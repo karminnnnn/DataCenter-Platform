@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.srt.dao.DataProductionTaskDao">
+
+    <resultMap type="net.srt.entity.DataProductionTaskEntity" id="dataProductionTaskMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="alias" column="alias"/>
+        <result property="dialect" column="dialect"/>
+        <result property="type" column="type"/>
+        <result property="checkPoint" column="check_point"/>
+        <result property="savePointStrategy" column="save_point_strategy"/>
+        <result property="savePointPath" column="save_point_path"/>
+        <result property="parallelism" column="parallelism"/>
+        <result property="fragment" column="fragment"/>
+        <result property="statementSet" column="statement_set"/>
+        <result property="batchModel" column="batch_model"/>
+        <result property="clusterId" column="cluster_id"/>
+        <result property="clusterConfigurationId" column="cluster_configuration_id"/>
+        <result property="databaseId" column="database_id"/>
+        <result property="jarId" column="jar_id"/>
+        <result property="envId" column="env_id"/>
+        <result property="alertGroupId" column="alert_group_id"/>
+        <result property="configJson" column="config_json"/>
+        <result property="note" column="note"/>
+        <result property="step" column="step"/>
+        <result property="jobInstanceId" column="job_instance_id"/>
+        <result property="useAutoCancel" column="use_auto_cancel"/>
+        <result property="useChangeLog" column="use_change_log"/>
+        <result property="useResult" column="use_result"/>
+        <result property="enabled" column="enabled"/>
+        <result property="versionId" column="version_id"/>
+        <result property="version" column="version"/>
+        <result property="deleted" column="deleted"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <update id="updateInfoByCatalogue" parameterType="net.srt.entity.DataProductionCatalogueEntity">
+        UPDATE data_production_task SET name=#{name},alias=#{name},org_id=#{orgId} WHERE catalogue_id=#{id}
+    </update>
+
+</mapper>

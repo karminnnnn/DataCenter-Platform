@@ -1,0 +1,1 @@
+import{ad as t}from"./index.afa5927e.js";const u=e=>t.get("/data-development/catalogue/"+e),o=e=>e.id?t.put("/data-development/catalogue",e):t.post("/data-development/catalogue",e),l=()=>t.get("/data-development/catalogue"),s=e=>t.delete("/data-development/catalogue/"+e);export{o as a,l as b,s as c,u};

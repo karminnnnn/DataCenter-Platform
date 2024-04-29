@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.srt.dao.DataServiceApiConfigDao">
+    <update id="increaseRequestedTimes">
+        UPDATE data_service_api_config SET requested_times=requested_times+1 WHERE id =#{id}
+    </update>
+    <update id="increaseRequestedSuccessTimes">
+        UPDATE data_service_api_config SET requested_success_times=requested_success_times+1 WHERE id=#{id}
+    </update>
+    <update id="increaseRequestedFailedTimes">
+        UPDATE data_service_api_config SET requested_failed_times=requested_failed_times+1 WHERE id=#{id}
+    </update>
+
+    <select id="getAuthList" resultType="net.srt.entity.DataServiceApiConfigEntity">
+        <choose>
+            <when test="ifMarket != null and ifMarket==1">
+                SELECT
+                dsac.*,
+                dsaa.id AS auth_id,
+                dsag.path AS group_path
+                FROM
+                data_service_api_config dsac
+                INNER JOIN data_service_api_group dsag ON dsac.group_id=dsag.id
+                INNER JOIN data_service_api_auth dsaa ON dsac.id = dsaa.api_id
+                WHERE
+                dsaa.app_id=#{appId}
+                AND dsac.deleted=0
+                AND dsaa.deleted=0
+            </when>
+            <otherwise>
+                SELECT
+                dsac.*,
+                dsaa.id AS auth_id
+                FROM
+                data_service_api_config dsac
+                LEFT JOIN data_service_api_auth dsaa ON dsac.id = dsaa.api_id AND dsaa.app_id=#{appId}
+                AND dsaa.deleted=0
+                WHERE
+                dsac.group_id = #{groupId}
+                AND dsac.previlege=1
+                AND dsac.deleted=0
+            </otherwise>
+        </choose>
+        <if test="name != null and name.trim() != ''">
+            AND dsac.name LIKE "%"#{name}"%"
+        </if>
+        <if test="path != null and path.trim() != ''">
+            AND dsac.path LIKE "%"#{path}"%"
+        </if>
+        <if test="contentType != null and contentType.trim() != ''">
+            AND dsac.content_type = #{contentType}
+        </if>
+        <if test="status != null">
+            AND dsac.status = #{status}
+        </if>
+        <if test="sqlDbType != null">
+            AND dsac.sql_db_type = #{sqlDbType}
+        </if>
+        <if test="databaseId != null">
+            AND dsac.database_id = #{databaseId}
+        </if>
+        <if test="previlege != null">
+            AND dsac.previlege = #{previlege}
+        </if>
+        <if test="openTrans != null">
+            AND dsac.open_trans = #{openTrans}
+        </if>
+        ORDER BY dsac.create_time DESC,dsac.id DESC
+    </select>
+    <select id="getResourceList" resultType="net.srt.entity.DataServiceApiConfigEntity">
+        <choose>
+            <when test="queryApply!=null and queryApply==1">
+                SELECT
+                DISTINCT dsac.*
+                FROM
+                data_service_api_config dsac
+                INNER JOIN data_assets_resource_mount darm ON dsac.id = darm.mount_id
+                INNER JOIN data_market_resource_apply dmra ON dmra.resource_mount_id=darm.id
+                WHERE
+                darm.mount_type=2
+                AND darm.resource_id=#{resourceId}
+                AND dmra.apply_user_id=#{userId}
+                AND apply_start_time<![CDATA[<=]]>now() AND apply_end_time<![CDATA[>=]]>now()
+                AND dmra.status=1 AND dmra.if_auth=1
+                AND dsac.deleted=0
+            </when>
+            <otherwise>
+                SELECT
+                dsac.*
+                FROM
+                data_service_api_config dsac
+                INNER JOIN data_assets_resource_mount darm ON dsac.id = darm.mount_id
+                WHERE
+                darm.mount_type=2
+                AND darm.resource_id=#{resourceId}
+                AND dsac.deleted=0
+            </otherwise>
+        </choose>
+        <if test="name != null and name.trim() != ''">
+            AND dsac.name LIKE "%"#{name}"%"
+        </if>
+        <if test="path != null and path.trim() != ''">
+            AND dsac.path LIKE "%"#{path}"%"
+        </if>
+        <if test="contentType != null and contentType.trim() != ''">
+            AND dsac.content_type = #{contentType}
+        </if>
+        <if test="status != null">
+            AND dsac.status = #{status}
+        </if>
+        <if test="sqlDbType != null">
+            AND dsac.sql_db_type = #{sqlDbType}
+        </if>
+        <if test="databaseId != null">
+            AND dsac.database_id = #{databaseId}
+        </if>
+        <if test="previlege != null">
+            AND dsac.previlege = #{previlege}
+        </if>
+        <if test="openTrans != null">
+            AND dsac.open_trans = #{openTrans}
+        </if>
+        ORDER BY dsac.create_time DESC,dsac.id DESC
+    </select>
+</mapper>

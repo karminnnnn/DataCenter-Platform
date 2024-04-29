@@ -1,0 +1,1 @@
+import"./app-page.vue_vue_type_script_setup_true_name_Data-serviceAppIndex_lang.73d519db.js";import{_ as t}from"./app-page.vue_vue_type_script_setup_true_name_Data-serviceAppIndex_lang.73d519db.js";import"./index.afa5927e.js";export{t as default};

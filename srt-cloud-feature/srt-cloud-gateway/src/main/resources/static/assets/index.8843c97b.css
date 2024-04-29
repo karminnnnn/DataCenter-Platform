@@ -1,0 +1,1 @@
+.databaseDivClass{height:calc(100vh - 170px);position:relative;overflow:hidden}.databaseDivClass>.drawerClass>div{height:100%;position:absolute!important;overflow:hidden}.tableMain{display:flex}.tableMain div:nth-child(1){flex:1}.tableMain div:nth-child(2){flex:2}

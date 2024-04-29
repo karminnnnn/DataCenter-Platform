@@ -1,0 +1,1 @@
+import{ad as t}from"./index.afa5927e.js";const r=e=>t.get("/data-governance/metamodel/"+e),n=e=>e.id?t.put("/data-governance/metamodel",e):t.post("/data-governance/metamodel",e),o=()=>t.get("/data-governance/metamodel/list-tree"),d=e=>t.delete("/data-governance/metamodel/"+e);export{n as a,d,o as l,r as u};

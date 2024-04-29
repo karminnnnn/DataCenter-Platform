@@ -1,0 +1,1 @@
+import{ad as t}from"./index.afa5927e.js";const r=()=>t.get("/data-integrate/fileCategory"),i=e=>t.delete("/data-integrate/fileCategory?id="+e),g=e=>t.get("/data-integrate/fileCategory/"+e),o=e=>e.id?t.put("/data-integrate/fileCategory",e):t.post("/data-integrate/fileCategory",e);export{o as a,i as d,r as l,g as u};

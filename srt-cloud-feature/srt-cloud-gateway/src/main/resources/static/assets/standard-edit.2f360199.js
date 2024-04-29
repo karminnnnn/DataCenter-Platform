@@ -1,0 +1,1 @@
+import"./standard-edit.vue_vue_type_script_setup_true_lang.82b1a70f.js";import{_ as i}from"./standard-edit.vue_vue_type_script_setup_true_lang.82b1a70f.js";import"./index.afa5927e.js";import"./dataStandard.17989026.js";export{i as default};

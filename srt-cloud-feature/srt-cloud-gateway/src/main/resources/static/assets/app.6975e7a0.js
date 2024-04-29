@@ -1,0 +1,1 @@
+import{ad as t}from"./index.afa5927e.js";const p=e=>t.get("/data-service/app/"+e),s=e=>e.id?t.put("/data-service/app",e):t.post("/data-service/app",e),i=e=>e.id?t.put("/data-service/app/auth",e):t.post("/data-service/app/auth",e),r=e=>t.delete("/data-service/app/cancel-auth/"+e),u=e=>t.get("/data-service/api-config/auth-info/"+e);export{s as a,i as b,r as c,u as g,p as u};

@@ -1,0 +1,1 @@
+import{ad as e}from"./index.afa5927e.js";const p=s=>s.id?e.put("/data-assets/resource-apply",s):e.post("/data-assets/resource-apply",s),r=s=>e.put("/data-assets/resource-apply/check",s),u=(s,t)=>e.put("/data-assets/resource-apply/auth/"+s+"/"+t);export{u as a,r as c,p as u};

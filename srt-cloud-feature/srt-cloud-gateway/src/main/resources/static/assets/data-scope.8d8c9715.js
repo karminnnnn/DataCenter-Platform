@@ -1,0 +1,1 @@
+import"./data-scope.vue_vue_type_script_setup_true_lang.b41e08fc.js";import{_ as i}from"./data-scope.vue_vue_type_script_setup_true_lang.b41e08fc.js";import"./index.afa5927e.js";import"./role.e96c1f40.js";export{i as default};

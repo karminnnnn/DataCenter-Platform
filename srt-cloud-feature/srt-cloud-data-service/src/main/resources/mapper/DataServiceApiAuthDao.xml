@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.srt.dao.DataServiceApiAuthDao">
+
+
+    <update id="increaseRequestedTimes">
+         UPDATE data_service_api_auth SET requested_times=requested_times+1 WHERE id =#{id}
+    </update>
+    <update id="increaseRequestedSuccessTimes">
+        UPDATE data_service_api_auth SET requested_success_times=requested_success_times+1 WHERE id =#{id}
+    </update>
+    <update id="increaseRequestedFailedTimes">
+        UPDATE data_service_api_auth SET requested_failed_times=requested_failed_times+1 WHERE id =#{id}
+    </update>
+    <update id="resetRequested">
+        UPDATE data_service_api_auth SET requested_times=0,requested_success_times=0,requested_failed_times=0 WHERE id =#{id}
+    </update>
+</mapper>

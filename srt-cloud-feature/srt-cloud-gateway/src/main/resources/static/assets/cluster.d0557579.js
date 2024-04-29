@@ -1,0 +1,1 @@
+import{ad as t}from"./index.afa5927e.js";const r=e=>t.get("/data-development/cluster/"+e),l=e=>e.id?t.put("/data-development/cluster",e):t.post("/data-development/cluster",e),a=e=>t.post("/data-development/cluster/heartbeat",e),u=()=>t.get("/data-development/cluster/clear"),n=()=>t.get("/data-development/cluster/list-all");export{l as a,u as c,a as h,n as l,r as u};

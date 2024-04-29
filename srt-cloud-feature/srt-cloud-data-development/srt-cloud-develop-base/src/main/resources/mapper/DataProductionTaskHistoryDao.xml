@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.srt.dao.DataProductionTaskHistoryDao">
+
+    <resultMap type="net.srt.entity.DataProductionTaskHistoryEntity" id="dataProductionTaskHistoryMap">
+        <result property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="clusterId" column="cluster_id"/>
+        <result property="clusterConfigurationId" column="cluster_configuration_id"/>
+        <result property="session" column="session"/>
+        <result property="jobId" column="job_id"/>
+        <result property="executeSql" column="execute_sql"/>
+        <result property="executeType" column="execute_type"/>
+        <result property="scheduleId" column="schedule_id"/>
+        <result property="scheduleNodeId" column="schedule_node_id"/>
+        <result property="scheduleRecordId" column="schedule_record_id"/>
+        <result property="scheduleNodeRecordId" column="schedule_node_record_id"/>
+        <result property="executeNo" column="execute_no"/>
+        <result property="jobName" column="job_name"/>
+        <result property="jobManagerAddress" column="job_manager_address"/>
+        <result property="status" column="status"/>
+        <result property="type" column="type"/>
+        <result property="statement" column="statement"/>
+        <result property="error" column="error"/>
+        <result property="result" column="result"/>
+        <result property="configJson" column="config_json"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="taskId" column="task_id"/>
+        <result property="version" column="version"/>
+        <result property="deleted" column="deleted"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <select id="getHistoryList" resultType="net.srt.entity.DataProductionTaskHistoryEntity">
+        SELECT dpti.jid,dpth.*,dpti.status AS instance_status,dpti.finish_time FROM data_production_task_history dpth
+        LEFT JOIN data_production_task_instance dpti ON dpth.id=dpti.history_id
+        WHERE dpth.deleted=0
+        <if test="nodeRecordId != null">
+            and dpth.schedule_node_record_id=#{nodeRecordId}
+        </if>
+        <if test="recordId != null">
+            and dpth.schedule_record_id=#{recordId}
+        </if>
+        <if test="taskId != null">
+            and dpth.task_id=#{taskId}
+        </if>
+        <if test="jobName != null and jobName.trim() != ''">
+            and dpth.job_name LIKE "%"#{jobName}"%"
+        </if>
+        <if test="status != null">
+            and dpth.status=#{status}
+        </if>
+        <if test="instanceStatus != null and instanceStatus.trim() != ''">
+            and dpti.status=#{instanceStatus}
+        </if>
+        <if test="type != null and type.trim() != ''">
+            and dpth.type=#{type}
+        </if>
+        <if test="sqlDbType != null">
+            and dpth.sql_db_type=#{sqlDbType}
+        </if>
+        <if test="databaseId != null">
+            and dpth.database_id=#{databaseId}
+        </if>
+        <if test="dialect != null">
+            and dpth.dialect=#{dialect}
+        </if>
+        <if test="clusterId != null">
+            and dpth.cluster_id=#{clusterId}
+        </if>
+        <if test="clusterConfigurationId != null">
+            and dpth.cluster_configuration_id=#{clusterConfigurationId}
+        </if>
+        <if test="startTime != null">
+            and dpth.start_time <![CDATA[>=]]> #{startTime}
+        </if>
+        <if test="endTime != null">
+            and dpth.end_time <![CDATA[<=]]> #{endTime}
+        </if>
+        <if test="finishTime != null">
+            and dpti.finish_time <![CDATA[<=]]> #{finishTime}
+        </if>
+    </select>
+
+</mapper>

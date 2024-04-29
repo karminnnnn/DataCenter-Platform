@@ -1,0 +1,1 @@
+import"./resource-info.vue_vue_type_script_setup_true_lang.0f1c28f0.js";import{_ as i}from"./resource-info.vue_vue_type_script_setup_true_lang.0f1c28f0.js";import"./index.afa5927e.js";import"./role.e96c1f40.js";export{i as default};

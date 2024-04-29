@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.srt.dao.DataServiceAppDao">
+
+    <select id="selectByApplyId" resultType="net.srt.entity.DataServiceAppEntity">
+        SELECT dsa.* FROM data_service_app dsa INNER JOIN data_market_resource_apply dmra ON dsa.id=dmra.app_id WHERE dmra.id=#{applyId}
+    </select>
+</mapper>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.srt.dao.DataGovernanceMetadataPropertyDao">
+
+
+    <select id="listPropertyById" resultType="net.srt.vo.DataGovernanceMetamodelPropertyVO">
+        SELECT mo.id,mo.metamodel_id,mo.id AS metamodel_property_id,mo.name,mo.code,mo.data_type,mo.data_length,mo.input_type,mo.nullable,mo.builtin,md.id as metadata_property_id,md.property as `value` FROM data_governance_metamodel_property mo
+        LEFT JOIN data_governance_metadata_property md ON mo.id=md.metamodel_property_id AND md.metadata_id=#{id}
+        WHERE mo.metamodel_id=#{metamodelId} AND mo.deleted=0 AND md.deleted=0 order by mo.order_no
+    </select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.srt.dao.DataProductionCatalogueDao">
+
+    <resultMap type="net.srt.entity.DataProductionCatalogueEntity" id="dataProductionCatalogueMap">
+        <result property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="path" column="path"/>
+        <result property="projectId" column="project_id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="name" column="name"/>
+        <result property="taskType" column="task_type"/>
+        <result property="enabled" column="enabled"/>
+        <result property="ifLeaf" column="if_leaf"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="description" column="description"/>
+        <result property="version" column="version"/>
+        <result property="deleted" column="deleted"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updater" column="updater"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <update id="updateTaskIdById">
+        UPDATE data_production_catalogue SET task_id=#{taskId} WHERE id=#{catalogueId}
+    </update>
+
+</mapper>
