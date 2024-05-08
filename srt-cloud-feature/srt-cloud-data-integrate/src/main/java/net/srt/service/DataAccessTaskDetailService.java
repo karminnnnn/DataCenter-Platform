@@ -3,7 +3,7 @@ package net.srt.service;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.BaseService;
 import net.srt.vo.DataAccessTaskDetailVO;
-import net.srt.query.DataAccessTaskDetailQuery;
+import net.srt.constants.query.DataAccessTaskDetailQuery;
 import net.srt.entity.DataAccessTaskDetailEntity;
 
 import java.util.List;
