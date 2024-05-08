@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div v-if="market">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px">
 			<el-form-item label="评分" prop="level" label-width="auto">
@@ -118,4 +118,4 @@ defineExpose({
 </script>
 
 <style>
-</style>
+</style> -->

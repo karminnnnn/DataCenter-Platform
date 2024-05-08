@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 		<el-card>
 			<div class="flowBox" style="height: 100%;">
 				<div class="flowTopBox" v-loading="saveLoading">
@@ -38,7 +38,7 @@
 						<div style="height:100%;width:100%" @dragover="allowDropOver" ref="flowContainer" id="flowContainer"></div>
 					</div>
 				</div>
-				<!-- 上下侧边 -->
+				上下侧边
 				<div
 					 v-show="runFlag"
 				   title="上下侧边栏" 
@@ -61,10 +61,10 @@
 		</el-card>
 		
 		
-		<!-- 下载流程图 -->
+		下载流程图
 		<div id="snapshotDownloadId" v-show="false"></div>
 		
-		<!-- 节点框 -->
+		节点框
 		<el-drawer v-model="nodeVisable" direction="rtl" :append-to-body="true">
 			<template #header>
 			    <h4>编辑调度</h4>
@@ -94,7 +94,7 @@
 			</template>
 		</el-drawer>
 		
-		<!-- 调度任务保存 -->
+		调度任务保存
 		<el-dialog v-model="configVisible" title="调度配置"  @keyup.enter="scheduleSubmit(false)">
 			<el-form ref="scheduleFormRef" :model="scheduleForm" :rules="scheduleRules" label-width="100px">
 				<el-form-item prop="orgId" label="所属机构" label-width="auto">
@@ -116,12 +116,7 @@
 				</el-form-item>
 				<el-form-item label="cron表达式" prop="cron" label-width="auto" v-if="scheduleForm.ifCycle=='1'">
 					<el-input v-model="scheduleForm.cron" placeholder="cron表达式"></el-input>
-					<!-- <el-popover ref="cronPopover" :width="550" trigger="click">
-						<Cron @submit="changeCron" @close="cronPopover.hide()"></Cron>
-						<template #reference>
-							<el-input v-model="scheduleForm.cron" placeholder="cron表达式"></el-input>
-						</template>
-					</el-popover> -->
+
 				</el-form-item>
 				<el-form-item label="备注" prop="note" label-width="auto">
 					<el-input  :rows="2" type="textarea" v-model="scheduleForm.note" placeholder="备注"></el-input>
@@ -766,4 +761,4 @@
 	.el-notification.right {
 	    height: 100px;
 	}
-</style>
+</style> -->

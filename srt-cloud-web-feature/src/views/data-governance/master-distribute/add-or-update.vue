@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
 			<el-form-item prop="orgId" label="所属机构" label-width="auto">
@@ -31,7 +31,7 @@
 			<el-form-item label="派发类型" prop="distributeType" label-width="auto">
 				<fast-select v-model="dataForm.distributeType" dict-type="distribute_type" placeholder="派发类型" clearable @change="distributeTypeChange"></fast-select>
 			</el-form-item>
-			<!-- mq或接口 -->
+			mq或接口
 			<el-form-item label="调度类型" prop="taskType" label-width="auto">
 				<fast-radio-group v-model="dataForm.taskType" dict-type="distribute_task_type"></fast-radio-group>
 			</el-form-item>
@@ -41,7 +41,7 @@
 			<el-form-item label="描述" prop="description" label-width="auto">
 				<el-input type="textarea" v-model="dataForm.description" placeholder="描述"></el-input>
 			</el-form-item>
-			<!-- 数据库相关参数 -->
+			数据库相关参数
 			<template v-if="dataForm.distributeType == 1">
 				<el-divider><span style="font-size: 17px"><b>接入配置</b></span></el-divider>
 				<el-form-item label="接入数据库"  prop="distributeJson.distributeDb.databaseId" label-width="auto">
@@ -229,7 +229,7 @@
 					</el-table>
 				</div>
 			</template>
-			<!-- 接口相关参数 -->
+			接口相关参数
 			<template v-if="dataForm.distributeType == 2">
 				<el-form-item label="url" prop="distributeJson.distributeApi.url" label-width="auto">
 					<el-input v-model="dataForm.distributeJson.distributeApi.url" placeholder="url地址"></el-input>
@@ -322,7 +322,7 @@
 					</el-table>
 				</div>
 			</template>
-			<!-- 消息队列相关参数 -->
+			消息队列相关参数
 			<template v-if="dataForm.distributeType == 3">
 				<el-form-item label="队列类型" prop="distributeJson.distributeMq.mqType" label-width="auto">
 					<fast-radio-group v-model="dataForm.distributeJson.distributeMq.mqType" dict-type="mq_type"></fast-radio-group>
@@ -781,4 +781,4 @@ const submitHandle = () => {
 defineExpose({
 	init
 })
-</script>
+</script> -->
