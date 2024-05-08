@@ -12,7 +12,7 @@ import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.BeanUtil;
 import net.srt.framework.common.utils.SqlUtils;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
-import net.srt.query.DataTableQuery;
+import net.srt.constants.query.DataTableQuery;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
