@@ -52,6 +52,7 @@ public class SysAuthController {
         return Result.ok();
     }
 
+    /*
     @PostMapping("mobile")
     @Operation(summary = "手机号登录")
     public Result<SysTokenVO> mobile(@RequestBody SysMobileLoginVO login) {
@@ -59,7 +60,7 @@ public class SysAuthController {
 
         return Result.ok(token);
     }
-
+    */
     @PostMapping("logout")
     @Operation(summary = "退出")
     public Result<String> logout(HttpServletRequest request) {
