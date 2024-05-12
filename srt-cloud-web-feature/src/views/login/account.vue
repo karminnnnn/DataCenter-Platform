@@ -1,8 +1,8 @@
 <template>
 	<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" @keyup.enter="onLogin">
-		<!--<div class="login-title">{{ $t('app.signIn') }}</div>-->
+		<div class="login-title">{{ $t('app.signIn') }}</div>
 		<el-form-item prop="username">
-			<el-input v-model="loginForm.username" :prefix-icon="User" :placeholder="'学号/工号'"></el-input>
+			<el-input v-model="loginForm.username" :prefix-icon="User" :placeholder="$t('app.username')"></el-input>
 		</el-form-item>
 		<el-form-item prop="password">
 			<el-input v-model="loginForm.password" :prefix-icon="Lock" show-password :placeholder="$t('app.password')"></el-input>
@@ -12,7 +12,7 @@
 			<img :src="captchaBase64" @click="onCaptcha" />
 		</el-form-item>
 		<el-form-item class="login-button">
-			<el-button type="success" @click="onLogin()">{{ $t('app.signIn') }}</el-button>
+			<el-button type="primary" @click="onLogin()">{{ $t('app.signIn') }}</el-button>
 		</el-form-item>
 	</el-form>
 </template>
@@ -51,14 +51,10 @@ const onCaptcha = async () => {
 	const { data } = await useCaptchaApi()
 	loginForm.key = data.key
 	captchaBase64.value = data.image
-	console.log(loginForm.key)
-	console.log(captchaBase64.value)
 }
 
 const onLogin = () => {
-	// 这个valid就是来看loginRules的
 	loginFormRef.value.validate((valid: boolean) => {
-		console.log(valid)
 		if (!valid) {
 			return false
 		}
@@ -97,7 +93,7 @@ const onLogin = () => {
 	cursor: pointer;
 }
 .login-button {
-	:deep(.el-button--success) {
+	:deep(.el-button--primary) {
 		margin-top: 10px;
 		width: 100%;
 		height: 45px;
