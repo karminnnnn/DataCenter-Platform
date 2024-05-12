@@ -7,7 +7,7 @@ import net.srt.framework.common.utils.TreeNodeVo;
 import net.srt.framework.mybatis.service.BaseService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataDatabaseVO;
-import net.srt.constants.query.DataDatabaseQuery;
+import net.srt.query.DataDatabaseQuery;
 import net.srt.entity.DataDatabaseEntity;
 import net.srt.vo.SchemaTableDataVo;
 import net.srt.vo.SqlGenerationVo;

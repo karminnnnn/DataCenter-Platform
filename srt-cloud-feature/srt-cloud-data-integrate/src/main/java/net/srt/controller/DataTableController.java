@@ -7,7 +7,7 @@ import net.srt.convert.DataOdsConvert;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
-import net.srt.constants.query.DataTableQuery;
+import net.srt.query.DataTableQuery;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;

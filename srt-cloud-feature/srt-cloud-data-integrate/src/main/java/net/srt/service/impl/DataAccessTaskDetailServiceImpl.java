@@ -8,7 +8,7 @@ import net.srt.convert.DataAccessTaskDetailConvert;
 import net.srt.entity.DataAccessTaskDetailEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
-import net.srt.constants.query.DataAccessTaskDetailQuery;
+import net.srt.query.DataAccessTaskDetailQuery;
 import net.srt.vo.DataAccessTaskDetailVO;
 import net.srt.dao.DataAccessTaskDetailDao;
 import net.srt.service.DataAccessTaskDetailService;

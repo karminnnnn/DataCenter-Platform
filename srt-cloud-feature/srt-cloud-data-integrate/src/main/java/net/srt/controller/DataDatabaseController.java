@@ -10,7 +10,7 @@ import net.srt.entity.DataDatabaseEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
 import net.srt.framework.common.utils.TreeNodeVo;
-import net.srt.constants.query.DataDatabaseQuery;
+import net.srt.query.DataDatabaseQuery;
 import net.srt.service.DataDatabaseService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataDatabaseVO;
