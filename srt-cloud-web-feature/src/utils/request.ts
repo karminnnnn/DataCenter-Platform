@@ -40,14 +40,17 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
 	response => {
+		console.log(response)
 		if (response.status !== 200) {
 			return Promise.reject(new Error(response.statusText || 'Error'))
 		}
 
 		const res = response.data
-		//console.log(res)
+		console.log("res:")
+		console.log(res)
 		// 响应成功
 		if (res.code === 0) {
+			console.log(res.code)
 			return res
 		}
 

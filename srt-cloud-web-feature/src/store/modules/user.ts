@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { useAccountLoginApi, useMobileLoginApi, useLogoutApi } from '@/api/auth'
+import { useAccountLoginApi, useMobileLoginApi, useLogoutApi, useAccountRegisterApi } from '@/api/auth'
 import { useUserInfoApi } from '@/api/sys/user'
 import cache from '@/utils/cache'
 import { useAuthorityListApi } from '@/api/sys/menu'
@@ -28,6 +28,12 @@ export const userStore = defineStore('userStore', {
 		// 账号登录
 		async accountLoginAction(loginForm: any) {
 			const { data } = await useAccountLoginApi(loginForm)
+			this.setToken(data.access_token)
+		},
+		// 账号注册
+		async accountRegisterAction(registerForm: any) {
+			// 是否可重复？不用管，msg去管
+			const { data } = await useAccountRegisterApi(registerForm)
 			this.setToken(data.access_token)
 		},
 		// 手机号登录

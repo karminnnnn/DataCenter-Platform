@@ -15,9 +15,9 @@ export default {
 	updateTime: '更新时间',
 	required: '必填项不能为空',
 	app: {
-		title: 'srt',
+		title: '数据中心平台',
 		description:
-			'最新版数睿通数据中台，前台采用 vue3，ts 等最新技术，后台采用 springCloudAlibaba，flink，tidb 等大数据技术，包含数据集成，数据开发，数据治理，数据资产，数据服务，数据集市六大模块，解决数据孤岛问题，实现数据统一口径标准，自定义数据开发任务，帮助企业，政府解决数据问题！',
+			'最新版数据中台，前台采用 vue3，ts 等最新技术，后台采用 springCloudAlibaba，flink，tidb 等大数据技术，包含数据集成，数据开发，数据治理，数据资产，数据服务，数据集市六大模块，解决数据孤岛问题，实现数据统一口径标准，自定义数据开发任务，帮助企业，政府解决数据问题！',
 		logoText: '数睿通',
 		miniLogoText: '数睿通',
 		username: '用户名',
