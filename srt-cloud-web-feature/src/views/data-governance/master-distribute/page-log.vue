@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-dialog v-model="visible" title="执行记录" :close-on-click-modal="false">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -87,4 +87,4 @@ defineExpose({
 		init
 	})
 
-</script> -->
+</script>

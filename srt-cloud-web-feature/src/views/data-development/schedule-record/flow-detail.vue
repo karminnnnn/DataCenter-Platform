@@ -1,10 +1,10 @@
-<!-- <template>
+<template>
 		<el-card>
 			<div class="flowDetailBox" style="height: 100%;" v-loading="boxLoading">
 				<div class="flowDetailTopBox">
 					<div style="height:100%;width:100%"  id="flowDetailContainer"></div>
 				</div>
-				上下侧边
+				<!-- 上下侧边 -->
 				<div
 				   title="上下侧边栏" 
 					 class="flowDetailBottomResize">
@@ -37,10 +37,10 @@
 		</el-card>
 		
 		
-		下载流程图
+		<!-- 下载流程图 -->
 		<div id="snapshotDownloadId" v-show="false"></div>
 		
-		节点框
+		<!-- 节点框 -->
 		<el-drawer size="45%" v-model="nodeVisable" direction="rtl" :append-to-body="true" :destroy-on-close="true">
 			<template #header>
 			    <h4>{{nodeDataForm.properties.name}}</h4>
@@ -87,7 +87,7 @@
 			</template>
 		</el-drawer>
 		
-		调度任务保存
+		<!-- 调度任务保存 -->
 		<el-dialog v-model="configVisible" title="调度配置" >
 			<el-descriptions
 			    title=""
@@ -380,4 +380,4 @@
 	    position: relative;
 	    margin: 0 0 0;
 	}
-</style> -->
+</style>

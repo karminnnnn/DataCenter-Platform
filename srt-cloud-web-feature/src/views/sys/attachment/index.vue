@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-card>
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -104,4 +104,4 @@ const beforeUpload: UploadProps['beforeUpload'] = file => {
 }
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle, downloadHandle } = useCrud(state)
-</script> -->
+</script>

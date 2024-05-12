@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<div>
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -115,4 +115,4 @@ defineExpose({
 
 <style>
 	
-</style> -->
+</style>

@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<div class="resource_dialog">
 	  <el-dialog
 	    :close-on-click-modal="false"
@@ -101,7 +101,9 @@
 	          </el-row>
 	        </div>
 	      </el-tab-pane>
-
+	     <!-- <el-tab-pane label="变更信息" name="2">
+	        
+	      </el-tab-pane> -->
 	      <el-tab-pane label="资源信息" name="3">
 	        <MountInfo ref="mountInfoRef"></MountInfo>
 	      </el-tab-pane>
@@ -212,4 +214,4 @@ defineExpose({
 	    }
 	  }
 	}
-</style> -->
+</style>

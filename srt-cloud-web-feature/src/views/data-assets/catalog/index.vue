@@ -1,10 +1,10 @@
-<!-- <template>
+<template>
   <el-card body-style="height: calc(100vh - 170px )" @click="OptionCardClose($event)">
 	<div>
 	  <SideLayout class="fp-content table-content" left-title="资产目录" right-title="资产列表">
 		<div slot="left-title" class="rm-left-title">
 		  <span>资产目录</span>
-		  添加按钮
+		  <!-- 添加按钮-->
 		</div>
 		<template #left>
 			<div>
@@ -42,13 +42,7 @@
 		</template>
 		<template #right>
 			<div v-if="infoView">
-			  <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
-			  	<el-form-item>
-			  	  <el-input v-model="state.queryForm.name" placeholder="名称"></el-input>
-			  	</el-form-item>
-			  	<el-form-item>
-			  	  <el-input v-model="state.queryForm.code" placeholder="编码"></el-input>
-			  	</el-form-item>
+			  <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">			  	<el-form-item>			  	  <el-input v-model="state.queryForm.name" placeholder="名称"></el-input>			  	</el-form-item>			  	<el-form-item>			  	  <el-input v-model="state.queryForm.code" placeholder="编码"></el-input>			  	</el-form-item>
 				<el-form-item>
 				  <fast-select v-model="state.queryForm.status" dict-type="ground_status" placeholder="上架状态" clearable filterable></fast-select>
 				</el-form-item>
@@ -57,14 +51,7 @@
 				</el-form-item>
 				<el-form-item>
 				  <el-input v-model="state.queryForm.dutyUser" placeholder="负责人"></el-input>
-				</el-form-item>
-			  	<el-form-item>
-			  		<el-button @click="getDataList()">查询</el-button>
-			  	</el-form-item>
-			  	<el-form-item>
-			  		<el-button type="primary" @click="addOrUpdateResouce()">新增</el-button>
-			  	</el-form-item>
-			  </el-form>
+				</el-form-item>			  	<el-form-item>			  		<el-button @click="getDataList()">查询</el-button>			  	</el-form-item>			  	<el-form-item>			  		<el-button type="primary" @click="addOrUpdateResouce()">新增</el-button>			  	</el-form-item>			  </el-form>
 			  <el-empty description="暂无数据" v-if="!state.dataList.length"/>
 			  <div v-loading="state.dataListLoading" class="row_datas" v-if="state.dataList.length">
 				<el-scrollbar style="height: calc(100vh - 265px )">
@@ -129,7 +116,7 @@
 	    </template>
 	  </SideLayout>
 	</div>
-    右键菜单
+    <!-- 右键菜单 -->
     <div :style="{'z-index': 9999, position: 'fixed',left: ckRightOptionData.optionCardX + 'px', 
     				top: ckRightOptionData.optionCardY + 'px', width: '100px', background: 'white',
     				 'box-shadow': '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)'}" 
@@ -138,7 +125,7 @@
     	<el-button @click="renameItem" class="option-card-button">修改</el-button>
     	<el-button @click="deleteItem" class="option-card-button">删除</el-button>
     </div>
-	弹窗, 新增 / 修改
+	<!-- 弹窗, 新增 / 修改 -->
 	<add-or-update ref="addOrUpdateRef" @refreshDataList="getTreeList"></add-or-update>
 	<ResourceInfo ref="resourceInfoRef" @refreshDataList="getDataList"></ResourceInfo>
 	<ResourceDetail ref="resourceDetailRef"></ResourceDetail>
@@ -489,4 +476,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 	  }
 	}
 	
-</style> -->
+</style>

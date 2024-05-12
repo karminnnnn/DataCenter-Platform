@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-dialog v-model="dialogVisible" title="sql语法和逻辑检查" width="80%">
 		  <el-scrollbar>
 				<div style="font-size:16px" v-show="waitShow">
@@ -81,4 +81,4 @@
 </script>
 
 <style>
-</style> -->
+</style>

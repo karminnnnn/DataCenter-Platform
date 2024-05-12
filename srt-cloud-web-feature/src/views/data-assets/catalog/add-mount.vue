@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '挂载资源' : '修改'" :close-on-click-modal="false" width="70%">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
 			<el-form-item label="资源类型" prop="mountType" label-width="auto">
@@ -9,7 +9,7 @@
 					<template #default="{ node, data }">
 						 <div>
 							 <span>
-								 如果是目录
+								 <!-- 如果是目录-->
 								 <img v-if="data.icon=='/src/assets/folder.png'" src="/src/assets/folder.png"/>
 								 <img v-if="data.icon=='/src/assets/database.png'" src="/src/assets/database.png"/>
 								 <img v-if="data.icon=='/src/assets/table.png'" src="/src/assets/table.png"/>
@@ -26,7 +26,7 @@
 					<template #default="{ node, data }">
 						 <div>
 							 <span>
-								 如果是目录
+								 <!-- 如果是目录-->
 								 <img v-if="data.type=='1'" src="/src/assets/folder.png"/>
 								 <img v-if="data.type=='2'" src="/src/assets/api.png"/>
 								 <span style="margin-left: 8px;">{{ data.name }}</span>
@@ -40,7 +40,7 @@
 					<template #default="{ node, data }">
 						 <div>
 							 <span>
-								 如果是目录
+								 <!-- 如果是目录-->
 								 <img v-if="data.type=='0'" src="/src/assets/folder.png"/>
 								 <img v-if="data.type=='1'" src="/src/assets/file.png"/>
 								 <span style="margin-left: 8px;">{{ data.name }}</span>
@@ -50,11 +50,11 @@
 				</el-tree-select>
 			</el-form-item>
 	    </el-form>
-		api分页
+		<!-- api分页 -->
 		<div v-if="dataForm.mountType == 2 && apiPageShow">
 			<ApiMount ref="apiMountRef"></ApiMount>
 		</div>
-		文件分页
+		<!-- 文件分页 -->
 		<div v-if="dataForm.mountType == 3 && filePageShow">
 			<FileMount ref="fileMountRef"></FileMount>
 		</div>
@@ -220,4 +220,4 @@ const submitHandle = () => {
 defineExpose({
 	init
 })
-</script> -->
+</script>

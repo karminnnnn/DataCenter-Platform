@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-card>
 		<el-tag style="margin-bottom: 10px"><p>tips：当前 ~ 该条历史记录的所有 savepoint 记录；全部 ~ 该条记录对应作业的所有 savepoint 记录</p></el-tag>
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
@@ -20,7 +20,11 @@
 			<el-table-column prop="type" label="类型" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="path" label="地址" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="createTime" label="创建时间" header-align="center" align="center"></el-table-column>
-
+			<!-- <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
+				<template #default="scope">
+					<el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+				</template>
+			</el-table-column> -->
 		</el-table>
 		<el-pagination
 			:current-page="state.page"
@@ -84,4 +88,4 @@ const rangeChange = (val: any) => {
 }
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script> -->
+</script>

@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" destroy-on-close :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
 			<el-form-item label="标题" prop="title" label-width="auto">
@@ -169,4 +169,4 @@ const submitHandle = () => {
 defineExpose({
 	init
 })
-</script> -->
+</script>

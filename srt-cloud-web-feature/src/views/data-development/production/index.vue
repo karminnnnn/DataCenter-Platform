@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	  <el-card>
 			<div class="headerBox" @click="OptionCardClose($event)">
 				<div class="headLeft">
@@ -39,7 +39,7 @@
 						>
 							<el-button v-show="currentTaskType=='1' || currentTaskType=='2'" :loading="executeSqlButton" @click="executeSql()" text><img src="@/assets/run.png"/></el-button>
 					</el-tooltip>
-					flinksql下才显示
+					<!-- flinksql下才显示 -->
 					<el-tooltip
 							class="box-item"
 							effect="dark"
@@ -64,7 +64,10 @@
 						 <el-scrollbar>
 							 <el-tabs class="demo-tabs"  v-model="activeCatalogueName">
 							     <el-tab-pane label="目录" name="catalogue">
-
+										<!-- 目录
+										 <el-button size="small" @click="addTab(editableTabsValue)">
+										       add tab
+										 </el-button> -->
 										 <el-input v-model="filterCatalogueText" placeholder="search" />
 										 <br><br>
 										 <el-button type="primary" @click="appendCatalogueRoot">添加根目录</el-button><br><br>
@@ -102,7 +105,7 @@
 						class="leftResize"
 						title="左右侧边栏"
 					></div>
-					中间
+					<!-- 中间 -->
 					<div class="midBox">
 						<el-tabs
 							  class="mid-tabs"
@@ -160,7 +163,7 @@
 						class="rightResize"
 						title="左右侧边栏"
 					></div>
-					右侧
+					<!-- 右侧 -->
 					<div class="right">
 						<el-scrollbar>
 							<div class="summaryInfo" style="margin: 30px" v-show="editableTabsValue=='0'">
@@ -223,7 +226,7 @@
 									<el-form-item label="flink版本" prop="flinkVersion" v-if="currentTaskType=='2' || currentTaskType=='3'">
 										<fast-select v-model="flinkSqlDataForm.flinkVersion" dict-type="flink_version" placeholder="请选择" clearable></fast-select>
 									</el-form-item>
-									只有 Standalone 和 Yarn Session ，k8s session 模式选择集群实例，其他非 local 模式需要选择集群配置自动生成 FLink 集群
+									<!-- 只有 Standalone 和 Yarn Session ，k8s session 模式选择集群实例，其他非 local 模式需要选择集群配置自动生成 FLink 集群 -->
 									<el-form-item label="Flink集群实例" prop="clusterId" v-if="(currentTaskType=='2' || currentTaskType=='3') && (flinkSqlDataForm.type=='1' || flinkSqlDataForm.type=='2' || flinkSqlDataForm.type=='5')">
 										<el-select v-model="flinkSqlDataForm.clusterId"
 															 clearable
@@ -354,7 +357,7 @@
 				   title="上下侧边栏" 
 					 class="bottomResize">
 				</div>
-				下方
+				<!-- 下方 -->
 				<div class="downBox">
 					<el-tabs class="buttom-tabs">
 						<el-tab-pane>
@@ -390,7 +393,7 @@
 				</div>
 			</div>
 			
-			右键菜单
+			<!-- 右键菜单 -->
 			<div :style="{'z-index': 9999, position: 'fixed',left: ckRightOptionData.optionCardX + 'px', 
 							top: ckRightOptionData.optionCardY + 'px', width: '100px', background: 'white',
 							 'box-shadow': '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)'}" 
@@ -400,7 +403,7 @@
 				<el-button @click="renameCatalogue" class="option-card-button">修改</el-button>
 				<el-button @click="deleteCatalogue" class="option-card-button">删除</el-button>
 			</div>
-			作业目录
+			<!-- 作业目录 -->
 			<catalogue-add-or-update ref="CatalogueAddOrUpdateRef" @refreshDataList="getCatalogueTreeList"></catalogue-add-or-update>
 			<explain-sql-dialog ref="explainSqlDialogRef"></explain-sql-dialog>
 			
@@ -1574,4 +1577,4 @@ const dragControllerUD = () => {
     margin: 0 0 0;
 }
 
-</style> -->
+</style>

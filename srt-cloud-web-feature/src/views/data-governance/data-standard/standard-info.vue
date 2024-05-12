@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-dialog v-model="visible" title="详情" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px">
 			<el-form-item label="英文名称" prop="engName" label-width="auto">
@@ -102,4 +102,4 @@ const dataRules = ref({
 defineExpose({
 	init
 })
-</script> -->
+</script>

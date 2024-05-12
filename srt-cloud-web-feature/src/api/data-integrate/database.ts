@@ -40,31 +40,31 @@ export const listColumnsByIdAndSql = (id: any, sqlConsole: any) => {
 	return service.post('/data-integrate/database/'+id+'/sql/columns', sqlConsole)
 }
 
-// export const getSqlGenerationApi = (id: any, tableName: any, tableRemarks) => {
-// 	return service.get('/data-integrate/database/'+id+'/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
-// }
+export const getSqlGenerationApi = (id: any, tableName: any, tableRemarks) => {
+	return service.get('/data-integrate/database/'+id+'/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
+}
 
-// export const listMiddleDbTreeApi = () => {
-// 	return service.get('/data-integrate/database/middle-db/list-tree')
-// }
+export const listMiddleDbTreeApi = () => {
+	return service.get('/data-integrate/database/middle-db/list-tree')
+}
 
-// export const listMiddleDbColumnsApi = (tableName: any) => {
-// 	return service.get('/data-integrate/database/middle-db/'+tableName+'/columns')
-// }
+export const listMiddleDbColumnsApi = (tableName: any) => {
+	return service.get('/data-integrate/database/middle-db/'+tableName+'/columns')
+}
 
-// export const getMiddleDbSqlGenerationApi = (tableName: any, tableRemarks) => {
-// 	return service.get('/data-integrate/database/middle-db/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
-// }
+export const getMiddleDbSqlGenerationApi = (tableName: any, tableRemarks) => {
+	return service.get('/data-integrate/database/middle-db/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
+}
 
-// export const getTableInfoApi = (tableName: any) => {
-// 	return service.get('/data-integrate/database/middle-db/table-info/'+tableName)
-// }
+export const getTableInfoApi = (tableName: any) => {
+	return service.get('/data-integrate/database/middle-db/table-info/'+tableName)
+}
 
-// export const saveTableInfoApi = (dataForm: any) => {
-// 	return service.post('/data-integrate/database/middle-db/table-info', dataForm)
-// }
+export const saveTableInfoApi = (dataForm: any) => {
+	return service.post('/data-integrate/database/middle-db/table-info', dataForm)
+}
 
-// export const deleteTableInfoApi = (tableName: any) => {
-// 	return service.delete('/data-integrate/database/middle-db/table-info/'+tableName)
-// }
+export const deleteTableInfoApi = (tableName: any) => {
+	return service.delete('/data-integrate/database/middle-db/table-info/'+tableName)
+}
 

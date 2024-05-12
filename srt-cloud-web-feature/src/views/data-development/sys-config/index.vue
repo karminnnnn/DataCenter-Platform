@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-card body-style="height: calc(100vh - 170px )">
 		<el-form ref="dataFormRef" :rules="dataRules" label-width="auto" :model="dataForm">
 			<el-form-item label="application 模式的 flink-app.jar 文件路径" prop="sqlSubmitJarPath" label-width="auto">
@@ -65,4 +65,4 @@ const onSubmit = () => {
 	})
 }
 
-</script> -->
+</script>

@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-card>
 		<div class="scheduleRecordDivClass">
 			<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
@@ -51,6 +51,7 @@
 				</el-table-column>
 				<el-table-column show-overflow-tooltip prop="startTime" label="开始时间" header-align="center" align="center"></el-table-column>
 				<el-table-column show-overflow-tooltip prop="endTime" label="结束时间" header-align="center" align="center"></el-table-column>
+				<!-- <el-table-column prop="log" label="运行日志" header-align="center" align="center"></el-table-column> -->
 				<el-table-column prop="createTime" label="创建时间" header-align="center" align="center"></el-table-column>
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
 					<template #default="scope">
@@ -150,4 +151,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 		/* padding: 6px; */
 		height: 100%;
 	}
-</style> -->
+</style>

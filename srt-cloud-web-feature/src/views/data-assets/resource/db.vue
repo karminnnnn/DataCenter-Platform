@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<div>
 		<el-scrollbar>
 			<div class="databases" @click="OptionCardClose($event)">
@@ -81,7 +81,7 @@
 		</el-dialog>
 		
 		
-		右键菜单
+		<!-- 右键菜单 -->
 		<div :style="{'z-index': 9999, position: 'fixed',left: ckRightOptionData.optionCardX + 'px', 
 						top: ckRightOptionData.optionCardY + 'px', width: '100px', background: 'white',
 						 'box-shadow': '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)'}" 
@@ -290,4 +290,4 @@ import ReadOnlyStudio from '../../data-development/production/readonly-studio.vu
 		margin-left: 0;
 		font-size: 16px;
 	} 
-</style> -->
+</style>

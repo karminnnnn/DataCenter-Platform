@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="task-node" :style="properties.style">
 		<div>
 			<div v-if="properties.name.length <= 10"><b>名称：{{properties.name}}</b></div>
@@ -40,4 +40,4 @@ const props = defineProps({
 	background-color: #fffdfc;
   box-sizing: border-box;
 }
-</style> -->
+</style>

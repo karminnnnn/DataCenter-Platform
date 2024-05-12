@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-card @click="OptionCardClose($event)">
 		<div class="ruleConfigCategoryBox" style="height: calc(100vh - 170px );">
 			<div class="leftBox">
@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		
-		右键菜单
+		<!-- 右键菜单 -->
 		<div :style="{'z-index': 9999, position: 'fixed',left: ckRightOptionData.optionCardX + 'px', 
 						top: ckRightOptionData.optionCardY + 'px', width: '100px', background: 'white',
 						 'box-shadow': '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)'}" 
@@ -47,7 +47,7 @@
 			<el-button @click="renameItem" class="option-card-button">修改</el-button>
 			<el-button @click="deleteItem" class="option-card-button">删除</el-button>
 		</div>
-		弹窗, 新增 / 修改
+		<!-- 弹窗, 新增 / 修改 -->
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getTreeList"></add-or-update>
 	</el-card>
 </template>
@@ -220,4 +220,4 @@ const treeNodeCk = (e, data, n, t) => {
 		font-size: 14px;
 		border-radius: 0;
 	}
-</style> -->
+</style>

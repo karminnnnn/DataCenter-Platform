@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-dialog v-model="visible" title="码表数据" :close-on-click-modal="false">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -19,7 +19,8 @@
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" @selection-change="selectionChangeHandle">
 			<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-
+			<!-- <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> -->
+			<!-- <el-table-column prop="standardId" label="标准码表id" header-align="center" align="center"></el-table-column> -->
 			<el-table-column prop="dataId" label="码表id" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="dataName" label="码表name" header-align="center" align="center"></el-table-column>
 			<fast-creator-column prop="creator" label="创建者" header-align="center" align="center"></fast-creator-column>
@@ -42,7 +43,7 @@
 		>
 		</el-pagination>
 
-		弹窗, 新增 / 修改
+		<!-- 弹窗, 新增 / 修改 -->
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 	</el-dialog>
 </template>
@@ -78,4 +79,4 @@ defineExpose({
 })
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script> -->
+</script>

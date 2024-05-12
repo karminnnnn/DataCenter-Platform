@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-card>
 		<el-form :inline="true" :model="state.queryForm">
 			<el-form-item>
@@ -36,7 +36,7 @@
 			@current-change="currentChangeHandle"
 		>
 		</el-pagination>
-		新增 / 修改
+		<!-- 新增 / 修改 -->
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 	</el-card>
 </template>
@@ -69,4 +69,4 @@ const addOrUpdateHandle = (id?: Number) => {
 }
 
 const { getDataList, sizeChangeHandle, selectionChangeHandle, sortChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script> -->
+</script>

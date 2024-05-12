@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
 	<el-dialog v-model="visable" title="检测详情" width="65%">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -74,4 +74,4 @@ defineExpose({
 })
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script> -->
+</script>
