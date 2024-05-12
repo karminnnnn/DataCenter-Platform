@@ -1,45 +1,51 @@
 <template>
-	<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" @keyup.enter="onLogin">
+	<el-form ref="registerFormRef" :model="registerForm" :rules="registerRules" @keyup.enter="onRegister">
 		<!--<div class="login-title">{{ $t('app.signIn') }}</div>-->
 		<el-form-item prop="username">
-			<el-input v-model="loginForm.username" :prefix-icon="User" :placeholder="'学号/工号'"></el-input>
+			<el-input v-model="registerForm.username" :prefix-icon="User" :placeholder="'学号/工号'"></el-input>
 		</el-form-item>
 		<el-form-item prop="password">
-			<el-input v-model="loginForm.password" :prefix-icon="Lock" show-password :placeholder="$t('app.password')"></el-input>
+			<el-input v-model="registerForm.password" :prefix-icon="Lock" show-password :placeholder="$t('app.password')"></el-input>
+		</el-form-item>
+        <el-form-item prop="confirmPassword">
+			<el-input v-model="registerForm.confirmPassword" :prefix-icon="Unlock" show-password :placeholder="'确认'+$t('app.password')"></el-input>
 		</el-form-item>
 		<el-form-item prop="captcha" class="login-captcha">
-			<el-input v-model="loginForm.captcha" :placeholder="$t('app.captcha')" :prefix-icon="Key"></el-input>
+			<el-input v-model="registerForm.captcha" :placeholder="$t('app.captcha')" :prefix-icon="Key"></el-input>
 			<img :src="captchaBase64" @click="onCaptcha" />
 		</el-form-item>
 		<el-form-item class="login-button">
-			<el-button type="success" @click="onLogin()">{{ $t('app.signIn') }}</el-button>
+			<el-button type="success" @click="onRegister()">{{ '注册' }}</el-button>
 		</el-form-item>
 	</el-form>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { User, Lock, Key } from '@element-plus/icons-vue'
+import { User, Lock, Key, Unlock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import store from '@/store'
-import { useCaptchaApi } from '@/api/auth'
+import { accountRegisterAction, useCaptchaApi } from '@/api/auth'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const { t } = useI18n()
-const loginFormRef = ref()
+const registerFormRef = ref()
 const captchaBase64 = ref()
 
-const loginForm = reactive({
-	username: 'admin',
-	password: 'admin',
+const registerForm = reactive({
+	username: '',
+	password: '',
+    confirmPassword: '',
 	key: '',
 	captcha: ''
 })
 
-const loginRules = ref({
+const registerRules = ref({
 	username: [{ required: true, message: t('required'), trigger: 'blur' }],
 	password: [{ required: true, message: t('required'), trigger: 'blur' }],
+    confrimPassword: [{ required: true, message: t('required'), trigger: 'blur' }],
 	captcha: [{ required: true, message: t('required'), trigger: 'blur' }]
 })
 
@@ -49,30 +55,34 @@ onMounted(() => {
 
 const onCaptcha = async () => {
 	const { data } = await useCaptchaApi()
-	loginForm.key = data.key
+	registerForm.key = data.key
 	captchaBase64.value = data.image
-	console.log(loginForm.key)
-	console.log(captchaBase64.value)
 }
 
-const onLogin = () => {
-	// 这个valid就是来看loginRules的
-	loginFormRef.value.validate((valid: boolean) => {
-		console.log(valid)
+const onRegister = () => {
+	registerFormRef.value.validate((valid: boolean) => {
 		if (!valid) {
 			return false
 		}
 
-		// 用户登录
+		// 用户注册
 		store.userStore
-			.accountLoginAction(loginForm)
+			.accountRegisterAction(registerForm)
 			.then(() => {
+				console.log("Good!!!!")
+				ElMessage({
+  				  message: '注册成功！',
+  				  type: 'success',
+  				})
 				router.push({ path: '/home' })
 			})
 			.catch(() => {
+				console.log("why????")
 				onCaptcha()
 			})
 	})
+
+    // TODO
 }
 </script>
 
