@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-scrollbar>
 		<div style="padding: 20px">
 			<div style="margin-bottom: 10px">
@@ -10,7 +10,7 @@
 				      <el-button v-show = "!!taskType && !ifOnlyShow" :icon="Delete" @click="clear"/>
 				</el-tooltip>
 			</div>
-			<!-- sql -->
+
 			<div v-show="taskType == '1'">
 				<el-collapse>
 					<el-collapse-item v-for="(item, index) in sqlResults" :title="(index + 1) + '. ' + item.sql">
@@ -20,7 +20,7 @@
 						</div>
 						<div v-if="item.ifQuery && item.success">
 							<p><b>> rows:&nbsp;</b><b>{{item.rowData.length}}</b></p>
-							<!-- 表格数据 -->
+							表格数据
 							<el-table :data="item.rowData">
 								 <el-table-column
 									 :show-overflow-tooltip="true"
@@ -36,13 +36,12 @@
 						<div v-if="!item.success">
 							<p><b>> errorMsg: </b></p>
 							<ReadonlyStudio id="sqlItemErrorMsgId" :value="item.errorMsg" style="height: 500px"></ReadonlyStudio>
-							<!-- <p>{{item.errorMsg}}</p> -->
 							<p><b>> time:&nbsp;</b><span><b>{{item.time}}ms</b></span></p>
 						</div>
 					</el-collapse-item>
 				</el-collapse>
 			</div>
-			<!-- flinkSql -->
+
 			<div v-show="taskType == '2'">
 				<div v-show="!ifOnlyShow">
 					<div style="margin-bottom: 10px">
@@ -153,4 +152,4 @@
 </script>
 
 <style>
-</style>
+</style> -->

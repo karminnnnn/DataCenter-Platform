@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-scrollbar>
 		<div class="databases" @click="OptionCardClose($event)">
 			<el-button @click="refresh()"><el-icon><RefreshLeft /></el-icon></el-button>
@@ -35,7 +35,7 @@
 			<el-descriptions-item label="名称">{{dbInfo.name}}</el-descriptions-item>
 			<el-descriptions-item label="库名">{{ dbInfo.databaseName }}</el-descriptions-item>
 			<el-descriptions-item label="用户名">{{ dbInfo.userName  }}</el-descriptions-item>
-			<el-descriptions-item label="密码">******<!-- {{ dbInfo.password  }} --></el-descriptions-item>
+			<el-descriptions-item label="密码">******{{ dbInfo.password  }}</el-descriptions-item>
 			<el-descriptions-item label="jdbc连接串">{{ dbInfo.jdbcUrl  }}</el-descriptions-item>
 		</el-descriptions>
 	</el-dialog>
@@ -84,7 +84,7 @@
 	</el-dialog>
 	
 	
-	<!-- 右键菜单 -->
+	右键菜单
 	<div :style="{'z-index': 9999, position: 'fixed',left: ckRightOptionData.optionCardX + 'px', 
 					top: ckRightOptionData.optionCardY + 'px', width: '100px', background: 'white',
 					 'box-shadow': '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)'}" 
@@ -246,4 +246,4 @@
 		margin-left: 0;
 		font-size: 16px;
 	} 
-</style>
+</style> -->

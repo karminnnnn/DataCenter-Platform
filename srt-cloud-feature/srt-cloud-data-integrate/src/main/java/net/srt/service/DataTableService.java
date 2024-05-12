@@ -3,7 +3,7 @@ package net.srt.service;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.BaseService;
-import net.srt.query.DataTableQuery;
+import net.srt.constants.query.DataTableQuery;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
 import net.srt.vo.SchemaTableDataVo;

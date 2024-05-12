@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card body-style="height: calc(100vh - 170px )" @click="OptionCardClose($event)">
 		<div>
 		  <SideLayout class="fp-content" left-title="数据表" right-title="表信息">
@@ -28,9 +28,9 @@
 				  			 <template #default="{ node, data }">
 				  				 <div class="dataTable-tree-node">
 				  					 <span>
-										 <!-- layer-->
+										 layer
 				  						 <img v-if="data.type==2" src="/src/assets/database.png"/>
-										 <!-- table-->
+										 table
 				  						 <img v-if="data.type==3" src="/src/assets/table.png"/>
 				  						 <span style="margin-left: 8px;">{{ data.name }}&emsp;{{ data.description }}</span>
 				  					 </span>
@@ -95,7 +95,7 @@
 								</el-table-column>
 								<el-table-column align="center" label="长度" width="160">
 								  <template #default="scope">
-									<!-- 如果是3-日期 7-序列 8-大字段 9-日期 10-日期 11-默认 -->
+									如果是3-日期 7-序列 8-大字段 9-日期 10-日期 11-默认
 									<div v-if="!isDetail">
 										<el-input disabled v-if="scope.row.fieldType == 3 || scope.row.fieldType == 7 || scope.row.fieldType == 8 || scope.row.fieldType == 9 || scope.row.fieldType == 10 || scope.row.fieldType == 11"></el-input>
 										<el-input v-else v-model="scope.row.fieldLength" />
@@ -249,7 +249,7 @@
 	  		<el-descriptions-item label="名称">{{dbInfo.name}}</el-descriptions-item>
 	  		<el-descriptions-item label="库名">{{ dbInfo.databaseName }}</el-descriptions-item>
 	  		<el-descriptions-item label="用户名">{{ dbInfo.userName  }}</el-descriptions-item>
-	  		<el-descriptions-item label="密码">******<!-- {{ dbInfo.password  }} --></el-descriptions-item>
+	  		<el-descriptions-item label="密码">******{{ dbInfo.password  }}</el-descriptions-item>
 	  		<el-descriptions-item label="jdbc连接串">{{ dbInfo.jdbcUrl  }}</el-descriptions-item>
 	  	</el-descriptions>
 	  </el-dialog>
@@ -295,7 +295,7 @@
 	  </el-dialog>
 	  
 	  
-	  <!-- 右键菜单 -->
+
 	  <div :style="{'z-index': 9999, position: 'fixed',left: ckRightOptionData.optionCardX + 'px', 
 	  				top: ckRightOptionData.optionCardY + 'px', width: '100px', background: 'white',
 	  				 'box-shadow': '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)'}" 
@@ -813,4 +813,4 @@ const OptionCardClose = (event) => {
 .data-table-tabs > .el-tabs__header {
 	margin: 0;
 }
-</style>
+</style> -->

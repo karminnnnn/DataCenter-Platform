@@ -1,4 +1,4 @@
-package net.srt.query;
+package net.srt.constants.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

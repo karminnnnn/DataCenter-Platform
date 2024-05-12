@@ -3,7 +3,7 @@ package net.srt.service;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.BaseService;
 import net.srt.vo.DataLayerVO;
-import net.srt.query.DataLayerQuery;
+import net.srt.constants.query.DataLayerQuery;
 import net.srt.entity.DataLayerEntity;
 
 import java.util.List;

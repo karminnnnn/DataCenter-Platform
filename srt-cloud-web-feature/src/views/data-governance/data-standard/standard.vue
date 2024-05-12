@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div style="padding-left: 20px;">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -18,9 +18,7 @@
 			</el-form-item>
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" @selection-change="selectionChangeHandle">
-			<!-- <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column> -->
-			<!-- <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> -->
-			<!-- <el-table-column prop="categoryId" label="所属目录id" header-align="center" align="center"></el-table-column> -->
+
 			<el-table-column prop="engName" label="英文名称" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="cnName" label="中文名称" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="codeNum" label="编码数" header-align="center" align="center">
@@ -29,11 +27,7 @@
 					<span v-show="scope.row.type == 2">{{scope.row.codeNum}}</span>
 				</template>
 			</el-table-column>
-			<!-- <el-table-column prop="dataType" label="数据类型 数字，字符串，日期，小数" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="dataLength" label="长度" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="dataPrecision" label="精度" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="ifNull" label="非空 0-否 1-是" header-align="center" align="center"></el-table-column> -->
-			<!-- <el-table-column prop="standardCodeId" label="标准码表id" header-align="center" align="center"></el-table-column> -->
+
 			<fast-table-column prop="type" dict-type="standard_type" label="类型" header-align="center" align="center"></fast-table-column>
 			<fast-creator-column prop="creator" label="创建者" header-align="center" align="center"></fast-creator-column>
 			<el-table-column prop="createTime" show-overflow-tooltip label="创建时间" header-align="center" align="center"></el-table-column>
@@ -55,7 +49,7 @@
 			@current-change="currentChangeHandle"
 		>
 		</el-pagination>
-		<!-- 弹窗, 新增 / 修改 -->
+		弹窗, 新增 / 修改
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 		<StandardCode ref="standardCodeRef"></StandardCode>
 	</div>
@@ -98,4 +92,4 @@ defineExpose({
 })
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script>
+</script> -->

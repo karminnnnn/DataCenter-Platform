@@ -7,7 +7,7 @@ import net.srt.convert.DataLayerConvert;
 import net.srt.entity.DataLayerEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
-import net.srt.query.DataLayerQuery;
+import net.srt.constants.query.DataLayerQuery;
 import net.srt.service.DataLayerService;
 import net.srt.vo.DataLayerVO;
 import org.springframework.security.access.prepost.PreAuthorize;

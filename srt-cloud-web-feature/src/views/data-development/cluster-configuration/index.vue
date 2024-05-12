@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card body-style="height: calc(100vh - 170px )">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -54,7 +54,7 @@
 		>
 		</el-pagination>
 
-		<!-- 弹窗, 新增 / 修改 -->
+
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 	</el-card>
 </template>
@@ -80,4 +80,4 @@ const addOrUpdateHandle = (id?: number) => {
 }
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script>
+</script> -->

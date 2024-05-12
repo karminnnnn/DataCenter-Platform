@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card body-style="height: calc(100vh - 170px )" @click="OptionCardClose($event)">
 		<div>
 		  <SideLayout class="fp-content" left-title="主数据目录" right-title="主数据模型">
@@ -118,7 +118,7 @@
 					    </el-table-column>
 					    <el-table-column align="center" label="长度" width="160">
 					      <template #default="scope">
-							<!-- 如果是3-日期 7-序列 8-大字段 9-日期 10-日期 11-默认 -->
+							如果是3-日期 7-序列 8-大字段 9-日期 10-日期 11-默认
 							<div v-if="!isDetail">
 								<el-input disabled v-if="scope.row.fieldType == 3 || scope.row.fieldType == 7 || scope.row.fieldType == 8 || scope.row.fieldType == 9 || scope.row.fieldType == 10 || scope.row.fieldType == 11"></el-input>
 								<el-input v-else v-model="scope.row.fieldLength" />
@@ -164,7 +164,7 @@
 			</template>
 		  </SideLayout>
 		</div>
-	  <!-- 右键菜单 -->
+	  右键菜单
 	  <div :style="{'z-index': 9999, position: 'fixed',left: ckRightOptionData.optionCardX + 'px', 
 	  				top: ckRightOptionData.optionCardY + 'px', width: '100px', background: 'white',
 	  				 'box-shadow': '0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)'}" 
@@ -745,4 +745,4 @@ const OptionCardClose = (event) => {
 	  }
 	}
 	
-</style>
+</style> -->

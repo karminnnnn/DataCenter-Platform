@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card>
 		<div class="apiConfigDivClass">
 			<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
@@ -8,9 +8,7 @@
 				<el-form-item>
 					<fast-select v-model="state.queryForm.contentType" dict-type="content_type" placeholder="内容类型" clearable filterable></fast-select>
 				</el-form-item>
-				<!-- <el-form-item>
-					<fast-select v-model="state.queryForm.status" dict-type="release_status" placeholder="状态" clearable filterable></fast-select>
-				</el-form-item> -->
+
 				<el-form-item>
 					<el-select v-model="state.queryForm.sqlDbType" clearable filterable placeholder="sql库类型">
 							<el-option :key="1" label="数据库" :value="1"></el-option>
@@ -40,19 +38,14 @@
 				<el-form-item>
 					<el-button type="warning" @click="exportDocs()">导出文档</el-button>
 				</el-form-item>
-				<!-- <el-form-item>
-					<el-button v-auth="'srt:api-config:delete'" type="danger" @click="deleteBatchHandle()">删除</el-button>
-				</el-form-item> -->
+
 			</el-form>
 			<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" @selection-change="selectionChangeHandle">
 				<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>	
 				<el-table-column show-overflow-tooltip label="分组" header-align="center" align="center" width="150" prop="group"></el-table-column>
 				<el-table-column prop="path" show-overflow-tooltip label="api地址" header-align="center" align="center"></el-table-column>
 				<el-table-column show-overflow-tooltip prop="name" label="名称" header-align="center" align="center"></el-table-column>
-				<!-- <el-table-column prop="note" label="描述" header-align="center" align="center"></el-table-column>
-				<el-table-column prop="sqlText" label="sql语句" header-align="center" align="center"></el-table-column> 
-				<el-table-column prop="params" label=" application/x-www-form-urlencoded 类API对应的参数" header-align="center" align="center"></el-table-column>
-				<el-table-column prop="jsonParam" label="application/json 类API对应的json参数示例" header-align="center" align="center"></el-table-column> -->
+
 				<fast-table-column prop="contentType" label="内容类型" dict-type="content_type" width="150" header-align="center" align="center"></fast-table-column>
 				<el-table-column prop="status" label="状态" header-align="center" align="center">
 					<template #default="scope">
@@ -60,8 +53,7 @@
 						<el-tag v-show="scope.row.status == 1" type="success">已发布</el-tag>
 					</template>
 				</el-table-column>
-				<!-- <el-table-column prop="sqlDbType" label="1-数据库 2-中台库" header-align="center" align="center"></el-table-column>
-				<el-table-column prop="databaseId" label="数据库id" header-align="center" align="center"></el-table-column> -->
+
 				<fast-table-column prop="previlege" label="私有" dict-type="yes_or_no" header-align="center" align="center"></fast-table-column>
 				<fast-table-column prop="openTrans" label="开启事务" dict-type="yes_or_no" header-align="center" align="center"></fast-table-column>
 				<fast-creator-column prop="releaseUserId" label="发布者" header-align="center" align="center"></fast-creator-column>
@@ -87,17 +79,14 @@
 			>
 			</el-pagination>
 			
-			<!-- 弹窗, 新增 / 修改 -->
-			<!-- <div class="drawerClass" style="height:100%">
-				<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
-			</div> -->
+
 			
-			<!-- 弹窗, 查看 -->
+			弹窗, 查看
 			<div class="drawerClass" style="height:100%">
 				<AppInfo ref="appInfoRef" ></AppInfo>
 			</div>
 			
-			<!-- 测试 -->
+			测试
 			<div class="drawerClass" style="height:100%">
 				<ApiTest ref="apiTestRef"></ApiTest>
 			</div>
@@ -192,4 +181,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 		position: absolute !important;
 		overflow: hidden;
 	}
-</style>
+</style> -->

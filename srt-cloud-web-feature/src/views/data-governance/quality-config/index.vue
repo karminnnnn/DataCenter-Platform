@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div style="padding-left: 20px;">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -21,12 +21,9 @@
 			</el-form-item>
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%">
-			<!-- <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column> -->
-			<!-- <el-table-column prop="id" label="自增id" header-align="center" align="center"></el-table-column> -->
+
 			<el-table-column prop="name" label="名称" header-align="center" align="center"></el-table-column>
-			<!-- <el-table-column prop="ruleId" label="规则id" header-align="center" align="center"></el-table-column> -->
-			<!-- <el-table-column prop="param" label="个性化参数json" header-align="center" align="center"></el-table-column> -->
-			<!-- <el-table-column prop="metadataIds" label="元数据字段列表" header-align="center" align="center"></el-table-column> -->
+
 			<el-table-column prop="status" label="启用状态" header-align="center" align="center">
 				<template #default="scope">
 					<span><el-tag v-show="scope.row.status==0" type="danger">已关闭</el-tag></span>
@@ -40,8 +37,7 @@
 				</template>
 			</el-table-column>
 			<el-table-column show-overflow-tooltip prop="cron" label="cron表达式" header-align="center" align="center"></el-table-column>
-			<!-- <el-table-column prop="note" label="备注" header-align="center" align="center"></el-table-column> -->
-			<!-- <el-table-column prop="projectId" label="项目id" header-align="center" align="center"></el-table-column> -->
+
 			<fast-creator-column prop="creator" label="创建者" header-align="center" align="center"></fast-creator-column>
 			<el-table-column show-overflow-tooltip prop="createTime" label="创建时间" header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
@@ -65,7 +61,7 @@
 		>
 		</el-pagination>
 
-		<!-- 弹窗, 新增 / 修改 -->
+		弹窗, 新增 / 修改
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 	</div>
 </template>
@@ -149,4 +145,4 @@ defineExpose({
 })
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script>
+</script> -->

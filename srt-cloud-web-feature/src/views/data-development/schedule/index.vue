@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card>
 		<div class="scheduleDivClass">
 			<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
@@ -54,14 +54,14 @@
 				@current-change="currentChangeHandle"
 			>
 			</el-pagination>
-			<!-- 弹窗, 新增 / 修改 -->
+			弹窗, 新增 / 修改
 			<div class="drawerClass" style="height:100%">
 				<el-drawer title="编辑流程" size="100%" v-model="flowVisable" direction="rtl" :modal="false" :close-on-click-modal="false">
 					<Flow ref="flowRef" @refreshDataList="refreshData"></Flow>
 				</el-drawer>
 			</div>
 			
-			<!-- 弹窗, 查看 -->
+			弹窗, 查看
 			<div class="drawerClass" style="height:100%">
 				<el-drawer title="详情" size="100%" v-model="detailVisable" direction="rtl" :modal="false" :close-on-click-modal="false">
 					<Detail ref="detailRef"></Detail>
@@ -228,4 +228,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 		/* padding: 6px; */
 		height: 100%;
 	}
-</style>
+</style> -->
