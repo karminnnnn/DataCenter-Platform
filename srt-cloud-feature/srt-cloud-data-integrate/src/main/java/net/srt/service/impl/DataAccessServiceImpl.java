@@ -1,7 +1,6 @@
 package net.srt.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
@@ -30,9 +29,9 @@ import net.srt.framework.common.utils.BeanUtil;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.framework.security.user.SecurityUser;
 import net.srt.framework.security.user.UserDetail;
-import net.srt.query.DataAccessQuery;
-import net.srt.query.DataAccessTaskDetailQuery;
-import net.srt.query.DataAccessTaskQuery;
+import net.srt.constants.query.DataAccessQuery;
+import net.srt.constants.query.DataAccessTaskDetailQuery;
+import net.srt.constants.query.DataAccessTaskQuery;
 import net.srt.service.DataAccessService;
 import net.srt.service.DataAccessTaskDetailService;
 import net.srt.service.DataAccessTaskService;

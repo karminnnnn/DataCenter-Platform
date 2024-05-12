@@ -11,7 +11,7 @@ import net.srt.entity.DataAccessTaskEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.DateUtils;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
-import net.srt.query.DataAccessTaskQuery;
+import net.srt.constants.query.DataAccessTaskQuery;
 import net.srt.service.DataAccessTaskService;
 import net.srt.vo.DataAccessTaskVO;
 import org.springframework.stereotype.Service;
