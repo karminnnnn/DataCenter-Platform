@@ -1,7 +1,7 @@
 <template>
 	<el-card>
 		<div class="databaseDivClass">
-			<el-form :inline="true" :model="datasource_state.queryForm" @keyup.enter="getDataList()">
+			<el-form :inline="true" :model="datasource_state.queryForm" @keyup.enter="datasource_useCrud.getDataList()">
 						<el-form-item>
 				  <el-input v-model="datasource_state.queryForm.name" placeholder="名称"></el-input>
 				</el-form-item>
@@ -24,7 +24,7 @@
 					<fast-project-select v-model="state.queryForm.projectId" placeholder="所属项目" clearable></fast-project-select>
 				</el-form-item> -->
 				<el-form-item>
-					<el-button @click="getDataList()">查询</el-button>
+					<el-button @click="datasource_useCrud.getDataList()">查询</el-button>
 				</el-form-item>
 				<el-form-item>
 					<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -78,7 +78,7 @@
       					<h2>查看数据库</h2>
     				</template>
 					<!-- Mine -->
-					<el-form :inline="true" :model="database_state.queryForm" @keyup.enter="getDataList()">
+					<el-form :inline="true" :model="database_state.queryForm" @keyup.enter="database_useCrud.getDataList()">
 								<el-form-item>
 						  <el-input v-model="database_state.queryForm.name" placeholder="名称"></el-input>
 						</el-form-item>
@@ -101,7 +101,7 @@
 							<fast-project-select v-model="state.queryForm.projectId" placeholder="所属项目" clearable></fast-project-select>
 						</el-form-item> -->
 						<el-form-item>
-							<el-button @click="getDataList()">查询</el-button>
+							<el-button @click="database_useCrud.getDataList()">查询</el-button>
 						</el-form-item>
 						<el-form-item>
 							<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -158,7 +158,7 @@
 				  	<template #header>
       					<h2>查看数据库表</h2>
     				</template>
-					<el-form :inline="true" :model="datatable_state.queryForm" @keyup.enter="getDataList()">
+					<el-form :inline="true" :model="datatable_state.queryForm" @keyup.enter="datatable_useCrud.getDataList()">
 								<el-form-item>
 						  <el-input v-model="datatable_state.queryForm.name" placeholder="名称"></el-input>
 						</el-form-item>
@@ -181,7 +181,7 @@
 							<fast-project-select v-model="state.queryForm.projectId" placeholder="所属项目" clearable></fast-project-select>
 						</el-form-item> -->
 						<el-form-item>
-							<el-button @click="getDataList()">查询</el-button>
+							<el-button @click="datatable_useCrud.getDataList()">查询</el-button>
 						</el-form-item>
 						<el-form-item>
 							<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -229,7 +229,7 @@
 
 
 		<!-- 弹窗, 新增 / 修改 -->
-		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
+		<add-or-update ref="addOrUpdateRef" @refreshDataList="datasource_useCrud.getDataList"></add-or-update>
 	</el-card>
 </template>
 
@@ -259,8 +259,6 @@ const datasource_state: IHooksOptions = reactive({
 		isRtApprove: '', 
 		projectId: ''
 	},
-	database_drawer: false,
-	datatable_drawer: false,
 	direction: 'rtl',
 	databaseId: '', 
 	sqlDataHeader: {},
@@ -274,8 +272,10 @@ const database_state: IHooksOptions = reactive({
 	deleteUrl: '/data-integrate/database',
 
 	// Mine
+	datasource_id: '',
 	dataListUrl_v2: '/metadata/database/page',
 	deleteUrl_v2: '/metadata/database',
+	database_drawer: false,
 
 	queryForm: {
 		name: '', 
@@ -286,8 +286,6 @@ const database_state: IHooksOptions = reactive({
 		isRtApprove: '', 
 		projectId: ''
 	},
-	database_drawer: false,
-	datatable_drawer: false,
 	direction: 'rtl',
 	databaseId: '', 
 	sqlDataHeader: {},
@@ -301,8 +299,11 @@ const datatable_state: IHooksOptions = reactive({
 	deleteUrl: '/data-integrate/database',
 
 	// Mine
+	datasource_id: '',
+	database_id: '',
 	dataListUrl_v2: '/metadata/datatable/page',
 	deleteUrl_v2: '/metadata/datatable',
+	datatable_drawer: false,
 
 	queryForm: {
 		name: '', 
@@ -313,8 +314,7 @@ const datatable_state: IHooksOptions = reactive({
 		isRtApprove: '', 
 		projectId: ''
 	},
-	database_drawer: false,
-	datatable_drawer: false,
+	// database_drawer: false,
 	direction: 'rtl',
 	databaseId: '', 
 	sqlDataHeader: {},
@@ -343,6 +343,10 @@ const addOrUpdateHandle = (id?: number) => {
 const database_tables = (id) => {
 	database_state.database_drawer = true
 	database_state.databaseId = id
+
+	// Mine
+	database_state.datasource_id = id
+
 	// getTablesById(id).then(res => {
 	// 	state.tableData = res.data
 	// })
@@ -351,6 +355,11 @@ const database_tables = (id) => {
 const datatable_tables = (id) => {
 	datatable_state.datatable_drawer = true
 	datatable_state.databaseId = id
+
+	// Mine
+	datatable_state.datasource_id = database_state.datasource_id
+	datatable_state.database_id = id
+
 	// getTablesById(id).then(res => {
 	// 	state.tableData = res.data
 	// })
@@ -368,18 +377,18 @@ const datatable_tables = (id) => {
 // 	})
 // }
 
-const search = ref('')
-const filterTableData = computed(() =>
-  datasource_state.tableData.filter(
-    (data) =>
-      !search.value ||
-      data.tableName && data.tableName.toLowerCase().includes(search.value.toLowerCase()) ||
-			data.remarks && data.remarks.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
+// const search = ref('')
+// const filterTableData = computed(() =>
+//   datasource_state.tableData.filter(
+//     (data) =>
+//       !search.value ||
+//       data.tableName && data.tableName.toLowerCase().includes(search.value.toLowerCase()) ||
+// 			data.remarks && data.remarks.toLowerCase().includes(search.value.toLowerCase())
+//   )
+// )
 
 const databasedrawerClose = (done: () => void) => {
-	search.value=''
+	// search.value=''
 	// sql.value=''
 	database_state.sqlData = []
 	database_state.sqlDataHeader = []
@@ -391,7 +400,7 @@ const databasedrawerClose = (done: () => void) => {
 // 当抽屉准备关闭，但在实际关闭之前，Vue会调用这个钩子函数。如果在这个函数中执行了done()，
 // 那么它告诉Vue，关闭抽屉前的所有操作都已完成，可以继续执行关闭动作
 const datatabledrawerClose = (done: () => void) => {
-	search.value=''
+	// search.value=''
 	// sql.value=''
 	datatable_state.sqlData = []
 	datatable_state.sqlDataHeader = []
