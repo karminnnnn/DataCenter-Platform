@@ -23,7 +23,10 @@ public interface SysAuthService {
      *
      * @param login 登录信息
      */
+
+    /*
     SysTokenVO loginByMobile(SysMobileLoginVO login);
+    */
 
     /**
      * 发送手机验证码
