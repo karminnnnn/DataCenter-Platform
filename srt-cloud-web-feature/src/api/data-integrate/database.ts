@@ -1,9 +1,16 @@
 import service from '@/utils/request'
 
+// 保留？？？
 export const useDatabaseApi = (id: number) => {
 	return service.get('/data-integrate/database/' + id)
 }
 
+// Mine
+export const useDataSourceApi_v2 = (id: number) => {
+	return service.get('/metadata/datasource/' + id)
+}
+
+// 保留？？？
 export const useDatabaseSubmitApi = (dataForm: any) => {
 	if (dataForm.id) {
 		return service.put('/data-integrate/database', dataForm)
@@ -12,58 +19,86 @@ export const useDatabaseSubmitApi = (dataForm: any) => {
 	}
 }
 
-export const testOnline = (dataForm: any) => {
-	return service.post('/data-integrate/database/test-online', dataForm)
+// Mine
+export const useDataSourceSubmitApi_v2 = (dataForm: any) => {
+	if (dataForm.id) {
+		return service.put('/metadata/datasource', dataForm)
+	} else {
+		return service.post('/metadata/datasource', dataForm)
+	}
 }
 
+// // 不要
+// export const testOnline = (dataForm: any) => {
+// 	return service.post('/data-integrate/database/test-online', dataForm)
+// }
+
+// 保留？？？
 export const getTablesById = (id: number) => {
 	return service.get('/data-integrate/database/tables/' + id)
 }
 
+// Mine
+export const getTablesById_v2 = (id: number) => {
+	return service.get('/metadata/datasource/tables/' + id)
+}
+
+// 不要
 export const getTableDataBySql = (id: number, sqlConsole: any) => {
 	return service.post('/data-integrate/database/table-data/' + id, sqlConsole)
 }
 
+// 保留，牵扯众多
 export const listDatabase = () => {
 	return service.get('/data-integrate/database/list-all')
 }
 
+// 保留？？？
 export const listTreeByIdApi = (id:any) => {
 	return service.get('/data-integrate/database/list-tree/'+id)
 }
 
+// 保留？？？
 export const listColumnsByIdAndTableName = (id: any, tableName: any) => {
 	return service.get('/data-integrate/database/'+id+'/'+tableName+'/columns')
 }
 
+// 保留？？？
 export const listColumnsByIdAndSql = (id: any, sqlConsole: any) => {
 	return service.post('/data-integrate/database/'+id+'/sql/columns', sqlConsole)
 }
 
+// 保留？？？
 export const getSqlGenerationApi = (id: any, tableName: any, tableRemarks) => {
 	return service.get('/data-integrate/database/'+id+'/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
 }
 
+// 保留？？？
 export const listMiddleDbTreeApi = () => {
 	return service.get('/data-integrate/database/middle-db/list-tree')
 }
 
+// 保留？？？
 export const listMiddleDbColumnsApi = (tableName: any) => {
 	return service.get('/data-integrate/database/middle-db/'+tableName+'/columns')
 }
 
+// 保留？？？
 export const getMiddleDbSqlGenerationApi = (tableName: any, tableRemarks) => {
 	return service.get('/data-integrate/database/middle-db/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
 }
 
+// 保留？？？
 export const getTableInfoApi = (tableName: any) => {
 	return service.get('/data-integrate/database/middle-db/table-info/'+tableName)
 }
 
+// 保留？？？
 export const saveTableInfoApi = (dataForm: any) => {
 	return service.post('/data-integrate/database/middle-db/table-info', dataForm)
 }
 
+// 保留？？？
 export const deleteTableInfoApi = (tableName: any) => {
 	return service.delete('/data-integrate/database/middle-db/table-info/'+tableName)
 }

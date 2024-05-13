@@ -46,7 +46,7 @@
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
-			<el-button type="primary" @click="test()">测试</el-button>
+			<!--<el-button type="primary" @click="test()">测试</el-button>-->
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
 		</template>
 	</el-dialog>
@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDatabaseApi, useDatabaseSubmitApi,testOnline } from '@/api/data-integrate/database'
+import { useDatabaseApi, useDatabaseSubmitApi,/*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
 
 const emit = defineEmits(['refreshDataList'])
@@ -141,23 +141,23 @@ const submitHandle = () => {
 	})
 }
 
-// 测试连接
-const test = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false
-		}
-		testOnline(dataForm).then(() => {
-			ElMessage.success({
-				message: '测试连接成功',
-				duration: 500,
-				onClose: () => {
-					emit('refreshDataList')
-				}
-			})
-		})
-	})
-}
+// // 测试连接
+// const test = () => {
+// 	dataFormRef.value.validate((valid: boolean) => {
+// 		if (!valid) {
+// 			return false
+// 		}
+// 		testOnline(dataForm).then(() => {
+// 			ElMessage.success({
+// 				message: '测试连接成功',
+// 				duration: 500,
+// 				onClose: () => {
+// 					emit('refreshDataList')
+// 				}
+// 			})
+// 		})
+// 	})
+// }
 
 defineExpose({
 	init
