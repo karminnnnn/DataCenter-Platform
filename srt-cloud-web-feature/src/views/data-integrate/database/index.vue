@@ -27,13 +27,13 @@
 					<el-button @click="datasource_useCrud.getDataList()">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+					<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle_datasource()">新增</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="deleteBatchHandle()">删除</el-button>
+					<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="datasource_state.deleteBatchHandle()">删除</el-button>
 				</el-form-item>
 			</el-form>
-			<el-table v-loading="datasource_state.dataListLoading" :data="datasource_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
+			<el-table v-loading="datasource_state.dataListLoading" :data="datasource_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="datasource_useCrud.selectionChangeHandle">
 				<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 				<el-table-column prop="name" label="名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 				<fast-table-column prop="databaseType" label="数据库类型" dict-type="database_type"></fast-table-column>
@@ -47,10 +47,10 @@
 				<el-table-column prop="createTime" label="创建时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" width="200">
 					<template #default="scope">
-						<el-button v-auth="'data-integrate:database:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
+						<el-button v-auth="'data-integrate:database:update'" type="primary" link @click="addOrUpdateHandle_datasource(scope.row.id)">编辑</el-button>
 						<el-button type="primary" link @click="database_tables(scope.row.id)">数据库</el-button>
-						<!--<el-button type="primary" link @click="test(scope.row)">测试</el-button>-->
-						<el-button v-auth="'data-integrate:database:delete'" type="danger" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+						<!-- <el-button type="primary" link @click="test(scope.row)">测试</el-button> -->
+						<el-button v-auth="'data-integrate:database:delete'" type="danger" link @click="datasource_useCrud.deleteBatchHandle(scope.row.id)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -60,8 +60,8 @@
 				:page-size="datasource_state.limit"
 				:total="datasource_state.total"
 				layout="total, sizes, prev, pager, next, jumper"
-				@size-change="sizeChangeHandle"
-				@current-change="currentChangeHandle"
+				@size-change="datasource_useCrud.sizeChangeHandle"
+				@current-change="datasource_useCrud.currentChangeHandle"
 			>
 			</el-pagination>
 			
@@ -107,10 +107,10 @@
 							<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
 						</el-form-item>
 						<el-form-item>
-							<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="deleteBatchHandle()">删除</el-button>
+							<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="database_useCrud.deleteBatchHandle()">删除</el-button>
 						</el-form-item>
 					</el-form>
-					<el-table v-loading="database_state.dataListLoading" :data="database_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
+					<el-table v-loading="database_state.dataListLoading" :data="database_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="database_useCrud.selectionChangeHandle">
 						<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 						<el-table-column prop="name" label="名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 						<fast-table-column prop="databaseType" label="数据库类型" dict-type="database_type"></fast-table-column>
@@ -127,7 +127,7 @@
 								<el-button v-auth="'data-integrate:database:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
 								<el-button type="primary" link @click="datatable_tables(scope.row.id)">数据库表</el-button>
 								<!--<el-button type="primary" link @click="test(scope.row)">测试</el-button>-->
-								<el-button v-auth="'data-integrate:database:delete'" type="danger" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+								<el-button v-auth="'data-integrate:database:delete'" type="danger" link @click="database_useCrud.deleteBatchHandle(scope.row.id)">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -137,8 +137,8 @@
 						:page-size="database_state.limit"
 						:total="database_state.total"
 						layout="total, sizes, prev, pager, next, jumper"
-						@size-change="sizeChangeHandle"
-						@current-change="currentChangeHandle"
+						@size-change="database_useCrud.sizeChangeHandle"
+						@current-change="database_useCrud.currentChangeHandle"
 					>
 					</el-pagination>
 					<!-- Mine -->
@@ -187,10 +187,10 @@
 							<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle()">新增</el-button>
 						</el-form-item>
 						<el-form-item>
-							<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="deleteBatchHandle()">删除</el-button>
+							<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="datatable_useCrud.deleteBatchHandle()">删除</el-button>
 						</el-form-item>
 					</el-form>
-					<el-table v-loading="datatable_state.dataListLoading" :data="datatable_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
+					<el-table v-loading="datatable_state.dataListLoading" :data="datatable_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="datatable_useCrud.selectionChangeHandle">
 						<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 						<el-table-column prop="name" label="名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 						<fast-table-column prop="databaseType" label="数据库类型" dict-type="database_type"></fast-table-column>
@@ -207,7 +207,7 @@
 								<el-button v-auth="'data-integrate:database:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
 								<!-- <el-button type="primary" link @click="datatable_tables(scope.row.id)">数据库表</el-button> -->
 								<!-- <el-button type="primary" link @click="test(scope.row)">测试</el-button> -->
-								<el-button v-auth="'data-integrate:database:delete'" type="danger" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+								<el-button v-auth="'data-integrate:database:delete'" type="danger" link @click="datatable_useCrud.deleteBatchHandle(scope.row.id)">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -217,8 +217,8 @@
 						:page-size="datatable_state.limit"
 						:total="datatable_state.total"
 						layout="total, sizes, prev, pager, next, jumper"
-						@size-change="sizeChangeHandle"
-						@current-change="currentChangeHandle"
+						@size-change="datatable_useCrud.sizeChangeHandle"
+						@current-change="datatable_useCrud.currentChangeHandle"
 					>
 					</el-pagination>
 				</el-drawer>
@@ -229,17 +229,17 @@
 
 
 		<!-- 弹窗, 新增 / 修改 -->
-		<add-or-update ref="addOrUpdateRef" @refreshDataList="datasource_useCrud.getDataList"></add-or-update>
+		<add-or-update ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update>
 	</el-card>
 </template>
 
 <script setup lang="ts" name="Data-integrateDatabaseIndex">
 import { useCrud } from '@/hooks'
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import AddOrUpdate from './add-or-update.vue'
 import { IHooksOptions } from '@/hooks/interface'
 import { ElMessage } from 'element-plus/es'
-import { /*testOnline,*/getTablesById, getTableDataBySql } from '@/api/data-integrate/database'
+// import { /*testOnline,*/getTablesById, getTableDataBySql } from '@/api/data-integrate/database'
 
 // 数据源
 const datasource_state: IHooksOptions = reactive({
@@ -250,20 +250,44 @@ const datasource_state: IHooksOptions = reactive({
 	dataListUrl_v2: '/metadata/datasource/page',
 	deleteUrl_v2: '/metadata/datasource',
 
+	// 搜索框查询, 没啥问题
 	queryForm: {
 		name: '', 
 		databaseType: '', 
-		databaseName: '', 
+		// databaseName: '', 
 		databaseSchema: '',
 		status: '', 
 		isRtApprove: '', 
 		projectId: ''
 	},
-	direction: 'rtl',
+
+	// Mine 应该用这个
+	queryForm_v3: {
+		name: '', 
+		datasourceType: '', 
+		datasourceSchema: '', // 我也不知道是啥
+		status: '', 
+		// isRtApprove: '', // 是否支持实时接入？ 
+		platformName: ''
+	},
+
+	// Mine
+	queryForm_v2: {
+		DataSourceID: '',
+		DataSourceName: '',
+		IP: '',
+		Port: '',
+		UserName: '',
+		Password: '',
+		PlatformID: '',
+		DatabaseType: ''
+	},
+
+	// direction: 'rtl',
 	databaseId: '', 
-	sqlDataHeader: {},
-	sqlData: [],
-	tableData: []
+	// sqlDataHeader: {},
+	// sqlData: [],
+	tableData: [] // 好像没啥用
 })
 
 // 数据库
@@ -286,10 +310,31 @@ const database_state: IHooksOptions = reactive({
 		isRtApprove: '', 
 		projectId: ''
 	},
+
+	// 这个才对
+	queryForm_v3: {
+		name: '', 
+		state: '',
+		State: '',
+		syncState: '', 
+		datasourceID: ''
+	},
+
+	// Mine
+	queryForm_v2: {
+		DatabaseID: '',
+		DatabaseName: '',
+		SyncStatus: false,
+		State: false,
+		BuildTime: '',
+		Remark: '',
+		DataSourceID: '',
+	},
+
 	direction: 'rtl',
 	databaseId: '', 
-	sqlDataHeader: {},
-	sqlData: [],
+	// sqlDataHeader: {},
+	// sqlData: [],
 	tableData: []
 })
 
@@ -314,17 +359,31 @@ const datatable_state: IHooksOptions = reactive({
 		isRtApprove: '', 
 		projectId: ''
 	},
+
+	// 这个才对
+	queryForm_v3: {
+		name: '',
+		databaseID: ''
+	},
+
+	// Mine
+	queryForm_v2: {
+		DatatableID: '',
+		DatatableName: '',
+		DatabaseID: '',
+	},
+
 	// database_drawer: false,
 	direction: 'rtl',
 	databaseId: '', 
-	sqlDataHeader: {},
-	sqlData: [],
+	// sqlDataHeader: {},
+	// sqlData: [],
 	tableData: []
 })
 
-const addOrUpdateRef = ref()
-const addOrUpdateHandle = (id?: number) => {
-	addOrUpdateRef.value.init(id)
+const addOrUpdateRef_datasource = ref()
+const addOrUpdateHandle_datasource = (id?: number) => {
+	addOrUpdateRef_datasource.value.init(id)
 }
 
 // // 测试连接
@@ -350,6 +409,10 @@ const database_tables = (id) => {
 	// getTablesById(id).then(res => {
 	// 	state.tableData = res.data
 	// })
+
+	// 记得前面 v3 要改掉
+	database_state.queryForm.datasourceID = id
+	database_useCrud.getDataList()
 }
 
 const datatable_tables = (id) => {
@@ -363,6 +426,10 @@ const datatable_tables = (id) => {
 	// getTablesById(id).then(res => {
 	// 	state.tableData = res.data
 	// })
+
+	// 记得前面 v3 要改掉
+	datatable_state.queryForm.databaseID = id
+	datatable_useCrud.getDataList()
 }
 
 // const sql = ref('')
@@ -390,8 +457,8 @@ const datatable_tables = (id) => {
 const databasedrawerClose = (done: () => void) => {
 	// search.value=''
 	// sql.value=''
-	database_state.sqlData = []
-	database_state.sqlDataHeader = []
+	// database_state.sqlData = []
+	// database_state.sqlDataHeader = []
 	database_state.tableData = []
 	done()
 }
@@ -402,8 +469,8 @@ const databasedrawerClose = (done: () => void) => {
 const datatabledrawerClose = (done: () => void) => {
 	// search.value=''
 	// sql.value=''
-	datatable_state.sqlData = []
-	datatable_state.sqlDataHeader = []
+	// datatable_state.sqlData = []
+	// datatable_state.sqlDataHeader = []
 	datatable_state.tableData = []
 	done()
 }

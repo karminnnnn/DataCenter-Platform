@@ -28,10 +28,10 @@ export const useDataSourceSubmitApi_v2 = (dataForm: any) => {
 	}
 }
 
-// // 不要
-// export const testOnline = (dataForm: any) => {
-// 	return service.post('/data-integrate/database/test-online', dataForm)
-// }
+// 不要
+export const testOnline = (dataForm: any) => {
+	return service.post('/data-integrate/database/test-online', dataForm)
+}
 
 // 保留？？？
 export const getTablesById = (id: number) => {
