@@ -62,8 +62,6 @@ import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
 import { useDataSourceApi_v2, useDataSourceSubmitApi_v2,/*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
-import Password from '@/views/profile/password.vue'
-import { Platform } from '@element-plus/icons-vue'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -132,16 +130,27 @@ const getDatabase = (id: number) => {
 }
 
 const dataRules = ref({
-	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseIp: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databasePort: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseSchema: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	userName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	/* projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }] */})
+	// orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseIp: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databasePort: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseSchema: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// userName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+	
+	DataSourceID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	DataSourceName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	IP: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	Port: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	UserName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	Password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	PlatformID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	PlatformName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	DatabaseType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+})
 
 // 表单提交
 const submitHandle = () => {
