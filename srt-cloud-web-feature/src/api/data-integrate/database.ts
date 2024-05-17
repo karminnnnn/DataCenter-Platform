@@ -7,7 +7,15 @@ export const useDatabaseApi = (id: number) => {
 
 // Mine
 export const useDataSourceApi_v2 = (id: number) => {
-	return service.get('/metadata/datasource/' + id)
+	return service.get('/data-integrate/datasource/' + id)
+}
+// Mine
+export const useDatabaseApi_v2 = (id: number) => {
+	return service.get('/data-integrate/database/' + id)
+}
+// Mine
+export const useDatatableApi_v2 = (id: number) => {
+	return service.get('/data-integrate/datatable/' + id)
 }
 
 // 保留？？？

@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDatabaseApi, useDatabaseSubmitApi,/*testOnline*/ } from '@/api/data-integrate/database'
+import { useDatabaseApi_v2, useDatabaseSubmitApi,/*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
 
 const emit = defineEmits(['refreshDataList'])
@@ -104,7 +104,7 @@ const pwdChange = (newPwd) => {
 }
 
 const getDatabase = (id: number) => {
-	useDatabaseApi(id).then(res => {
+	useDatabaseApi_v2(id).then(res => {
 		Object.assign(dataForm, res.data)
 	})
 }

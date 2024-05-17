@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDatabaseApi, useDatabaseSubmitApi,/*testOnline*/ } from '@/api/data-integrate/database'
+import { useDataSourceApi_v2, useDatabaseSubmitApi,/*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
 import Password from '@/views/profile/password.vue'
 import { Platform } from '@element-plus/icons-vue'
@@ -102,7 +102,9 @@ const init = (id?: number) => {
 		dataFormRef.value.resetFields()
 	}
 	
+	/**************************/
 	//获取部门列表
+	//是要的，但是要看sys那边的修改
 	useOrgListApi().then(res => {
 		orgList.value = res.data
 	})
@@ -117,7 +119,7 @@ const pwdChange = (newPwd) => {
 }
 
 const getDatabase = (id: number) => {
-	useDatabaseApi(id).then(res => {
+	useDataSourceApi_v2(id).then(res => {
 		Object.assign(dataForm, res.data)
 	})
 }
