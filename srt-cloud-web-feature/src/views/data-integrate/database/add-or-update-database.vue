@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDatabaseApi_v2, useDatabaseSubmitApi,/*testOnline*/ } from '@/api/data-integrate/database'
+import { useDatabaseApi_v2, useDatabaseSubmitApi_v2,/*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
 
 const emit = defineEmits(['refreshDataList'])
@@ -128,7 +128,7 @@ const submitHandle = () => {
 			return false
 		}
 
-		useDatabaseSubmitApi(dataForm).then(() => {
+		useDatabaseSubmitApi_v2(dataForm).then(() => {
 			ElMessage.success({
 				message: '操作成功',
 				duration: 500,

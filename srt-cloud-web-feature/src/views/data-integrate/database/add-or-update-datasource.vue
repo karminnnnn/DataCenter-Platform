@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDataSourceApi_v2, useDatabaseSubmitApi,/*testOnline*/ } from '@/api/data-integrate/database'
+import { useDataSourceApi_v2, useDataSourceSubmitApi_v2,/*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
 import Password from '@/views/profile/password.vue'
 import { Platform } from '@element-plus/icons-vue'
@@ -143,7 +143,7 @@ const submitHandle = () => {
 			return false
 		}
 
-		useDatabaseSubmitApi(dataForm).then(() => {
+		useDataSourceSubmitApi_v2(dataForm).then(() => {
 			ElMessage.success({
 				message: '操作成功',
 				duration: 500,

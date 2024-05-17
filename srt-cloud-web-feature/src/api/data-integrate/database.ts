@@ -30,9 +30,25 @@ export const useDatabaseSubmitApi = (dataForm: any) => {
 // Mine
 export const useDataSourceSubmitApi_v2 = (dataForm: any) => {
 	if (dataForm.id) {
-		return service.put('/metadata/datasource', dataForm)
+		return service.put('/data-integrate/datasource', dataForm)
 	} else {
-		return service.post('/metadata/datasource', dataForm)
+		return service.post('/data-integrate/datasource', dataForm)
+	}
+}
+// Mine
+export const useDatabaseSubmitApi_v2 = (dataForm: any) => {
+	if (dataForm.id) {
+		return service.put('/data-integrate/datasource', dataForm)
+	} else {
+		return service.post('/data-integrate/datasource', dataForm)
+	}
+}
+// Mine
+export const useDatatableSubmitApi_v2 = (dataForm: any) => {
+	if (dataForm.id) {
+		return service.put('/data-integrate/datasource', dataForm)
+	} else {
+		return service.post('/data-integrate/datasource', dataForm)
 	}
 }
 
