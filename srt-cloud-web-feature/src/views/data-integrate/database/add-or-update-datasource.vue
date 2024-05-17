@@ -93,8 +93,8 @@ const dataForm = reactive({
 	PlatformID: '',
 	PlatformName: '',
 	DatabaseType: '',
-	// 应该可以留着
-	newPassword: ''
+	// 应该可以留着，注意有可能有问题，传给后端的应该是没有newPassword的
+	newPassword: '******'
 	})
 
 const init = (id?: number) => {
@@ -140,7 +140,7 @@ const dataRules = ref({
 	// userName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	// password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	// projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
-	
+
 	DataSourceID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	DataSourceName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	IP: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

@@ -12,37 +12,18 @@
 						style="width: 100%"
 					/>
 				</el-form-item>
-				<el-form-item label="名称" prop="name">
-					<el-input v-model="dataForm.name" placeholder="名称"></el-input>
+				<el-form-item label="数据表ID" prop="DatatableID">
+					<el-input v-model="dataForm.DatatableID" placeholder="数据表ID"></el-input>
 				</el-form-item>
-				<el-form-item label="数据库类型" prop="databaseType">
-					<fast-select v-model="dataForm.databaseType" dict-type="database_type" placeholder="请选择" clearable></fast-select>
+				<el-form-item label="数据表名称" prop="DatatableName">
+					<el-input v-model="dataForm.DatatableName" placeholder="数据表名称"></el-input>
 				</el-form-item>
-				<el-form-item label="主机ip" prop="databaseIp">
-					<el-input v-model="dataForm.databaseIp" placeholder="主机ip"></el-input>
+				<el-form-item label="数据库ID" prop="DatabaseID">
+					<el-input v-model="dataForm.DatabaseID" placeholder="数据库ID"></el-input>
 				</el-form-item>
-				<el-form-item label="端口" prop="databasePort">
-					<el-input v-model="dataForm.databasePort" placeholder="端口"></el-input>
+				<el-form-item label="数据库名称" prop="DatabaseName">
+					<el-input v-model="dataForm.DatabaseName" placeholder="数据库名称"></el-input>
 				</el-form-item>
-				<el-form-item label="库名(服务名)" prop="databaseName">
-					<el-input v-model="dataForm.databaseName" placeholder="库名(服务名)"></el-input>
-				</el-form-item>
-				<el-form-item label="schema" prop="databaseSchema">
-					<el-input v-model="dataForm.databaseSchema" placeholder="schema"></el-input>
-				</el-form-item>
-				<el-form-item label="用户名" prop="userName">
-					<el-input v-model="dataForm.userName" placeholder="用户名(注意大小写)"></el-input>
-				</el-form-item>
-				<el-form-item label="密码" prop="password">
-					<el-input v-if="!dataForm.id" v-model="dataForm.password" placeholder="密码"></el-input>
-					<el-input v-else v-model="dataForm.newPassword" placeholder="密码" @change="pwdChange"></el-input>
-				</el-form-item>
-				<el-form-item label="jdbc连接串" prop="jdbcUrl">
-					<el-input v-model="dataForm.jdbcUrl" placeholder="jdbc连接串(若填写将以填写的内容连接,否则会后台自动构建连接)"></el-input>
-				</el-form-item>
-				<!-- <el-form-item label="所属项目" prop="projectId">
-					<fast-project-select v-model="dataForm.projectId" placeholder="所属项目" clearable></fast-project-select>
-				</el-form-item> -->
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
@@ -65,24 +46,29 @@ const dataFormRef = ref()
 const orgList = ref([])
 
 const dataForm = reactive({
-	orgId: '',
-	name: '',
-	databaseType: '',
-	databaseIp: '',
-	databasePort: '',
-	databaseName: '',
-	databaseSchema: '',
-	userName: '',
-	password: '',
-	newPassword: '******',
-	jdbcUrl: '',
-	projectId: ''
+	// orgId: '',
+	// name: '',
+	// databaseType: '',
+	// databaseIp: '',
+	// databasePort: '',
+	// databaseName: '',
+	// databaseSchema: '',
+	// userName: '',
+	// password: '',
+	// newPassword: '******',
+	// jdbcUrl: '',
+	// projectId: ''
+
+	DatatableID: '',
+	DatatableName: '',
+	DatabaseID: '',
+	DatabaseName: '',
 	})
 
 const init = (id?: number) => {
 	visible.value = true
 	dataForm.id = ''
-	dataForm.newPassword = '******'
+	// dataForm.newPassword = '******'
 
 	// 重置表单数据
 	if (dataFormRef.value) {
@@ -99,9 +85,9 @@ const init = (id?: number) => {
 	}
 }
 
-const pwdChange = (newPwd) => {
-	dataForm.password = newPwd
-}
+// const pwdChange = (newPwd) => {
+// 	dataForm.password = newPwd
+// }
 
 const getDatabase = (id: number) => {
 	useDatatableApi_v2(id).then(res => {
@@ -110,16 +96,22 @@ const getDatabase = (id: number) => {
 }
 
 const dataRules = ref({
-	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseIp: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databasePort: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	databaseSchema: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	userName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	/* projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }] */})
+	// orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseIp: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databasePort: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// databaseSchema: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// userName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+
+	DatatableID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	DatatableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	DatabaseID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	DatabaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+})
 
 // 表单提交
 const submitHandle = () => {
