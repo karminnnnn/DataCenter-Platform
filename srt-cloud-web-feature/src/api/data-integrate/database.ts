@@ -38,17 +38,17 @@ export const useDataSourceSubmitApi_v2 = (dataForm: any) => {
 // Mine
 export const useDatabaseSubmitApi_v2 = (dataForm: any) => {
 	if (dataForm.id) {
-		return service.put('/data-integrate/datasource', dataForm)
+		return service.put('/data-integrate/database', dataForm)
 	} else {
-		return service.post('/data-integrate/datasource', dataForm)
+		return service.post('/data-integrate/database', dataForm)
 	}
 }
 // Mine
 export const useDatatableSubmitApi_v2 = (dataForm: any) => {
 	if (dataForm.id) {
-		return service.put('/data-integrate/datasource', dataForm)
+		return service.put('/data-integrate/datatable', dataForm)
 	} else {
-		return service.post('/data-integrate/datasource', dataForm)
+		return service.post('/data-integrate/datatable', dataForm)
 	}
 }
 
@@ -126,4 +126,3 @@ export const saveTableInfoApi = (dataForm: any) => {
 export const deleteTableInfoApi = (tableName: any) => {
 	return service.delete('/data-integrate/database/middle-db/table-info/'+tableName)
 }
-

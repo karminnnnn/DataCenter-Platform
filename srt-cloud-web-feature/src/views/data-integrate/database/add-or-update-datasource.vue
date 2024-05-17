@@ -12,34 +12,39 @@
 						style="width: 100%"
 					/>
 				</el-form-item>
-				<el-form-item label="名称" prop="name">
-					<el-input v-model="dataForm.name" placeholder="名称"></el-input>
+				<el-form-item label="数据源ID" prop="DataSourceID">
+					<el-input v-model="dataForm.DataSourceID" placeholder="数据源ID"></el-input>
 				</el-form-item>
-				<el-form-item label="数据库类型" prop="databaseType">
-					<fast-select v-model="dataForm.databaseType" dict-type="database_type" placeholder="请选择" clearable></fast-select>
+				<el-form-item label="数据源名称" prop="DataSourceName">
+					<el-input v-model="dataForm.DataSourceName" placeholder="数据源名称"></el-input>
 				</el-form-item>
-				<el-form-item label="主机ip" prop="databaseIp">
-					<el-input v-model="dataForm.databaseIp" placeholder="主机ip"></el-input>
+				<!-- 这里需要看一下 -->
+				<el-form-item label="数据库类型" prop="DatabaseType">
+					<fast-select v-model="dataForm.DatabaseType" dict-type="database_type" placeholder="请选择" clearable></fast-select>
 				</el-form-item>
-				<el-form-item label="端口" prop="databasePort">
-					<el-input v-model="dataForm.databasePort" placeholder="端口"></el-input>
+				<!------------------->
+				<el-form-item label="数据源IP" prop="IP">
+					<el-input v-model="dataForm.IP" placeholder="数据源IP"></el-input>
 				</el-form-item>
-				<el-form-item label="库名(服务名)" prop="databaseName">
-					<el-input v-model="dataForm.databaseName" placeholder="库名(服务名)"></el-input>
+				<el-form-item label="端口" prop="Port">
+					<el-input v-model="dataForm.Port" placeholder="端口"></el-input>
 				</el-form-item>
-				<el-form-item label="schema" prop="databaseSchema">
-					<el-input v-model="dataForm.databaseSchema" placeholder="schema"></el-input>
+				<el-form-item label="创建者名称" prop="UserName">
+					<el-input v-model="dataForm.UserName" placeholder="创建者名称"></el-input>
 				</el-form-item>
-				<el-form-item label="用户名" prop="userName">
-					<el-input v-model="dataForm.userName" placeholder="用户名(注意大小写)"></el-input>
+				<el-form-item label="平台ID" prop="PlatformID">
+					<el-input v-model="dataForm.PlatformID" placeholder="平台ID"></el-input>
+				</el-form-item>
+				<el-form-item label="平台名称" prop="PlatformName">
+					<el-input v-model="dataForm.PlatformName" placeholder="平台名称"></el-input>
 				</el-form-item>
 				<el-form-item label="密码" prop="password">
-					<el-input v-if="!dataForm.id" v-model="dataForm.password" placeholder="密码"></el-input>
+					<el-input v-if="!dataForm.id" v-model="dataForm.Password" placeholder="密码"></el-input>
 					<el-input v-else v-model="dataForm.newPassword" placeholder="密码" @change="pwdChange"></el-input>
 				</el-form-item>
-				<el-form-item label="jdbc连接串" prop="jdbcUrl">
+				<!-- <el-form-item label="jdbc连接串" prop="jdbcUrl">
 					<el-input v-model="dataForm.jdbcUrl" placeholder="jdbc连接串(若填写将以填写的内容连接,否则会后台自动构建连接)"></el-input>
-				</el-form-item>
+				</el-form-item> -->
 				<!-- <el-form-item label="所属项目" prop="projectId">
 					<fast-project-select v-model="dataForm.projectId" placeholder="所属项目" clearable></fast-project-select>
 				</el-form-item> -->
@@ -89,7 +94,9 @@ const dataForm = reactive({
 	Password: '',
 	PlatformID: '',
 	PlatformName: '',
-	DatabaseType: ''
+	DatabaseType: '',
+	// 应该可以留着
+	newPassword: ''
 	})
 
 const init = (id?: number) => {
@@ -115,7 +122,7 @@ const init = (id?: number) => {
 }
 
 const pwdChange = (newPwd) => {
-	dataForm.password = newPwd
+	dataForm.Password = newPwd
 }
 
 const getDatabase = (id: number) => {
