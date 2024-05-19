@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div :id="id" class="codeEditBox"></div>
 </template>
 
@@ -182,4 +182,4 @@ defineExpose({
 	width: 100%;
 	height: 100%;
 }
-</style>
+</style> -->

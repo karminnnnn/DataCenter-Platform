@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card body-style="height: calc(100vh - 170px )">
 		<el-form ref="dataFormRef" :rules="dataRules" label-width="auto" :model="dataForm">	
 			<el-form-item label="neo4j 访问地址" label-width="auto">
@@ -58,4 +58,4 @@ const lookUp = () => {
 	window.open(dataForm.neo4jUrl, '_blank') 
 }
 
-</script>
+</script> -->

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card>
 		<div class="appDivClass">
 			<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
@@ -25,7 +25,7 @@
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" width="200">
 					<template #default="scope">
 						<el-button type="primary" link @click="getAuthInfo(scope.row.id)">查看授权</el-button>
-						<!-- <el-button type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button> -->
+						<!-- <el-button type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button> 
 						<el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -41,7 +41,7 @@
 			>
 			</el-pagination>
 			
-			<!-- 弹窗, 新增 / 修改 -->
+			<!-- 弹窗, 新增 / 修改 
 			<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 			<div class="drawerClass" style="height:100%">
 				<el-drawer v-model="authDialogVisable" title="查看授权" size="100%" :destroy-on-close="true">
@@ -97,4 +97,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 		position: absolute !important;
 		overflow: hidden;
 	}
-</style>
+</style> -->

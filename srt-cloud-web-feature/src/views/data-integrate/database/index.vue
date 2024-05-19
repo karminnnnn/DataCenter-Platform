@@ -229,7 +229,8 @@
 
 
 		<!-- 弹窗, 新增 / 修改 -->
-		<add-or-update ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update>
+		<!-- <add-or-update ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update> -->
+		<add-or-update-datasource ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update-datasource>
 	</el-card>
 </template>
 
@@ -237,6 +238,7 @@
 import { useCrud } from '@/hooks'
 import { reactive, ref, computed, onMounted } from 'vue'
 import AddOrUpdate from './add-or-update.vue'
+import AddOrUpdate_datasource from './add-or-update-datasource.vue'
 import { IHooksOptions } from '@/hooks/interface'
 import { ElMessage } from 'element-plus/es'
 // import { /*testOnline,*/getTablesById, getTableDataBySql } from '@/api/data-integrate/database'
@@ -385,6 +387,7 @@ const addOrUpdateRef_datasource = ref()
 const addOrUpdateHandle_datasource = (id?: number) => {
 	addOrUpdateRef_datasource.value.init(id)
 }
+
 
 // // 测试连接
 // const test = (row) => {

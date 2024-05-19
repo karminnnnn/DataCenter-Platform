@@ -24,6 +24,6 @@ export const listAllUserApi = () => {
 	return service.get('/sys/user/list-all')
 }
 
-export const listUserApi = () => {
-	return service.get('/sys/user/list-users')
-}
+// export const listUserApi = () => {
+// 	return service.get('/sys/user/list-users')
+// }

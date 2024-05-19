@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-dialog v-model="visible" title="查看" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
 			<el-form-item label="标题:" prop="title" label-width="auto">
@@ -40,7 +40,7 @@
 			</el-form-item>
 			<!-- <el-form-item  label="申请说明" prop="applyNote" label-width="auto">
 				<span>{{dataForm.applyNote}}</span>
-			</el-form-item> -->
+			</el-form-item> 
 	    </el-form>
 		<div v-if="dataForm.mountType == 2 && appShow">
 			<AppPage ifInfo></AppPage>
@@ -130,4 +130,4 @@ defineExpose({
 	.process {
 		padding: 5px
 	}
-</style>
+</style> -->

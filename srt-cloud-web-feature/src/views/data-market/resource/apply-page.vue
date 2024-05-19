@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-dialog v-model="visible" title="我申请的" :close-on-click-modal="false" width="70%">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -48,7 +48,7 @@
 			</el-form-item>
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" >
-			<!-- <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> -->
+			<!-- <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> 
 			<el-table-column show-overflow-tooltip prop="title" label="标题" header-align="center" align="center"></el-table-column>
 			<el-table-column show-overflow-tooltip prop="resourceMountName" label="资源名称" header-align="center" align="center"></el-table-column>
 			<fast-table-column prop="mountType" label="类型" dict-type="mount_type" header-align="center" align="center"></fast-table-column>
@@ -63,7 +63,7 @@
 				</template>
 			</el-table-column>
 			<!-- <el-table-column prop="applyUseTimes" label="调用次数" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="applyUserId" label="申请人id" header-align="center" align="center"></el-table-column> -->
+			<el-table-column prop="applyUserId" label="申请人id" header-align="center" align="center"></el-table-column> 
 			<el-table-column prop="status" label="审核状态" header-align="center" align="center">
 				<template #default="scope">
 					<el-tag v-show="scope.row.status=='0'">待审核</el-tag>
@@ -178,4 +178,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 defineExpose({
 	init
 })
-</script>
+</script> -->

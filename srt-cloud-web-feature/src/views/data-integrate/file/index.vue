@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div v-show="ifshow">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -44,7 +44,7 @@
 			<el-table-column prop="createTime" label="创建时间" header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
 				<template #default="scope">
-					<!-- <el-button v-auth="'data-integrate:file:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button> -->
+					<!-- <el-button v-auth="'data-integrate:file:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button> 
 					<el-button type="primary" link @click="downloadHandle(scope.row.fileUrl, scope.row.name)">下载</el-button>
 					<el-button v-auth="'data-integrate:file:delete'" type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
 				</template>
@@ -62,7 +62,7 @@
 		</el-pagination>
 	</div>
 
-	<!-- 弹窗, 新增 / 修改 -->
+	<!-- 弹窗, 新增 / 修改 
 	<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 </template>
 
@@ -110,4 +110,4 @@ defineExpose({
 	init
 })
 
-</script>
+</script> -->
