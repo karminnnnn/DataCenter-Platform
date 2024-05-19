@@ -37,12 +37,12 @@
 			<el-form-item>
 				<el-button type="primary" @click="getDataList()">查询</el-button>
 			</el-form-item>
-			<!-- <el-form-item>
+			 <el-form-item>
 				<el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
 			</el-form-item>
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"  max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
-			<!-- <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+			 <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 			<el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> 
 			<el-table-column show-overflow-tooltip prop="resourceName" label="资产名称" header-align="center" align="center"></el-table-column>
 			<el-table-column show-overflow-tooltip prop="resourceMountName" label="资源名称" header-align="center" align="center"></el-table-column>
@@ -57,7 +57,7 @@
 					<el-tag v-show="!scope.row.effective" type="warning">否</el-tag>
 				</template>
 			</el-table-column>
-			<!-- <el-table-column prop="applyUseTimes" label="调用次数" header-align="center" align="center"></el-table-column>
+			 <el-table-column prop="applyUseTimes" label="调用次数" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="applyUserId" label="申请人id" header-align="center" align="center"></el-table-column> 
 			<el-table-column prop="status" label="审核状态" header-align="center" align="center">
 				<template #default="scope">
@@ -97,7 +97,7 @@
 		
 		<ApplyInfo ref="applyInfoRef"></ApplyInfo>
 		
-		<!-- 审核 
+		 审核 
 		<el-dialog v-model="checkVisible" title="审核" :close-on-click-modal="false" destroy-on-close>
 			<el-form ref="checkFormRef" :model="checkForm" :rules="checkRules" label-width="100px" @keyup.enter="checkHandle()">
 				<el-form-item label="审核结果" prop="status" label-width="auto">

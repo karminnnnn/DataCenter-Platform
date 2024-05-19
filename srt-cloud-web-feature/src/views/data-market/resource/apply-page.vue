@@ -48,7 +48,7 @@
 			</el-form-item>
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" >
-			<!-- <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> 
+			 <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> 
 			<el-table-column show-overflow-tooltip prop="title" label="标题" header-align="center" align="center"></el-table-column>
 			<el-table-column show-overflow-tooltip prop="resourceMountName" label="资源名称" header-align="center" align="center"></el-table-column>
 			<fast-table-column prop="mountType" label="类型" dict-type="mount_type" header-align="center" align="center"></fast-table-column>
@@ -62,7 +62,7 @@
 					<el-tag v-show="!scope.row.effective" type="warning">否</el-tag>
 				</template>
 			</el-table-column>
-			<!-- <el-table-column prop="applyUseTimes" label="调用次数" header-align="center" align="center"></el-table-column>
+			 <el-table-column prop="applyUseTimes" label="调用次数" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="applyUserId" label="申请人id" header-align="center" align="center"></el-table-column> 
 			<el-table-column prop="status" label="审核状态" header-align="center" align="center">
 				<template #default="scope">

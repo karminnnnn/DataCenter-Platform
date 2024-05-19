@@ -18,9 +18,9 @@
 			</el-form-item>
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
-			<!-- <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column> 
-			<!-- <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> 
-			<!-- <el-table-column prop="masterModelId" label="主数据id" header-align="center" align="center"></el-table-column> 
+			 <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column> 
+			 <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> 
+			 <el-table-column prop="masterModelId" label="主数据id" header-align="center" align="center"></el-table-column> 
 			<el-table-column prop="name" label="名称" header-align="center" align="center"></el-table-column>
 			<fast-table-org-column prop="orgId" label="所属机构" header-align="center" align="center"></fast-table-org-column>
 			<fast-table-column prop="distributeType" label="派发类型" header-align="center" align="center" dict-type='distribute_type'></fast-table-column>
@@ -72,7 +72,7 @@
 		>
 		</el-pagination>
 
-		<!-- 弹窗, 新增 / 修改 
+		 弹窗, 新增 / 修改 
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 		<PageLog ref="pageLogRef"></PageLog>
 	</el-card>

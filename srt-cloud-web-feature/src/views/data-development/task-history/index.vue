@@ -109,7 +109,7 @@
 			</el-table-column>
 			<fast-table-column prop="executeType" label="执行方式" dict-type="execute_type" header-align="center" align="center"></fast-table-column>
 			<fast-table-column show-overflow-tooltip prop="type" label="flink执行模式" dict-type="production_cluster_type" header-align="center" align="center"></fast-table-column>
-			<!-- <el-table-column prop="jobManagerAddress" label="集群地址" header-align="center" align="center"></el-table-column> 
+			 <el-table-column prop="jobManagerAddress" label="集群地址" header-align="center" align="center"></el-table-column> 
 			<el-table-column show-overflow-tooltip prop="jid" label="flink实例id" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="instanceStatus" label="flink实例状态" header-align="center" align="center">
 				<template #default="scope">
@@ -130,7 +130,7 @@
 					</el-tag>
 				</template>
 			</el-table-column>
-			<!-- <el-table-column prop="statement" label="statement set" header-align="center" align="center"></el-table-column>
+			 <el-table-column prop="statement" label="statement set" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="error" label="error message" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="result" label="result set" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="configJson" label="config json" header-align="center" align="center"></el-table-column> 
@@ -212,7 +212,7 @@
 			<el-divider>
 			  <span style="font-size: 17px"><b>配置信息</b></span>
 			</el-divider>
-			<!-- sql 
+			 sql 
 			<div v-if="dialect == 1">
 				<el-descriptions
 				    title="数据来源"
@@ -231,7 +231,7 @@
 				    <el-descriptions-item label="名称">{{currentConfig.database.name}}</el-descriptions-item>
 						<el-descriptions-item label="库名">{{currentConfig.database.databaseName}}</el-descriptions-item>
 						<el-descriptions-item label="用户名">{{currentConfig.database.userName}}</el-descriptions-item>
-						<el-descriptions-item label="密码">******<!-- {{currentConfig.database.password}} </el-descriptions-item>
+						<el-descriptions-item label="密码">****** {{currentConfig.database.password}} </el-descriptions-item>
 						<el-descriptions-item label="jdbc连接串">{{currentConfig.database.jdbcUrl}}</el-descriptions-item>
 				</el-descriptions><br>
 				<el-descriptions
@@ -243,7 +243,7 @@
 				    <el-descriptions-item label="最大预览行数">{{currentConfig.pvdataNum}}</el-descriptions-item>
 				</el-descriptions>
 			</div>
-			<!-- flinksql 
+			 flinksql 
 			<div v-if="dialect == 2 || dialect == 3">
 				<el-descriptions
 				    title="作业配置"

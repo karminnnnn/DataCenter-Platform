@@ -40,7 +40,7 @@
 		>
 		</el-pagination>
 
-		<!-- 弹窗, 新增 / 修改 
+		 弹窗, 新增 / 修改 
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 	</el-card>
 </template>

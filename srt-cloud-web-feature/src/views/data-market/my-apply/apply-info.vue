@@ -38,7 +38,7 @@
 					<el-tag v-show="dataForm.ifAuth=='1'" type="success">已授权</el-tag>
 				</span>
 			</el-form-item>
-			<!-- <el-form-item  label="申请说明" prop="applyNote" label-width="auto">
+			 <el-form-item  label="申请说明" prop="applyNote" label-width="auto">
 				<span>{{dataForm.applyNote}}</span>
 			</el-form-item> 
 	    </el-form>

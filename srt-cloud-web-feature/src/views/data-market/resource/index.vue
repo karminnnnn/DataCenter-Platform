@@ -4,7 +4,7 @@
 	  <SideLayout class="fp-content table-content" left-title="资产目录" right-title="资产列表">
 		<div slot="left-title" class="rm-left-title">
 		  <span>资产目录</span>
-		  <!-- 添加按钮
+		   添加按钮
 		</div>
 		<template #left>
 			<div>
@@ -14,7 +14,7 @@
 			  			<el-input v-model="filterNodeText" placeholder="search" />
 			  			<br><br>
 			  		</div>
-			  		<!-- <div>
+			  		 <div>
 			  			<el-button type="primary" @click="appendRoot">添加根目录</el-button><br><br>
 			  		</div> 
 			  		<el-tree
@@ -48,7 +48,7 @@
 			  	<el-form-item>
 			  	  <el-input v-model="state.queryForm.code" placeholder="编码"></el-input>
 			  	</el-form-item>
-				<!-- <el-form-item>
+				 <el-form-item>
 				  <fast-select v-model="state.queryForm.status" dict-type="ground_status" placeholder="上架状态" clearable filterable></fast-select>
 				</el-form-item>
 				<el-form-item>
@@ -60,7 +60,7 @@
 			  	<el-form-item>
 			  		<el-button type="primary" @click="getDataList()">查询</el-button>
 			  	</el-form-item>
-			  	<!-- <el-form-item>
+					 <el-form-item>
 			  		<el-button type="primary" @click="addOrUpdateResouce()">新增</el-button>
 			  	</el-form-item> 
 			  </el-form>
@@ -98,16 +98,16 @@
 							  <p>{{ item.summary }}</p>
 							</div>
 						  </div>
-						  <!-- <div class="rd-status">
+						   <div class="rd-status">
 							<span>{{ item.status == 1? '已上架':'未上架' }}</span>
 							<span>{{ item.mountStatus == 1? '已挂载':'未挂载' }}</span>
 						  </div> 
 						  <div class="rd-actions">
 							<el-button type="warning" size="small" @click="toDetail(item)">详情</el-button>
-							<!-- <el-button type="warning" size="small" @click="addOrUpdateResouce(item.id)">修改</el-button> 
+							 <el-button type="warning" size="small" @click="addOrUpdateResouce(item.id)">修改</el-button> 
 							<el-button type="primary" size="small" @click="toMount(item)">资源信息</el-button>
 							<el-button type="primary" size="small" @click="toApply(item)">我申请的</el-button>
-							<!-- <el-button v-if="item.status == 1" type="primary" size="small" @click="offline(item.id)">下架</el-button>
+							 <el-button v-if="item.status == 1" type="primary" size="small" @click="offline(item.id)">下架</el-button>
 							<el-button v-if="item.status == 0" type="primary" size="small" @click="online(item.id)">上架</el-button>
 							<el-button type="danger" size="small" @click="toDelete(item.id)">删除</el-button> 
 						  </div>
