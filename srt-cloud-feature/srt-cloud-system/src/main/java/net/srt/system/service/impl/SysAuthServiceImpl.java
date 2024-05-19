@@ -61,13 +61,18 @@ public class SysAuthServiceImpl implements SysAuthService {
 			throw new ServerException("用户名或密码错误");
 		}
 
+
+
 		// 用户信息
 		UserDetail user = (UserDetail) authentication.getPrincipal();
 
+		/*
 		//判断是否有项目id列表，没有，禁止登录
 		if (!SuperAdminEnum.YES.getValue().equals(user.getSuperAdmin()) && CollectionUtils.isEmpty(user.getProjectIds())) {
 			throw new ServerException("您没有项目租户空间可用，请联系管理员分配项目空间！");
 		}
+
+		*/
 
 		// 生成 accessToken
 		String accessToken = TokenUtils.generator();
@@ -78,6 +83,7 @@ public class SysAuthServiceImpl implements SysAuthService {
 		return new SysTokenVO(accessToken);
 	}
 
+	/*
 	@Override
 	public SysTokenVO loginByMobile(SysMobileLoginVO login) {
 		Authentication authentication;
@@ -100,7 +106,7 @@ public class SysAuthServiceImpl implements SysAuthService {
 
 		return new SysTokenVO(accessToken);
 	}
-
+	*/
 	@Override
 	public void sendCode(String mobile) {
 		// 生成6位验证码
