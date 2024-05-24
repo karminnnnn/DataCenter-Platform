@@ -1,10 +1,10 @@
 package net.srt.framework.common.cache;
 
 /**
- * Redis Key管理
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: Redis Key管理，token前加前缀
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/23
+*/
 public class RedisKeys {
 
 	/**

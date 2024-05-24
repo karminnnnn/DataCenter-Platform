@@ -19,11 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * 用户 UserDetails 信息
- *
- * @author 阿沐 babamu@126.com
- */
 @Service
 @AllArgsConstructor
 public class SysUserDetailsServiceImpl implements SysUserDetailsService {
@@ -35,10 +30,10 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
 
     @Override
     public UserDetails getUserDetails(SysUserEntity userEntity) {
-        // 转换成UserDetail对象
+        // 转换成UserDetail对象，一一对应
         UserDetail userDetail = SysUserConvert.INSTANCE.convertDetail(userEntity);
 
-        // 账号不可用
+        // 设置账号是否可用
         if (userEntity.getStatus() == UserStatusEnum.DISABLE.getValue()) {
             userDetail.setEnabled(false);
         }
@@ -47,31 +42,37 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
         List<Long> dataScopeList = getDataScope(userDetail);
         userDetail.setDataScopeList(dataScopeList);
 
-        // 用户权限列表
+        // 用户权限列表（menu）
         Set<String> authoritySet = sysMenuService.getUserAuthority(userDetail);
         userDetail.setAuthoritySet(authoritySet);
 
-        //项目权限列表
+        // 获取user对应的项目列表
 		List<Long> projectIds = sysUserService.getProjectIds(userDetail);
 		userDetail.setProjectIds(projectIds);
 
 		return userDetail;
     }
 
+    /**
+     * 根据用户详情获取数据权限范围。
+     */
     private List<Long> getDataScope(UserDetail userDetail) {
+        // 通过用户ID获取数据权限范围(0,1,2,3,4)(min所对应的所有role的dataScope)
         Integer dataScope = sysRoleDao.getDataScopeByUserId(userDetail.getId());
-		userDetail.setDataScope(dataScope);
+		userDetail.setDataScope(dataScope); // 设置用户的数据权限范围
 
+        // 用户未关联角色或角色未设置dataScope
         if (dataScope == null) {
-            return new ArrayList<>();
+            return new ArrayList<>(); // 当数据权限为空时，返回空列表
         }
 
+        // 处理不同的数据权限范围
         if (dataScope.equals(DataScopeEnum.ALL.getValue())) {
             // 全部数据权限，则返回null
             return null;
         } else if (dataScope.equals(DataScopeEnum.DEPT_AND_CHILD.getValue())) {
             // 本部门及子部门数据
-            List<Long> dataScopeList = sysOrgService.getSubOrgIdList(userDetail.getOrgId());
+            List<Long> dataScopeList = sysOrgService.getSubOrgIdList(userDetail.getOrgId()); // 获取本部门及子部门ID列表
             // 自定义数据权限范围
             dataScopeList.addAll(sysRoleDataScopeDao.getDataScopeList(userDetail.getId()));
 
@@ -79,7 +80,7 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
         } else if (dataScope.equals(DataScopeEnum.DEPT_ONLY.getValue())) {
             // 本部门数据
             List<Long> dataScopeList = new ArrayList<>();
-            dataScopeList.add(userDetail.getOrgId());
+            dataScopeList.add(userDetail.getOrgId()); // 添加本部门ID
             // 自定义数据权限范围
             dataScopeList.addAll(sysRoleDataScopeDao.getDataScopeList(userDetail.getId()));
 
@@ -89,6 +90,7 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
             return sysRoleDataScopeDao.getDataScopeList(userDetail.getId());
         }
 
-        return new ArrayList<>();
+        return new ArrayList<>(); // 异常，返回空列表
     }
+
 }

@@ -8,8 +8,8 @@ import net.srt.framework.security.utils.TokenUtils;
 import net.srt.system.service.SysAuthService;
 import net.srt.system.service.SysCaptchaService;
 import net.srt.system.vo.SysAccountLoginVO;
+import net.srt.system.vo.SysAccountRegisterVo;
 import net.srt.system.vo.SysCaptchaVO;
-import net.srt.system.vo.SysMobileLoginVO;
 import net.srt.system.vo.SysTokenVO;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,27 +40,17 @@ public class SysAuthController {
     @Operation(summary = "账号密码登录")
     public Result<SysTokenVO> login(@RequestBody SysAccountLoginVO login) {
         SysTokenVO token = sysAuthService.loginByAccount(login);
-
         return Result.ok(token);
     }
 
-    @PostMapping("send/code")
-    @Operation(summary = "发送短信验证码")
-    public Result<String> sendCode(String mobile) {
-        sysAuthService.sendCode(mobile);
-
+    @PostMapping("register")
+    @Operation(summary = "用户注册")
+    public Result<SysTokenVO> register(@RequestBody SysAccountRegisterVo register){
+        SysTokenVO token = sysAuthService.registerAccount(register);
         return Result.ok();
     }
 
-    /*
-    @PostMapping("mobile")
-    @Operation(summary = "手机号登录")
-    public Result<SysTokenVO> mobile(@RequestBody SysMobileLoginVO login) {
-        SysTokenVO token = sysAuthService.loginByMobile(login);
 
-        return Result.ok(token);
-    }
-    */
     @PostMapping("logout")
     @Operation(summary = "退出")
     public Result<String> logout(HttpServletRequest request) {

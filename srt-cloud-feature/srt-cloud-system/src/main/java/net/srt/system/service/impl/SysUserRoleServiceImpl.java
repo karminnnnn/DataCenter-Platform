@@ -7,7 +7,6 @@ import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.framework.security.user.SecurityUser;
 import net.srt.framework.security.user.UserDetail;
 import net.srt.system.dao.SysUserRoleDao;
-import net.srt.system.entity.SysRoleEntity;
 import net.srt.system.entity.SysUserRoleEntity;
 import net.srt.system.enums.SuperAdminEnum;
 import net.srt.system.service.SysUserRoleService;

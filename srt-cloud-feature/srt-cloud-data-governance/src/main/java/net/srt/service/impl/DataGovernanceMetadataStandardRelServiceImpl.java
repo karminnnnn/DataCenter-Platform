@@ -5,17 +5,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import net.srt.convert.DataGovernanceMetadataStandardRelConvert;
 import net.srt.dao.DataGovernanceMetadataStandardRelDao;
-import net.srt.dao.DataGovernanceStandardDao;
 import net.srt.entity.DataGovernanceMetadataStandardRelEntity;
-import net.srt.entity.DataGovernanceStandardEntity;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.service.DataGovernanceMetadataStandardRelService;
 import net.srt.vo.DataGovernanceMetadataStandardRelVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
 
 /**
  * 数据治理-元数据标准关联表
@@ -27,7 +23,6 @@ import java.util.List;
 @AllArgsConstructor
 public class DataGovernanceMetadataStandardRelServiceImpl extends BaseServiceImpl<DataGovernanceMetadataStandardRelDao, DataGovernanceMetadataStandardRelEntity> implements DataGovernanceMetadataStandardRelService {
 
-	private final DataGovernanceStandardDao standardDao;
 
 	@Override
 	public void save(DataGovernanceMetadataStandardRelVO vo) {
@@ -64,10 +59,10 @@ public class DataGovernanceMetadataStandardRelServiceImpl extends BaseServiceImp
 		wrapper.eq(DataGovernanceMetadataStandardRelEntity::getMetadataId, metadataId).last("limit 1");
 		DataGovernanceMetadataStandardRelEntity relEntity = baseMapper.selectOne(wrapper);
 		if (relEntity != null) {
-			DataGovernanceStandardEntity standardEntity = standardDao.selectById(relEntity.getStandardId());
+			/*DataGovernanceStandardEntity standardEntity = standardDao.selectById(relEntity.getStandardId());
 			DataGovernanceMetadataStandardRelVO convert = DataGovernanceMetadataStandardRelConvert.INSTANCE.convert(relEntity);
 			convert.setStandardCategoryId(standardEntity.getCategoryId());
-			return convert;
+			return convert;*/
 		}
 		return null;
 	}

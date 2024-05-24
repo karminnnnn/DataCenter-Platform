@@ -10,10 +10,10 @@ import net.srt.framework.security.user.UserDetail;
 import org.springframework.stereotype.Component;
 
 /**
- * 认证 Cache
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 认证 Cache
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/21
+*/
 @Component
 @AllArgsConstructor
 public class TokenStoreCache {
