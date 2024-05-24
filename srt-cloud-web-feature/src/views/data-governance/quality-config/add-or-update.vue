@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" >
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
 			<el-form-item label="名称" prop="name" label-width="auto">
@@ -21,7 +21,7 @@
 					<template #default="{ node, data }">
 						 <div>
 							 <span>
-								 <!-- 如果是目录-->
+								 <!-- 如果是目录
 								 <img v-if="data.icon=='/src/assets/folder.png'" src="/src/assets/folder.png"/>
 								 <img v-if="data.icon=='/src/assets/database.png'" src="/src/assets/database.png"/>
 								 <img v-if="data.icon=='/src/assets/table.png'" src="/src/assets/table.png"/>
@@ -47,7 +47,7 @@
 					<template #default="{ node, data }">
 						 <div>
 							 <span>
-								 <!-- 如果是目录-->
+								 <!-- 如果是目录
 								 <img v-if="data.icon=='/src/assets/folder.png'" src="/src/assets/folder.png"/>
 								 <img v-if="data.icon=='/src/assets/database.png'" src="/src/assets/database.png"/>
 								 <img v-if="data.icon=='/src/assets/table.png'" src="/src/assets/table.png"/>
@@ -234,4 +234,4 @@ const loadNode = async (node: Node, resolve: (data: Tree[]) => void) => {
 defineExpose({
 	init
 })
-</script>
+</script> -->

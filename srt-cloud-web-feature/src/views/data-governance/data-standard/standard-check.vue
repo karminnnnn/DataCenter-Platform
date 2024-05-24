@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-dialog v-model="visible" title="标准检测结果" :close-on-click-modal="false">
 		<el-tabs type="border-card">
 		    <el-tab-pane label="属性比对">
@@ -73,4 +73,4 @@ defineExpose({
 	/* .el-tree-select__popper .el-select-dropdown__item {
 		
 	} */
-</style>
+</style> -->

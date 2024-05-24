@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card class="cluster" body-style="height: calc(100vh - 170px )">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -26,7 +26,7 @@
 			<el-table-column prop="alias" label="别名" show-overflow-tooltip header-align="center" align="center"></el-table-column>
 			<fast-table-org-column prop="orgId" label="所属机构" header-align="center" align="center"></fast-table-org-column>
 			<fast-table-column prop="type" label="实例类型" header-align="center" align="center" dict-type="production_cluster_type"></fast-table-column>
-			<!-- <el-table-column prop="hosts" label="集群地址" header-align="center" align="center"></el-table-column> -->
+			 <el-table-column prop="hosts" label="集群地址" header-align="center" align="center"></el-table-column> 
 			<el-table-column prop="jobManagerHost" label="Job Manager地址" header-align="center" align="center" width="180"></el-table-column>
 			<el-table-column prop="flinkVersion" label="flink版本" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="status" label="集群状态" header-align="center" align="center">
@@ -66,7 +66,7 @@
 		>
 		</el-pagination>
 
-		<!-- 弹窗, 新增 / 修改 -->
+		 弹窗, 新增 / 修改 
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 	</el-card>
 </template>
@@ -128,4 +128,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 
 <style lang="scss">
 	
-</style>
+</style> -->

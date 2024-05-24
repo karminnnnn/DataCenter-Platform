@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div>
 		<div style="margin-bottom: 8px;">
 			<el-tag type="warning" v-if="!ifInfo">tips: API 为私有 API，需要选择一个 APP 为其授权</el-tag>
@@ -82,4 +82,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 </script>
 
 <style>
-</style>
+</style> -->
