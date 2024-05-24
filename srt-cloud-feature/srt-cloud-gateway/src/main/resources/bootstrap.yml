@@ -65,13 +65,6 @@ spring:
             - Path=/data-governance/**
           filters:
             - StripPrefix=1
-        - id: srt-cloud-data-assets
-          uri: lb://srt-cloud-data-assets
-          order: 8
-          predicates:
-            - Path=/data-assets/**
-          filters:
-            - StripPrefix=1
         - id: openapi
           uri: http://localhost:${server.port}
           predicates:
