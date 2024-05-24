@@ -8,16 +8,18 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Token 工具类
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: Token 工具类
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/21
+*/
 public class TokenUtils {
 
     /**
      * 生成 AccessToken
      */
     public static String generator() {
+        // 生成带连字符的 UUID 字符串，标识信息的128位标识符，
+        // 通常用于确保不同系统、不同时间生成的标识符是唯一的。
         return UUID.fastUUID().toString(true);
     }
 

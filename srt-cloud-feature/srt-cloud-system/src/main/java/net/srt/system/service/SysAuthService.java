@@ -1,7 +1,7 @@
 package net.srt.system.service;
 
 import net.srt.system.vo.SysAccountLoginVO;
-import net.srt.system.vo.SysMobileLoginVO;
+import net.srt.system.vo.SysAccountRegisterVo;
 import net.srt.system.vo.SysTokenVO;
 
 /**
@@ -11,34 +11,7 @@ import net.srt.system.vo.SysTokenVO;
  */
 public interface SysAuthService {
 
-    /**
-     * 账号密码登录
-     *
-     * @param login 登录信息
-     */
     SysTokenVO loginByAccount(SysAccountLoginVO login);
-
-    /**
-     * 手机短信登录
-     *
-     * @param login 登录信息
-     */
-
-    /*
-    SysTokenVO loginByMobile(SysMobileLoginVO login);
-    */
-
-    /**
-     * 发送手机验证码
-     *
-     * @param mobile 手机号
-     */
-    void sendCode(String mobile);
-
-    /**
-     * 退出登录
-     *
-     * @param accessToken accessToken
-     */
+    SysTokenVO registerAccount(SysAccountRegisterVo register);
     void logout(String accessToken);
 }

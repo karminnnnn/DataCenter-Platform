@@ -4,10 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 自定义异常
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 自定义异常
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/21
+*/
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ServerException extends RuntimeException {

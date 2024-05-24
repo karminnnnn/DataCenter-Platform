@@ -6,10 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 角色管理
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 角色管理
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/23
+*/
 @Mapper
 public interface SysRoleDao extends BaseDao<SysRoleEntity> {
 

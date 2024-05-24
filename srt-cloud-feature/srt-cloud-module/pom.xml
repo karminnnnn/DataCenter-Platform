@@ -10,7 +10,6 @@
 
 	<modules>
 	    <module>srt-cloud-quartz</module>
-		<module>srt-cloud-message</module>
         <module>srt-cloud-monitor</module>
     </modules>
 

@@ -57,6 +57,11 @@ public class SysCaptchaServiceImpl implements SysCaptchaService {
         return code.equalsIgnoreCase(captcha);
     }
 
+    /**
+    * @description: 根据key获取对应图片的正确验证码
+    * @author PatrickLi 373595331@qq.com
+    * @date 2024/5/14
+    */
     private String getCache(String key) {
         key = RedisKeys.getCaptchaKey(key);
         String captcha = (String) redisCache.get(key);

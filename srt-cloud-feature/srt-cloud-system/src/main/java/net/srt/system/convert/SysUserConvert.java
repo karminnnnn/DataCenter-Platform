@@ -8,7 +8,11 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-
+/**
+* @description: SysUser表字段转换
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/21
+*/
 @Mapper
 public interface SysUserConvert {
     SysUserConvert INSTANCE = Mappers.getMapper(SysUserConvert.class);

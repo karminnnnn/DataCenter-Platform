@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 用户状态
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 用户是否启用
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/22
+*/
 @Getter
 @AllArgsConstructor
 public enum UserStatusEnum {

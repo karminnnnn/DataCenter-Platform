@@ -10,10 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 系统用户
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 系统用户DAO
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/23
+*/
+/*
+* 使用 @Mapper 注解标识，表明它是一个 MyBatis 的 Mapper 接口。
+* 这些方法会被 MyBatis 框架自动解析并映射成对应的 SQL 语句，实现与数据库的交互。
+* 实现在resources的mapper文件夹里，当然也可以直接写在代码里
+*
+*/
 @Mapper
 public interface SysUserDao extends BaseDao<SysUserEntity> {
 
@@ -35,6 +41,7 @@ public interface SysUserDao extends BaseDao<SysUserEntity> {
 
 	void deleteProject(@Param("projectId") Long projectId, @Param("userId") Long userId);
 
+	// 根据userid获取项目列表(项目status为enable)
 	List<Long> getProjectIds(@Param("userId") Long userId);
 
 	Long getByProjectIdAndUserId(@Param("projectId") Long projectId, @Param("userId") Long userId);

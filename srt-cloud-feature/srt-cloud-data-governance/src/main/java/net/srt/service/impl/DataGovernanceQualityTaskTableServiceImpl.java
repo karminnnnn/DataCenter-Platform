@@ -10,7 +10,6 @@ import net.srt.api.module.data.governance.dto.quality.QulaityColumn;
 import net.srt.convert.DataGovernanceQualityTaskTableConvert;
 import net.srt.dao.DataGovernanceQualityTaskColumnDao;
 import net.srt.entity.DataGovernanceQualityTaskColumnEntity;
-import net.srt.entity.DataGovernanceQualityTaskEntity;
 import net.srt.entity.DataGovernanceQualityTaskTableEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srt.cloud.framework.dbswitch.common.util.SingletonObject;
 import srt.cloud.framework.dbswitch.common.util.StringUtil;
-import sun.rmi.runtime.NewThreadAction;
 
 import java.text.DecimalFormat;
 import java.util.List;

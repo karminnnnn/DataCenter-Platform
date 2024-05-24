@@ -23,11 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * 菜单管理
- *
- * @author 阿沐 babamu@126.com
- */
 @Service
 @AllArgsConstructor
 public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuDao, SysMenuEntity> implements SysMenuService {
