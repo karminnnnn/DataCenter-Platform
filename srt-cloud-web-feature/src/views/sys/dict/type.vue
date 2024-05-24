@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card>
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 			<el-form-item>
@@ -49,9 +49,9 @@
 			@current-change="currentChangeHandle"
 		>
 		</el-pagination>
-		<!-- 新增 / 修改 -->
+		 新增 / 修改 
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
-		<!-- 字典配置 -->
+		 字典配置 
 		<el-drawer v-if="dictDataVisible" v-model="dictDataVisible" :title="dictDataTitle" :size="800" :close-on-press-escape="false">
 			<dict-data :dict-type-id="dictTypeId"></dict-data>
 		</el-drawer>
@@ -89,4 +89,4 @@ const addOrUpdateHandle = (id?: Number) => {
 }
 
 const { getDataList, sizeChangeHandle, selectionChangeHandle, sortChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script>
+</script> -->

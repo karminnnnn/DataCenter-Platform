@@ -32,17 +32,17 @@ export const listMetadataFloderApi = () => {
 	return service.get('/data-governance/metadata/list-floder')
 }
 
-export const updateNeo4jApi = (dataForm: any) => {
-	return service.post('/data-governance/metadata/neo4j', dataForm)
-}
+// export const updateNeo4jApi = (dataForm: any) => {
+// 	return service.post('/data-governance/metadata/neo4j', dataForm)
+// }
 
-export const getNeo4jApi = () => {
-	return service.get('/data-governance/metadata/neo4j')
-}
+// export const getNeo4jApi = () => {
+// 	return service.get('/data-governance/metadata/neo4j')
+// }
 
-export const listDbApi = () => {
-	return service.get('/data-governance/metadata/list-db')
-}
+// export const listDbApi = () => {
+// 	return service.get('/data-governance/metadata/list-db')
+// }
 
 
 

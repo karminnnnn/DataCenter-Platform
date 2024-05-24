@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-dialog :close-on-click-modal="false" title="资源详情" append-to-body v-model="visible" width="65%">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -55,7 +55,7 @@
 		>
 		</el-pagination>
 
-		<!-- 弹窗, 新增 / 修改 -->
+		 弹窗, 新增 / 修改 
 		<AddMount ref="addMountRef" @refreshDataList="refreshDataList"></AddMount>
 		<ApplyAddOrUpdate ref="applyRef" @refreshDataList="getDataList"></ApplyAddOrUpdate>
 	</el-dialog>
@@ -159,4 +159,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 defineExpose({
 	init
 })	
-</script>
+</script> -->

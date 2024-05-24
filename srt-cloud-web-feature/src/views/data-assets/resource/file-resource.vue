@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card>
 		<div class="fileResourceDiv">
 			<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
@@ -91,4 +91,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 	.fileResourceDiv {
 		height: calc(100vh - 170px );
 	}
-</style>
+</style> -->

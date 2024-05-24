@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div>
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -7,9 +7,9 @@
 			<el-form-item>
 				<el-button type="primary" @click="getDataList()">查询</el-button>
 			</el-form-item>
-			<!-- <el-form-item>
+			 <el-form-item>
 				<el-button type="primary" @click="addOrUpdateHandle()">挂载资源</el-button>
-			</el-form-item> -->
+			</el-form-item> 
 			<el-form-item>
 				<el-button type="warning" @click="checkStatus()" v-if="!market">有效性检测</el-button>
 			</el-form-item>
@@ -55,7 +55,7 @@
 		</el-pagination>
 		
 		<ApplyAddOrUpdate ref="applyRef" @refreshDataList="getDataList"></ApplyAddOrUpdate>
-		<!-- <AddMount ref="addMountRef" @refreshDataList="getDataList"></AddMount> -->
+		 <AddMount ref="addMountRef" @refreshDataList="getDataList"></AddMount> 
 	</div>
 </template>
 
@@ -131,4 +131,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 defineExpose({
 	init
 })	
-</script>
+</script> -->

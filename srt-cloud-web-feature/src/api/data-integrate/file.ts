@@ -1,13 +1,13 @@
-import service from '@/utils/request'
+// import service from '@/utils/request'
 
-export const useFileApi = (id: number) => {
-	return service.get('/data-integrate/file/' + id)
-}
+// export const useFileApi = (id: number) => {
+// 	return service.get('/data-integrate/file/' + id)
+// }
 
-export const useFileSubmitApi = (dataForm: any) => {
-	if (dataForm.id) {
-		return service.put('/data-integrate/file', dataForm)
-	} else {
-		return service.post('/data-integrate/file', dataForm)
-	}
-}
+// export const useFileSubmitApi = (dataForm: any) => {
+// 	if (dataForm.id) {
+// 		return service.put('/data-integrate/file', dataForm)
+// 	} else {
+// 		return service.post('/data-integrate/file', dataForm)
+// 	}
+// }

@@ -1,11 +1,11 @@
-<template>
+<!-- <template>
 	  <el-card @click="OptionCardClose($event)">
 			<div class="headerBox">
-				<!-- <div class="headLeft">
+				 <div class="headLeft">
 					<el-breadcrumb separator="/">
 					    <el-breadcrumb-item v-for="item in headList">{{item}}</el-breadcrumb-item>
 					  </el-breadcrumb>
-				</div> -->
+				</div> 
 				<div calss="headRight" v-show="editableTabsValue!='0'">
 					<el-tooltip
 							class="box-item"
@@ -59,7 +59,7 @@
 						class="leftResize"
 						title="左右侧边栏"
 					></div>
-					<!-- 中间 -->
+					 中间 
 					<div class="midBox">
 						<el-tabs
 							  class="mid-tabs"
@@ -85,7 +85,7 @@
 						class="rightResize"
 						title="左右侧边栏"
 					></div>
-					<!-- 右侧 -->
+					 右侧 
 					<div class="right">
 						<el-scrollbar>
 							<div v-show="editableTabsValue!='0'" style="padding: 30px 20px">
@@ -115,7 +115,7 @@
 				   title="上下侧边栏" 
 					 class="bottomResize">
 				</div>
-				<!-- 下方 -->
+				 下方 
 				<div class="downBox">
 					<el-tabs class="buttom-tabs">
 						<el-tab-pane>
@@ -818,4 +818,4 @@ const dragControllerUD = () => {
     margin: 0 0 0;
 }
 
-</style>
+</style> -->

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-card :body-style="props.ifChild ? '':'height: calc(100vh - 170px )'">
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
@@ -46,7 +46,7 @@
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
 			<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-			<!-- <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> -->
+			 <el-table-column prop="id" label="主键id" header-align="center" align="center"></el-table-column> 
 			<el-table-column show-overflow-tooltip prop="title" label="标题" header-align="center" align="center"></el-table-column>
 			<el-table-column show-overflow-tooltip prop="resourceName" label="资产名称" header-align="center" align="center"></el-table-column>
 			<el-table-column show-overflow-tooltip prop="resourceMountName" label="资源名称" header-align="center" align="center"></el-table-column>
@@ -61,8 +61,8 @@
 					<el-tag v-show="!scope.row.effective" type="warning">否</el-tag>
 				</template>
 			</el-table-column>
-			<!-- <el-table-column prop="applyUseTimes" label="调用次数" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="applyUserId" label="申请人id" header-align="center" align="center"></el-table-column> -->
+			 <el-table-column prop="applyUseTimes" label="调用次数" header-align="center" align="center"></el-table-column>
+			<el-table-column prop="applyUserId" label="申请人id" header-align="center" align="center"></el-table-column> 
 			<el-table-column prop="status" label="审核状态" header-align="center" align="center">
 				<template #default="scope">
 					<el-tag v-show="scope.row.status=='0'">待审核</el-tag>
@@ -95,7 +95,7 @@
 		>
 		</el-pagination>
 
-		<!-- 弹窗, 新增 / 修改 -->
+		 弹窗, 新增 / 修改 
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
 		<ApplyInfo ref="applyInfoRef"></ApplyInfo>
 	</el-card>
@@ -148,4 +148,4 @@ const lookInfo = (row: any) => {
 }
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
-</script>
+</script> -->

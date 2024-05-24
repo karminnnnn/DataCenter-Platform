@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<el-container>
 		<el-aside width="22%">
 			<el-card body-style="height: calc(100vh - 170px )">
@@ -35,7 +35,7 @@
 			</el-header>
 		</el-container>
 	</el-container>
-	<!-- 弹窗, 新增 / 修改 -->
+	 弹窗, 新增 / 修改 
 	<add-or-update ref="addOrUpdateRef" @refreshDataList="getTreeList"></add-or-update>
 </template>
 
@@ -128,4 +128,4 @@ const remove = (node, data) => {
   font-size: 16px;
   padding-right: 8px;
 }
-</style>
+</style> -->
