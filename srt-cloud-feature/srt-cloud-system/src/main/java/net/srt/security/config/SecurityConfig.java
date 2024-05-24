@@ -1,8 +1,6 @@
 package net.srt.security.config;
 
 import lombok.AllArgsConstructor;
-import net.srt.framework.security.mobile.MobileUserDetailsService;
-import net.srt.framework.security.mobile.MobileVerifyCodeService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
