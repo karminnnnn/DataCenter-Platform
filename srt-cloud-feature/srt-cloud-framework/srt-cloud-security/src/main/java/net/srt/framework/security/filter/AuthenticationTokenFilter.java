@@ -1,7 +1,6 @@
 package net.srt.framework.security.filter;
 
 import lombok.AllArgsConstructor;
-import net.srt.framework.common.cache.RedisCache;
 import net.srt.framework.security.cache.TokenStoreCache;
 import net.srt.framework.security.user.UserDetail;
 import net.srt.framework.security.utils.TokenUtils;
