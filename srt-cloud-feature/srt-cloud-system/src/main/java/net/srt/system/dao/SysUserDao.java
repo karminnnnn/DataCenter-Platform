@@ -33,10 +33,6 @@ public interface SysUserDao extends BaseDao<SysUserEntity> {
 		return this.selectOne(new QueryWrapper<SysUserEntity>().eq("username", username));
 	}
 
-	default SysUserEntity getByMobile(String mobile){
-		return this.selectOne(new QueryWrapper<SysUserEntity>().eq("mobile", mobile));
-	}
-
 	List<SysUserEntity> getProjectList(Map<String, Object> params);
 
 	void deleteProject(@Param("projectId") Long projectId, @Param("userId") Long userId);
