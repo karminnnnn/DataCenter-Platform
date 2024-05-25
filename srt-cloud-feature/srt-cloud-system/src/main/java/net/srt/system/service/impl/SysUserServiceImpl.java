@@ -79,10 +79,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 		}
 
 		// 判断手机号是否存在
-		user = baseMapper.getByMobile(entity.getMobile());
+		/*user = baseMapper.getByMobile(entity.getMobile());
 		if (user != null) {
 			throw new ServerException("手机号已经存在或被其他项目租户占用");
-		}
+		}*/
 
 		// 保存用户
 		baseMapper.insert(entity);
@@ -109,10 +109,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 		}
 
 		// 判断手机号是否存在
-		user = baseMapper.getByMobile(entity.getMobile());
+		/*user = baseMapper.getByMobile(entity.getMobile());
 		if (user != null && !user.getId().equals(entity.getId())) {
 			throw new ServerException("手机号已经存在或被其他项目租户占用");
-		}
+		}*/
 
 		// 更新用户
 		updateById(entity);
@@ -145,13 +145,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 
 		// 删除用户岗位关系
 		sysUserPostService.deleteByUserIdList(idList);
-	}
-
-	@Override
-	public SysUserVO getByMobile(String mobile) {
-		SysUserEntity user = baseMapper.getByMobile(mobile);
-
-		return SysUserConvert.INSTANCE.convert(user);
 	}
 
 	@Override
@@ -208,9 +201,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 
 	@Override
 	public List<Long> getProjectIds(UserDetail userDetail) {
+		// 超级管理员不参与项目
 		if (SuperAdminEnum.YES.getValue().equals(userDetail.getSuperAdmin())) {
 			return null;
 		}
+		// 通过user id获取项目id
 		return baseMapper.getProjectIds(userDetail.getId());
 	}
 

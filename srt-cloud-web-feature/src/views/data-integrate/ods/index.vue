@@ -11,14 +11,16 @@
 						<el-form-item size="small">
 							<el-input v-model="state.queryForm.remarks" placeholder="注释"></el-input>
 						</el-form-item>
-						<!-- <el-form-item size="small">
-							<fast-project-select v-model="state.queryForm.projectId" placeholder="所属项目" clearable></fast-project-select>
-						</el-form-item> -->
 						<el-form-item size="small">
 							<el-button type="primary" @click="getDataList()">查询</el-button>
 						</el-form-item>
+						<el-form-item size="small">
+							<el-button type="primary" @click="addOrUpdateTable()">新增</el-button>
+						</el-form-item>
+						<el-form-item size="small">
+							<el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
+						</el-form-item>
 					</el-form>
-					<!-- <el-tag style="margin-bottom:10px"><p>tips：此处显示的是通过数据接入同步的表，手动新增的不在范围内</p></el-tag> -->
 					<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%;" max-height="calc(100vh - 400px )" highlight-current-row  @current-change="handleCurrentChange">
 						<fast-table-project-column prop="projectId" label="所属项目" header-align="center" align="center"></fast-table-project-column>
 						<el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
@@ -34,6 +36,41 @@
 						@current-change="currentChangeHandle"
 					>
 					</el-pagination>
+
+					<!-- <div>
+						<el-scrollbar style="height: calc(100vh - 220px )">
+							<div style="height: 100%;" class="DataTableTreeDiv">
+								<div>
+									<el-input v-model="filterNodeText" placeholder="search" />
+									<br><br>
+								</div>
+								<div>
+									<el-button type="primary" @click="createTable">建表</el-button><br><br>
+								</div>
+								<el-tree
+								ref="treeRef"
+								:data="treeList"
+								@node-contextmenu="ckRightOption"
+								@node-click="treeNodeCk"
+								default-expand-all
+								node-key="id"
+								:filter-node-method="filterNode"
+								>
+									<template #default="{ node, data }">
+										<div class="dataTable-tree-node">
+											<span>
+												layer
+												<img v-if="data.type==2" src="/src/assets/database.png"/>
+												table
+												<img v-if="data.type==3" src="/src/assets/table.png"/>
+												<span style="margin-left: 8px;">{{ data.name }}&emsp;{{ data.description }}</span>
+											</span>
+										</div>
+									</template>
+								</el-tree>
+							</div>
+						</el-scrollbar>
+					</div> -->
 				</el-card>
 			</el-aside>
 			<!-- 右侧主区域 -->
@@ -42,89 +79,51 @@
 					<el-card body-style="height: calc(100vh - 170px )">
 						<el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleClick" :before-leave="tabBeforeLeave">
 						    <el-tab-pane label="表信息" name="tableInfo">
-									 <el-tag
-												size="large"
-												effect="dark"
-												round
-												style="margin-bottom: 15px;"
-											>
-												表属性
-										</el-tag>
-									 <el-descriptions
-									     :column="1"
-									     direction="horizontal"
-									     style="blockMargin"
-									   >
-									     <el-descriptions-item label="表名">{{state.currentRow.tableName}}</el-descriptions-item>
-									     <el-descriptions-item label="注释">{{state.currentRow.remarks}}</el-descriptions-item>
-											 <el-descriptions-item label="数据接入任务"><el-button type="primary" link @click="getAccessInfoHandler()">查看</el-button></el-descriptions-item>
-									     <el-descriptions-item label="最近同步时间">{{state.currentRow.recentlySyncTime?state.currentRow.recentlySyncTime:'暂无'}}</el-descriptions-item>
-									   </el-descriptions>
-										 <br />
-										 <el-tag
-										 			size="large"
-										      effect="dark"
-										      round
-										 			style="margin-bottom: 15px;"
-										    >
-										      字段信息
-										  </el-tag>
-											<el-table :data="state.tableColumns" height="400" style="width: 100%">
-											    <el-table-column prop="fieldName" label="名称" header-align="center" align="center"/>
-													<el-table-column prop="remarks" label="注释" header-align="center" align="center"/>
-											    <el-table-column prop="fieldTypeName" label="类型" header-align="center" align="center"/>
-													<el-table-column prop="displaySize" label="长度" header-align="center" align="center"/>
-													<el-table-column prop="scaleSize" label="小数位数" header-align="center" align="center"/>
-													<el-table-column prop="defaultValue" label="默认值" header-align="center" align="center"/>
-													<el-table-column prop="pk" label="是否主键" header-align="center" align="center"/>
-													<el-table-column prop="autoIncrement" label="是否递增" header-align="center" align="center"/>
-													<el-table-column prop="nullable" label="是否可为空" header-align="center" align="center"/>
-											  </el-table>
-								</el-tab-pane>
+								<!-- 弹窗 同步结果 -->
+								<ods-table-info ref="odsTableInfoRef"></ods-table-info>
+							</el-tab-pane>
 						    <el-tab-pane label="数据预览" name="tableData">
-									<div>
-										 <p>若超过50条，只显示前50条数据！</p>
-										 <el-table :data="state.tableData" style="margin-top: 20px; width: 90%;" height="600">
-													 <el-table-column
-													   :show-overflow-tooltip="true"
-														 width="100px"
-														 :prop="index"
-														 :label="item"
-														 v-for="(item, index) in state.tableDataHeader"
-														 :key="index"
-													 >
-													 </el-table-column>
-											</el-table>
-									</div>
-								</el-tab-pane>
+								<ods-tabledata-info ref="odsTableDataInfoRef"></ods-tabledata-info>
+							</el-tab-pane>
 						    <el-tab-pane label="接入日志" name="tableLog">
-									<!-- 弹窗 同步结果 -->
-									<ods-task-detail ref="odsTaskDetailRef"></ods-task-detail>
-								</el-tab-pane>
+								<!-- 弹窗 同步结果 -->
+								<ods-task-detail ref="odsTaskDetailRef"></ods-task-detail>
+							</el-tab-pane>
+							<el-tab-pane label="sql执行" name="tableSql">
+								<ods-sql ref="odsSqlRef"></ods-sql>
+							</el-tab-pane>
 						  </el-tabs>
 					</el-card>
 				</el-header>
 			</el-container>
 		</el-container>
 	</div>
-	
-	<!-- 数据接入 详情 -->
-	<info ref="infoRef"></info>
+
+	<!-- 弹窗, 表新增 / 修改 -->
+	<odsTableAddOrUpdate ref="odsTableAddOrUpdateRef" @refreshDataList="getDataList"></odsTableAddOrUpdate>
 	
 </template>
 
 <script setup lang="ts" name="Data-integrateOdsIndex">
 import { useCrud } from '@/hooks'
 import { ElMessage, ElMessageBox } from 'element-plus/es'
-import { reactive, ref } from 'vue'
-import info from '../access/info.vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import { IHooksOptions } from '@/hooks/interface'
 import { getColumnInfoApi, getTableDataApi } from '@/api/data-integrate/ods'
-import { useAccessApi } from '@/api/data-integrate/access'
+// import { useAccessApi } from '@/api/data-integrate/access'
+import { getTableDataBySql } from '@/api/data-integrate/database'
+// import { listMiddleDbTreeApi,getTableInfoApi} from '@/api/data-integrate/database'
 import OdsTaskDetail from './ods-task-detail.vue'
+import OdsTableInfo from './ods-tabel-info.vue'
+import OdsSql from './ods-sql.vue'
+import odsTabledataInfo  from './ods-tabledata-info.vue'
+import odsTableAddOrUpdate from './ods-table-add-or-update.vue'
+
+
 
 const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/ods/page',
+	deleteUrl: '',
 	queryForm: {
 		tableName: '', 
 		remarks: '', 
@@ -136,6 +135,82 @@ const state: IHooksOptions = reactive({
 	tableDataHeader: {},
 })
 
+// // 左侧的树形结构
+// onMounted(()=>{
+// 	getTreeList()
+// })
+// const treeRef = ref()
+// const filterNodeText = ref('')
+// const treeList = ref([])
+// /**
+//  * 获取数仓树
+//  */
+// const getTreeList = () => {
+// 	listMiddleDbTreeApi().then(res=>{
+// 		treeList.value = res.data[0].children
+// 	})
+// }
+
+// watch(filterNodeText, (val) => {
+// 	treeRef.value!.filter(val)
+// })
+
+// /**
+//  * 节点筛选
+//  */
+// const filterNode = (value: string, data: Tree) => {
+// 	if (!value) return true
+// 	return data.label.includes(value) || data.label.includes(value.toUpperCase()) || data.label.includes(value.toLowerCase())
+// }
+
+// const infoView = ref(false)
+// const currentNode = ref({})
+// const treeNodeCk = (e, data, n, t) => {
+// 	//关闭右键菜单
+// 	// OptionCardClose()
+// 	//如果是table
+// 	if(data.data.type == 3) {
+		
+// 		activeName.value = 'tableInfo'
+// 		// state.currentRow = row
+// 		currentNode.value = data.data
+// 		state.tableColumns = []
+// 		state.tableData = []
+// 		state.tableDataHeader = {}
+// 		getColumnInfoApi(data.data.tableName).then(res => {
+// 			state.tableColumns = res.data
+// 		})
+
+// 		// console.log(data.data)
+// 		// infoView.value = true
+		
+// 		// tableInfoRef.value.resetFields()
+// 		// columns.value = []
+// 		//获取表和字段信息
+// 		// getTableInfoApi(data.data.name).then(res => {
+// 		// 	if(res.data) {
+// 		// 		Object.assign(tableInfo, res.data)
+// 		// 		tableInfo.tableName = data.data.name
+// 		// 		tableInfo.tableCn = data.data.description
+// 		// 		columns.value = res.data.columns
+// 		// 		isDetail.value = true
+// 		// 	} else {
+// 		// 		isDetail.value = false
+// 		// 	}
+// 		// })
+		
+// 	} else {
+// 		currentNode.value = data.data
+// 		// infoView.value = false
+// 		//置空模型信息
+// 		// tableInfoRef.value.resetFields()
+// 		// columns.value = []
+// 	}
+// } 
+
+
+
+// 左侧
 const activeName = ref('')
 const tabBeforeLeave = () => {
 	if(!state.currentRow.tableName) {
@@ -144,22 +219,38 @@ const tabBeforeLeave = () => {
 		    type: 'warning',
 		  })
 			return false
-	} 
+	}
 }
 
+const odsTableAddOrUpdateRef = ref()
+const addOrUpdateTable = (row?:any) => {
+    odsTableAddOrUpdateRef.value.init(row)
+}
+
+
+
+// 右侧
+const odsTableInfoRef = ref()
 const odsTaskDetailRef = ref()
+const odsSqlRef = ref()
+const odsTableDataInfoRef = ref()
 /* tab切换 */
 const handleClick = (name: TabPaneName) => {
 	if (name == 'tableData') {
+		odsTableDataInfoRef.value.init(state.currentRow.tableName)
 		//查询选中的表数据
-		getTableDataApi(state.currentRow.tableName).then(res => {
-			state.tableDataHeader = res.data.columns
-			state.tableData = res.data.rows
-		}) 
+		// getTableDataApi(state.currentRow.tableName).then(res => {
+		// 	state.tableDataHeader = res.data.columns
+		// 	state.tableData = res.data.rows
+		// 	odsTableDataInfoRef.value.init(state.tableDataHeader, state.tableData)
+		// }) 
 	} else if (name == 'tableLog'){
 		odsTaskDetailRef.value.init(state.currentRow.projectId, state.currentRow.tableName)
+	} else if (name == 'tableSql'){
+		odsSqlRef.value.init(state.currentRow.projectId)
 	}
 }
+
 /* 表切换 */
 const handleCurrentChange = (row) => {
 	if(!row) {
@@ -170,32 +261,15 @@ const handleCurrentChange = (row) => {
 	state.tableColumns = []
 	state.tableData = []
 	state.tableDataHeader = {}
+	// console.log("查看分页返回的信息")
+	// console.log(row)
 	getColumnInfoApi(row.tableName).then(res => {
 		state.tableColumns = res.data
+		odsTableInfoRef.value.init(state.currentRow, state.tableColumns)
 	})
+	
 }
 
-const infoRef = ref()
-/* 查看表的数据接入任务 */
-const getAccessInfoHandler = () =>  {
-	if(!state.currentRow.dataAccessId) {
-		ElMessage({
-		    message: '没有查询到该表对应的数据接入任务',
-		    type: 'warning',
-		  })
-		return
-	}
-	useAccessApi(state.currentRow.dataAccessId).then(res=> {
-		if(!res.data) {
-			ElMessage({
-			    message: '该任务已被删除，若要恢复，请联系管理员处理',
-			    type: 'warning',
-			  })
-				return
-		}
-		infoRef.value.init(state.currentRow.dataAccessId)
-	})
-}
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
 </script>

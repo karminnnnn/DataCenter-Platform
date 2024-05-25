@@ -23,7 +23,6 @@ package net.srt.init;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.srt.service.DataGovernanceMetadataCollectRecordService;
-import net.srt.service.DataGovernanceQualityTaskService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -40,7 +39,6 @@ import org.springframework.stereotype.Component;
 public class BusinessInitializer implements ApplicationRunner {
 
 	private final DataGovernanceMetadataCollectRecordService collectRecordService;
-	private final DataGovernanceQualityTaskService qualityTaskService;
 
 	@Override
 	public void run(ApplicationArguments args) {
@@ -53,8 +51,6 @@ public class BusinessInitializer implements ApplicationRunner {
 	private void initScheduleMonitor() {
 		//处理没执行完的采集任务
 		collectRecordService.dealNotFinished();
-		//处理没执行完的质量检测任务
-		qualityTaskService.dealNotFinished();
 	}
 
 }

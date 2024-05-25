@@ -26,19 +26,15 @@ public class UserDetail implements UserDetails {
     private String realName;
     private String avatar;
     private Integer gender;
-    private String email;
-    private String mobile;
     private Long orgId;
     private Integer status;
     private Integer superAdmin;
 
     /**
      * 数据权限范围
-     * <p>
      * null：表示全部数据权限
      */
     private List<Long> dataScopeList;
-
 	/**
 	 * 数据权限
 	 */
@@ -63,15 +59,20 @@ public class UserDetail implements UserDetails {
      * 拥有权限集合
      */
     private Set<String> authoritySet;
-
 	/**
 	 * 拥有的项目id列表
 	 */
 	private List<Long> projectIds;
 
+    /**
+     * 用于返回用户具有的所有权限。
+     * @return Collection<? extends GrantedAuthority> 返回一个权限集合，其中每个权限都是 {@link GrantedAuthority} 接口的实现。
+     *         这里具体返回的是 {@link SimpleGrantedAuthority} 对象的集合。
+     */
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 将authoritySet中的元素映射为SimpleGrantedAuthority对象，并收集到一个Set中返回
         return authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
     }
 

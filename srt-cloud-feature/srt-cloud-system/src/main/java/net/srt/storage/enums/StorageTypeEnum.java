@@ -29,5 +29,5 @@ public enum StorageTypeEnum {
     /**
      * Minio
      */
-    MINIO;
+    MINIO
 }

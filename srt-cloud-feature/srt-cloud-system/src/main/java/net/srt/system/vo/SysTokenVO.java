@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Data
 @AllArgsConstructor
-@Schema(description = "用户登录")
+@Schema(description = "用户登录vo")
 public class SysTokenVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

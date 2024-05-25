@@ -10,10 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * 账号登录 UserDetailsService
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: UserDetailsService实现，登录逻辑
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/21
+*/
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,10 +23,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUserEntity userEntity = sysUserDao.getByUsername(username);
+        // 用户不存在抛出异常
         if (userEntity == null) {
             throw new UsernameNotFoundException("用户名或密码错误");
         }
 
+        // 用户存在则返回UserDetails对象
         return sysUserDetailsService.getUserDetails(userEntity);
     }
 

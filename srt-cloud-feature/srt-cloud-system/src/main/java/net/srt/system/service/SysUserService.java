@@ -11,10 +11,10 @@ import net.srt.system.vo.SysUserVO;
 import java.util.List;
 
 /**
- * 用户管理
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 用户管理
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/23
+*/
 public interface SysUserService extends BaseService<SysUserEntity> {
 
     PageResult<SysUserVO> page(SysUserQuery query);
@@ -24,8 +24,6 @@ public interface SysUserService extends BaseService<SysUserEntity> {
     void update(SysUserVO vo);
 
     void delete(List<Long> idList);
-
-    SysUserVO getByMobile(String mobile);
 
     /**
      * 修改密码
@@ -44,6 +42,9 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 
 	void deleteProject(Long projectId, List<Long> idList);
 
+    /**
+     * 根据用户id获取用户项目列表
+     */
 	List<Long> getProjectIds(UserDetail userDetail);
 
 	List<SysUserVO> listAll();

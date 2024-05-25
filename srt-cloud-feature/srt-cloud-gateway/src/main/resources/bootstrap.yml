@@ -30,13 +30,6 @@ spring:
             - Path=/schedule/**
           filters:
             - StripPrefix=1
-        - id: srt-cloud-message
-          uri: lb://srt-cloud-message
-          order: 3
-          predicates:
-            - Path=/message/**
-          filters:
-            - StripPrefix=1
         - id: srt-cloud-data-integrate
           uri: lb://srt-cloud-data-integrate
           order: 4
@@ -63,13 +56,6 @@ spring:
           order: 7
           predicates:
             - Path=/data-governance/**
-          filters:
-            - StripPrefix=1
-        - id: srt-cloud-data-assets
-          uri: lb://srt-cloud-data-assets
-          order: 8
-          predicates:
-            - Path=/data-assets/**
           filters:
             - StripPrefix=1
         - id: openapi

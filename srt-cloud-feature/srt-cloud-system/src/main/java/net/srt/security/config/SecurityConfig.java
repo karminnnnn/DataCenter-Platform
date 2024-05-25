@@ -1,9 +1,6 @@
 package net.srt.security.config;
 
 import lombok.AllArgsConstructor;
-import net.srt.framework.security.mobile.MobileAuthenticationProvider;
-import net.srt.framework.security.mobile.MobileUserDetailsService;
-import net.srt.framework.security.mobile.MobileVerifyCodeService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +23,17 @@ import java.util.List;
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
+    // 用于从持久化存储（如数据库）加载用户特定数据
     private final UserDetailsService userDetailsService;
-    private final MobileUserDetailsService mobileUserDetailsService;
-    private final MobileVerifyCodeService mobileVerifyCodeService;
+    // 对密码进行加密和匹配验证
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    /**
+    * @description: 数据库认证方式
+    * @author PatrickLi 373595331@qq.com
+    * @date 2024/5/21
+    */
     @Bean
     DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -41,18 +43,19 @@ public class SecurityConfig {
         return daoAuthenticationProvider;
     }
 
-    @Bean
-    MobileAuthenticationProvider mobileAuthenticationProvider() {
-        return new MobileAuthenticationProvider(mobileUserDetailsService, mobileVerifyCodeService);
-    }
-
+    /**
+    * @description: 返回AuthenticationManager对象，已配置好认证的细节
+    * @author PatrickLi 373595331@qq.com
+    * @date 2024/5/21
+    */
     @Bean
     public AuthenticationManager authenticationManager() {
         List<AuthenticationProvider> providerList = new ArrayList<>();
+        // 添加dao认证方式
         providerList.add(daoAuthenticationProvider());
-        providerList.add(mobileAuthenticationProvider());
 
         ProviderManager providerManager = new ProviderManager(providerList);
+        // 注册标准事件发布器
         providerManager.setAuthenticationEventPublisher(new DefaultAuthenticationEventPublisher(applicationEventPublisher));
 
         return providerManager;

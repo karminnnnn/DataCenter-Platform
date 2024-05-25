@@ -25,7 +25,6 @@
         <module>srt-cloud-data-development</module>
         <module>srt-cloud-data-service</module>
         <module>srt-cloud-data-governance</module>
-        <module>srt-cloud-data-assets</module>
     </modules>
 
     <properties>
@@ -64,7 +63,7 @@
         <greenplum-jdbc.version>5.1.4</greenplum-jdbc.version>
         <dm-jdbc.version>1.0.0</dm-jdbc.version>
         <kingbase-jdbc.version>8.6.0</kingbase-jdbc.version>
-        <hive-jdbc.version>3.1.2</hive-jdbc.version>
+        <hive-jdbc.version>4.0.0</hive-jdbc.version>
         <sizeof.version>0.4.0</sizeof.version>
         <json-smart.version>2.3</json-smart.version>
         <calcite-core.version>1.21.0</calcite-core.version>

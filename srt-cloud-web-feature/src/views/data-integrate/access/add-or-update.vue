@@ -5,17 +5,17 @@
 		  <el-step title="基本信息配置" />
 		  <el-step title="同步源端配置" />
 		  <el-step title="目标端(ods)配置" />
-		  <el-step title="映射转换配置" />
+		  <!-- <el-step title="映射转换配置" /> -->
 		  <el-step title="配置确认提交" />
 		</el-steps>
 		<br/>
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px">
 			<!-- 基本信息配置 -->
 			<div v-show="active == 1">
-				<el-form-item prop="orgId" label="所属机构">
+				<el-form-item prop="platformID" label="所属平台">
 					<el-tree-select
 						clearable
-						v-model="dataForm.orgId"
+						v-model="dataForm.platformID"
 						:data="orgList"
 						check-strictly
 						value-key="id"
@@ -301,7 +301,7 @@
 				</el-form-item>
 			</div>
 			<!-- 映射转换配置 -->
-			<div v-show="active == 4">
+			<!-- <div v-show="active == 4">
 				<el-form-item label="映射类型" prop="mapperType" label-width="auto" v-if="dataForm.sourceType == 1">
 					<fast-select @change="mapperTypeChange" v-model="dataForm.mapperType" dict-type="mapper_type" placeholder="映射类型" clearable></fast-select>
 					<el-tooltip placement="right"  content="统一映射:统一配置映射关系;单独映射:单独配置每张表的映射关系.">
@@ -529,9 +529,9 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			
-			<div v-show="active == 5">
+			<div v-show="active == 4">
 				<el-descriptions size="default"
 				                 :column="1"
 				                 label-class-name="el-descriptions-item-label-class"
@@ -635,12 +635,12 @@
 			</el-button>
 			<el-button round size="large"
 			           @click="next()"
-			           v-if="active > 0 && active < 5">
+			           v-if="active > 0 && active < 4">
 			  下一步
 			</el-button>
 			<el-button type="primary" round size="large"
 			           @click="submitHandle()"
-			           v-if="active == 5">
+			           v-if="active == 4">
 			  提交
 			</el-button>
 		</template>
@@ -712,7 +712,7 @@ const targetTables = ref([])
 
 const active = ref(1)
 const dataForm = reactive({
-	orgId: '',
+	platformID: '',
 	taskName: '',
 	description: '',
 	projectId: '',
@@ -721,7 +721,7 @@ const dataForm = reactive({
 	sourceType: '1',
 	sourceSql: '',
 	sourcePrimaryKeys: [],
-	taskType: '',
+	taskType: '2',
 	cron: '',
 	databases: [],
 	includeOrExclude: 1,
@@ -960,7 +960,7 @@ const sourceTypeChange = (sourceType: any) => {
 }
 
 const dataRules = ref({
-	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	platformID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	taskName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	/* projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }], */
 	sourceDatabaseId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
@@ -991,7 +991,7 @@ const pre = () => {
 }
 
 const next = () => {
-	if (active.value++ > 4) active.value = 5
+	if (active.value++ > 3) active.value = 4
 }
 
 //源端数据库变化

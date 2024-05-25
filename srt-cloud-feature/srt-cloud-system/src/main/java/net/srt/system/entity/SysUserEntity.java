@@ -32,14 +32,6 @@ public class SysUserEntity extends BaseEntity {
      */
     private Integer gender;
     /**
-     * 邮箱
-     */
-    private String email;
-    /**
-     * 手机号
-     */
-    private String mobile;
-    /**
      * 机构ID
      */
     private Long orgId;

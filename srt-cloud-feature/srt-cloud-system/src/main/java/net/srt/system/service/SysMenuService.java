@@ -10,10 +10,10 @@ import java.util.Set;
 
 
 /**
- * 菜单管理
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 菜单管理
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/23
+*/
 public interface SysMenuService extends BaseService<SysMenuEntity> {
 
 	void save(SysMenuVO vo);

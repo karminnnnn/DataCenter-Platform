@@ -13,7 +13,6 @@ import net.srt.framework.security.user.UserDetail;
 import net.srt.system.convert.SysRoleConvert;
 import net.srt.system.dao.SysRoleDao;
 import net.srt.system.entity.SysRoleEntity;
-import net.srt.system.entity.SysUserEntity;
 import net.srt.system.enums.DataScopeEnum;
 import net.srt.system.enums.SuperAdminEnum;
 import net.srt.system.query.SysRoleQuery;

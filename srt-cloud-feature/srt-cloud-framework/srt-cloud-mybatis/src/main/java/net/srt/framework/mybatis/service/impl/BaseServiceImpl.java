@@ -27,10 +27,10 @@ import java.util.List;
 
 
 /**
- * 基础服务类，所有Service都要继承
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 基础服务类，继承了BaseService的接口的实现类都要继承该类
+* @author PatrickLi 373595331@qq.com
+* @date 2024/5/23
+*/
 public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
 
 	@Autowired

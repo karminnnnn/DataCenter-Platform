@@ -1,0 +1,5 @@
+drop database if exists srt_cloud;
+create database srt_cloud;
+drop database if exists srt_data_warehouse_p_10002;
+create database srt_data_warehouse_p_10002;
+use srt_cloud;
