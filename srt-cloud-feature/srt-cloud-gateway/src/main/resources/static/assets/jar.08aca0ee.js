@@ -1,1 +1,0 @@
-import{ad as t}from"./index.afa5927e.js";const r=e=>t.get("/data-development/jar/"+e),s=e=>e.id?t.put("/data-development/jar",e):t.post("/data-development/jar",e),n=e=>t.get("/data-development/jar/list/"+e);export{s as a,n as g,r as u};

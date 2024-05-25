@@ -1,1 +1,0 @@
-import{ad as r}from"./index.afa5927e.js";const a=e=>r.get("/data-service/api-group/"+e),i=e=>e.id?r.put("/data-service/api-group",e):r.post("/data-service/api-group",e),p=()=>r.get("/data-service/api-group"),s=e=>r.delete("/data-service/api-group/"+e);export{a,i as b,s as c,p as u};

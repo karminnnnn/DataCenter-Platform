@@ -1,1 +1,0 @@
-import{d as o,B as s,A as n,W as c}from"./index.afa5927e.js";const d=o({created(){const{params:e,query:r}=s(),{path:t}=e;n().replace({path:"/"+t,query:r}).catch(a=>{console.warn(a)})},render(){return c("div")}});export{d as default};

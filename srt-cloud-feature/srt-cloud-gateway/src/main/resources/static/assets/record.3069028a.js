@@ -1,1 +1,0 @@
-import"./record.vue_vue_type_script_setup_true_name_SrtRecordIndex_lang.de77dd8c.js";import{_}from"./record.vue_vue_type_script_setup_true_name_SrtRecordIndex_lang.de77dd8c.js";import"./index.afa5927e.js";import"./readonly-studio.vue_vue_type_script_setup_true_lang.c5082512.js";import"./toggleHighContrast.9f64e070.js";import"./metadataCollect.53667fb3.js";export{_ as default};
