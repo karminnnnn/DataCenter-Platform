@@ -26,15 +26,20 @@
 				<el-form-item>
 					<el-button @click="datasource_useCrud.getDataList()">查询</el-button>
 				</el-form-item>
+
+				<!-- v-auth="'data-integrate:database:save'" -->
 				<el-form-item>
-					<el-button v-auth="'data-integrate:database:save'" type="primary" @click="addOrUpdateHandle_datasource()">新增</el-button>
+					<el-button type="primary" @click="addOrUpdateHandle_datasource()">新增</el-button>
 				</el-form-item>
+				<!-- v-auth="'data-integrate:database:delete'" -->
 				<el-form-item>
-					<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="datasource_state.deleteBatchHandle()">删除</el-button>
+					<el-button type="danger" @click="datasource_state.deleteBatchHandle()">删除</el-button>
 				</el-form-item>
+				<!---->
+
 			</el-form>
 			<el-table v-loading="datasource_state.dataListLoading" :data="datasource_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="datasource_useCrud.selectionChangeHandle">
-				<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+				<!-- <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 				<el-table-column prop="name" label="名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 				<fast-table-column prop="databaseType" label="数据库类型" dict-type="database_type"></fast-table-column>
 				<el-table-column prop="databaseIp" label="主机ip" header-align="center" align="center" show-overflow-tooltip></el-table-column>
@@ -44,13 +49,24 @@
 				<fast-table-column prop="status" label="状态" dict-type="database_status"></fast-table-column>
 				<fast-table-org-column prop="orgId" label="所属机构" header-align="center" align="center"></fast-table-org-column>
 				<fast-creator-column prop="creator" label="创建者" header-align="center" align="center"></fast-creator-column>
-				<el-table-column prop="createTime" label="创建时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="createTime" label="创建时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column> -->
+				<el-table-column prop="DataSourceID" label="数据源ID" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="DataSourceName" label="数据源名字" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="IP" label="数据源IP" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="Port" label="数据源端口" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="UserName" label="用户名" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="Password" label="密码" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="PlatformName" label="平台名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="DatabaseType" label="数据库类型" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" width="200">
 					<template #default="scope">
-						<el-button v-auth="'data-integrate:database:update'" type="primary" link @click="addOrUpdateHandle_datasource(scope.row.id)">编辑</el-button>
+						<!-- v-auth="'data-integrate:database:update'" -->
+						<el-button type="primary" link @click="addOrUpdateHandle_datasource(scope.row.id)">编辑</el-button>
 						<el-button type="primary" link @click="database_tables(scope.row.id)">数据库</el-button>
-						<!-- <el-button type="primary" link @click="test(scope.row)">测试</el-button> -->
-						<el-button v-auth="'data-integrate:database:delete'" type="danger" link @click="datasource_useCrud.deleteBatchHandle(scope.row.id)">删除</el-button>
+						<el-button type="primary" link @click="test(scope.row)">测试</el-button>
+						<!-- v-auth="'data-integrate:database:delete'" -->
+						<el-button type="danger" link @click="datasource_useCrud.deleteBatchHandle(scope.row.id)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -241,12 +257,12 @@ import AddOrUpdate from './add-or-update.vue'
 import AddOrUpdate_datasource from './add-or-update-datasource.vue'
 import { IHooksOptions } from '@/hooks/interface'
 import { ElMessage } from 'element-plus/es'
-// import { /*testOnline,*/getTablesById, getTableDataBySql } from '@/api/data-integrate/database'
+import { testOnline,/*getTablesById, getTableDataBySql*/ } from '@/api/data-integrate/database'
 
 // 数据源
 const datasource_state: IHooksOptions = reactive({
-	dataListUrl: '/data-integrate/database/page',
-	deleteUrl: '/data-integrate/database',
+	dataListUrl: '/data-integrate/datasource/page',
+	deleteUrl: '/data-integrate/datasource',
 
 	// Mine
 	dataListUrl_v2: '/metadata/datasource/page',
@@ -389,18 +405,18 @@ const addOrUpdateHandle_datasource = (id?: number) => {
 }
 
 
-// // 测试连接
-// const test = (row) => {
-// 	testOnline(row).then(() => {
-// 		ElMessage.success({
-// 			message: '测试连接成功',
-// 			duration: 500,
-// 			onClose: () => {
-// 				getDataList()
-// 			}
-// 		})
-// 	})
-// }
+// 测试连接
+const test = (row) => {
+	testOnline(row).then(() => {
+		ElMessage.success({
+			message: '测试连接成功',
+			duration: 500,
+			onClose: () => {
+				datasource_useCrud.getDataList()
+			}
+		})
+	})
+}
 
 const database_tables = (id) => {
 	database_state.database_drawer = true
@@ -482,6 +498,10 @@ const datasource_useCrud = useCrud(datasource_state)
 const database_useCrud = useCrud(database_state)
 const datatable_useCrud = useCrud(datatable_state)
 // const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(datatable_state)
+
+// defineExpose({
+// 	// init()
+// })
 </script>
 
 <style>
