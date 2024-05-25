@@ -1,1 +1,0 @@
-import{ad as e}from"./index.afa5927e.js";const t=s=>e.get("/message/sms/platform/"+s),r=s=>s.id?e.put("/message/sms/platform",s):e.post("/message/sms/platform",s),a=s=>e.post("/message/sms/platform/send",s);export{r as a,a as b,t as u};

@@ -1,1 +1,0 @@
-import"./index.vue_vue_type_script_setup_true_name_SrtSavepointsIndex_lang.f31ad482.js";import{_ as t}from"./index.vue_vue_type_script_setup_true_name_SrtSavepointsIndex_lang.f31ad482.js";import"./index.afa5927e.js";export{t as default};

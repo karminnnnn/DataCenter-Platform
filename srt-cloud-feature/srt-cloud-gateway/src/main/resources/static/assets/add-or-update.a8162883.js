@@ -1,1 +1,0 @@
-import"./add-or-update.vue_vue_type_script_setup_true_lang.c7f36ac1.js";import{_ as c}from"./add-or-update.vue_vue_type_script_setup_true_lang.c7f36ac1.js";import"./index.afa5927e.js";import"./folder.ea536bf2.js";import"./database.235d7a89.js";import"./table.e1c1b00a.js";import"./column.79595943.js";import"./model.45425835.js";import"./metadata.ec7a05f4.js";export{c as default};

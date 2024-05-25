@@ -1,1 +1,0 @@
-import"./user.vue_vue_type_script_setup_true_name_SysMenuIndex_lang.36e6598e.js";import{_ as i}from"./user.vue_vue_type_script_setup_true_name_SysMenuIndex_lang.36e6598e.js";import"./index.afa5927e.js";import"./role.e96c1f40.js";export{i as default};
