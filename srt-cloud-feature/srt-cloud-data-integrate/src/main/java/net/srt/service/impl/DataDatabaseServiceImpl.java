@@ -157,6 +157,8 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
 				throw new ServerException(String.format("删除的数据中有元数据【%s】与之关联，不允许删除！", metadataDto.getName()));
 			}
 		}
+		System.out.println(idList);
+		// 确实是根据id来删除data_database中的数据
 		removeByIds(idList);
 	}
 

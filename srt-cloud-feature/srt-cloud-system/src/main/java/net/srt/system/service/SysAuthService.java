@@ -12,6 +12,13 @@ import net.srt.system.vo.SysTokenVO;
 public interface SysAuthService {
 
     SysTokenVO loginByAccount(SysAccountLoginVO login);
+
     SysTokenVO registerAccount(SysAccountRegisterVo register);
+
+    /**
+     * 退出登录
+     *
+     * @param accessToken accessToken
+     */
     void logout(String accessToken);
 }

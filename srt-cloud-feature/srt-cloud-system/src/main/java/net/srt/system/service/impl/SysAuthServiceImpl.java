@@ -91,9 +91,8 @@ public class SysAuthServiceImpl implements SysAuthService {
         } catch (BadCredentialsException e) {
             throw new ServerException("用户名或密码错误");
         }
-
-        // 用户信息
-        UserDetail user = (UserDetail) authentication.getPrincipal();
+		// 用户信息
+		UserDetail user = (UserDetail) authentication.getPrincipal();
 
         // 生成 accessToken
         String accessToken = TokenUtils.generator();

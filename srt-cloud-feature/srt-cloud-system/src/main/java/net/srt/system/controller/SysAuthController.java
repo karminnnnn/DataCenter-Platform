@@ -43,6 +43,7 @@ public class SysAuthController {
         return Result.ok(token);
     }
 
+
     @PostMapping("register")
     @Operation(summary = "用户注册")
     public Result<SysTokenVO> register(@RequestBody SysAccountRegisterVo register){
