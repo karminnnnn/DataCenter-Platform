@@ -42,7 +42,7 @@
 				<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 				<el-table-column prop="name" label="名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 				<fast-table-column prop="databaseType" label="数据库类型" dict-type="database_type"></fast-table-column>
-				<el-table-column prop="databaseIp" label="数据源ip" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="databaseIp" label="数据源IP" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="databasePort" label="数据源端口" header-align="center" align="center"></el-table-column>
 				<el-table-column prop="userName" label="数据源用户名" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="password" label="数据源密码" header-align="center" align="center" show-overflow-tooltip></el-table-column>
@@ -55,7 +55,7 @@
 						<!-- v-auth="'data-integrate:database:update'" -->
 						<el-button type="primary" link @click="addOrUpdateHandle_datasource(scope.row.id)">编辑</el-button>
 						<el-button type="primary" link @click="database_tables(scope.row.id)">数据库</el-button>
-						<el-button type="primary" link @click="test(scope.row)">测试</el-button>
+						<el-button type="primary" link @click="test_datasource(scope.row)">测试</el-button>
 						<!-- v-auth="'data-integrate:database:delete'" -->
 						<el-button type="danger" link @click="datasource_useCrud.deleteBatchHandle(scope.row.id)">删除</el-button>
 					</template>
@@ -130,7 +130,7 @@
 								<!-- v-auth="'data-integrate:database:update'" -->
 								<el-button type="primary" link @click="addOrUpdateHandle_database(scope.row.id)">编辑</el-button>
 								<!-- <el-button type="primary" link @click="datatable_tables(scope.row.id)">数据库表</el-button> -->
-								<el-button type="primary" link @click="test(scope.row)">测试</el-button>
+								<el-button type="primary" link @click="test_database(scope.row)">测试</el-button>
 								<!-- v-auth="'data-integrate:database:delete'" -->
 								<el-button type="danger" link @click="database_useCrud.deleteBatchHandle(scope.row.id)">删除</el-button>
 							</template>
@@ -247,7 +247,7 @@ import AddOrUpdate from './add-or-update.vue'
 import AddOrUpdate_database from './add-or-update-database.vue'
 import { IHooksOptions } from '@/hooks/interface'
 import { ElMessage } from 'element-plus/es'
-import { testOnline,/*getTablesById, getTableDataBySql*/ } from '@/api/data-integrate/database'
+import { testOnline, testOnline_datasource, testOnline_database/*getTablesById, getTableDataBySql*/ } from '@/api/data-integrate/database'
 
 // 数据源
 const datasource_state: IHooksOptions = reactive({
@@ -390,8 +390,28 @@ const addOrUpdateHandle_database = (id?: number) => {
 
 
 // 测试连接
-const test = (row) => {
-	testOnline(row).then(() => {
+// database是空
+const test_datasource = (row) => {
+	// console.log(row)
+	// row['aaaaa'] = 'aaaaa'
+	// console.log(row['aaaaa'])
+	testOnline_datasource(row).then(() => {
+		ElMessage.success({
+			message: '测试连接成功',
+			duration: 500,
+			onClose: () => {
+				datasource_useCrud.getDataList()
+			}
+		})
+	})
+}
+const test_database = (row) => {
+	const test_form = {
+		datasource_id: datatable_state.datasource_id,
+		database_name: row['database_name'],
+	}
+	console.log(test_form)
+	testOnline_database(test_form).then(() => {
 		ElMessage.success({
 			message: '测试连接成功',
 			duration: 500,

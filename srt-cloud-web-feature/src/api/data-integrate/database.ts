@@ -65,8 +65,16 @@ export const useDatatableSubmitApi_v2 = (dataForm: any) => {
 	}
 }
 
-// 不要
-export const testOnline = (dataForm: any) => {
+// 要
+// export const testOnline = (dataForm: any) => {
+// 	return service.post('/data-integrate/database/test-online', dataForm)
+// }
+// Mine
+export const testOnline_datasource = (dataForm: any) => {
+	return service.post('/data-integrate/database/test-online', dataForm)
+}
+// Mine
+export const testOnline_database = (dataForm: any) => {
 	return service.post('/data-integrate/database/test-online', dataForm)
 }
 
