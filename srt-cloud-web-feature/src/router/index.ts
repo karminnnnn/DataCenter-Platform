@@ -55,6 +55,15 @@ const asyncRoutes: RouteRecordRaw = {
 			}
 		},
 		{
+			path: '/profile/info',
+			name: 'UserInfo',
+			component: () => import('../views/profile/info.vue'),
+			meta: {
+				title: i18n.global.t('router.userInfo'),
+				cache: true
+			}
+		},
+		{
 			path: '/data-assets/resource/db-resource',
 			name: 'DataAssetsDbResource',
 			component: () => import('../views/data-assets/resource/db-resource.vue'),

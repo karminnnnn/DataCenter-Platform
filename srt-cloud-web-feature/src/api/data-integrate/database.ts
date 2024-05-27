@@ -1,6 +1,10 @@
 import service from '@/utils/request'
 
-// 保留？？？
+// Mine
+export const useDatasourceApi = (id: number) => {
+	return service.get('/data-integrate/datasource/' + id)
+}
+// 保留
 export const useDatabaseApi = (id: number) => {
 	return service.get('/data-integrate/database/' + id)
 }
@@ -16,6 +20,15 @@ export const useDatabaseApi_v2 = (id: number) => {
 // Mine
 export const useDatatableApi_v2 = (id: number) => {
 	return service.get('/data-integrate/datatable/' + id)
+}
+
+// Mine
+export const useDatasourceSubmitApi = (dataForm: any) => {
+	if (dataForm.id) {
+		return service.put('/data-integrate/datasource', dataForm)
+	} else {
+		return service.post('/data-integrate/datasource', dataForm)
+	}
 }
 
 // 保留？？？

@@ -24,6 +24,10 @@ export const listAllUserApi = () => {
 	return service.get('/sys/user/list-all')
 }
 
+export const updateUserInfoApi = (dataForm: any) => {
+	return service.post('/sys/user/updateinfo', dataForm)
+}
+
 // export const listUserApi = () => {
 // 	return service.get('/sys/user/list-users')
 // }

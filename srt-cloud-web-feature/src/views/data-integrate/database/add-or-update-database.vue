@@ -12,29 +12,35 @@
 						style="width: 100%"
 					/>
 				</el-form-item>
-				<el-form-item label="数据库ID" prop="DatabaseID">
-					<el-input v-model="dataForm.DatabaseID" placeholder="数据库ID"></el-input>
+				<el-form-item label="数据库ID" prop="id">
+					<el-input v-model="dataForm.id" placeholder="数据库ID" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="数据库名称" prop="DatabaseName">
-					<el-input v-model="dataForm.DatabaseName" placeholder="数据库名称"></el-input>
+				<el-form-item label="数据库名称" prop="database_name">
+					<el-input v-model="dataForm.database_name" placeholder="数据库名称"></el-input>
 				</el-form-item>
-				<el-form-item label="数据源ID" prop="DataSourceID">
-					<el-input v-model="dataForm.DataSourceID" placeholder="数据源ID"></el-input>
+				<el-form-item label="数据源ID" prop="datasource_id">
+					<el-input v-model="dataForm.datasource_id" placeholder="数据源ID" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="数据源名称" prop="DataSourceName">
-					<el-input v-model="dataForm.DataSourceName" placeholder="数据源名称"></el-input>
+				<el-form-item label="数据源名称" prop="datasource_name">
+					<el-input v-model="dataForm.datasource_name" placeholder="数据源名称" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="同步状态" prop="SyncStatus">
-					<el-input v-model="dataForm.SyncStatus" placeholder="同步状态"></el-input>
+				<el-form-item label="同步状态" prop="syn_status">
+					<el-input v-model="dataForm.syn_status" placeholder="同步状态" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="状态" prop="State">
-					<el-input v-model="dataForm.State" placeholder="状态"></el-input>
+				<el-form-item label="状态" prop="status">
+					<el-input v-model="dataForm.status" placeholder="状态" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="创建时间" prop="BuildTime">
-					<el-input v-model="dataForm.BuildTime" placeholder="创建时间"></el-input>
+				<el-form-item label="版本" prop="version">
+					<el-input v-model="dataForm.version" placeholder="状态"></el-input>
 				</el-form-item>
-				<el-form-item label="备注" prop="Remark">
-					<el-input v-model="dataForm.Remark" placeholder="备注"></el-input>
+				<el-form-item label="是否删除" prop="deleted">
+					<el-input v-model="dataForm.deleted" placeholder="状态"></el-input>
+				</el-form-item>
+				<el-form-item label="创建者" prop="creator_name">
+					<el-input v-model="dataForm.creator_name" placeholder="创建者"></el-input>
+				</el-form-item>
+				<el-form-item label="创建时间" prop="create_time">
+					<el-input v-model="dataForm.create_time" placeholder="创建时间"></el-input>
 				</el-form-item>
 		</el-form>
 		<template #footer>
@@ -72,17 +78,23 @@ const dataForm = reactive({
 	// projectId: ''
 
 	// Mine
-	DatabaseID: '',
-	DatabaseName: '',
-	SyncStatus: false,
-	State: false,
-	BuildTime: '',
-	Remark: '',
-	DataSourceID: '',
-	DataSourceName: '',
+	id: '1',
+	database_name: '1',
+	datasource_id: '1',
+	datasource_name: '1',
+	syn_status: '1',
+	status: '1',
+	version: '1',
+	deleted: '1',
+	creator_name: '1',
+	create_time: '1',
+	updater: '1',
+	updater_name: '1',
+	update_time: '1',
 	})
 
 const init = (id?: number) => {
+	console.log('hello')
 	visible.value = true
 	dataForm.id = ''
 	// dataForm.newPassword = '******'
@@ -124,13 +136,15 @@ const dataRules = ref({
 	// password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	// projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }] 
 
-	DatabaseID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	DatabaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	SyncStatus: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	State: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	BuildTime: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	Remark: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	DataSourceID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	id: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	database_name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	datasource_id: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	datasource_name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	status: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	version: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	deleted: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	creator_name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	create_time: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 })
 
 // 表单提交
