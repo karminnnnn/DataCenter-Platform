@@ -99,7 +99,7 @@
 							<fast-project-select v-model="state.queryForm.projectId" placeholder="所属项目" clearable></fast-project-select>
 						</el-form-item> -->
 						<el-form-item>
-						  <el-input v-model="database_state.queryForm.creator_name" placeholder="创建者名称"></el-input>
+						  <el-input v-model="database_state.queryForm.creatorName" placeholder="创建者名称"></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button @click="database_useCrud.getDataList()">查询</el-button>
@@ -115,13 +115,13 @@
 					</el-form>
 					<el-table v-loading="database_state.dataListLoading" :data="database_state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="database_useCrud.selectionChangeHandle">
 						<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-						<el-table-column prop="database_name" label="数据库名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="databaseName" label="数据库名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 						<fast-table-column prop="status" label="状态" dict-type="database_status"></fast-table-column>
-						<el-table-column prop="syn_status" label="同步状态" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="synStatus" label="同步状态" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="version" label="版本" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 						<el-table-column prop="deleted" label="是否删除" header-align="center" align="center" show-overflow-tooltip></el-table-column>
-						<fast-creator-column prop="creator_name" label="创建者" header-align="center" align="center"></fast-creator-column>
-						<el-table-column prop="create_time" label="创建时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column>
+						<fast-creator-column prop="creatorName" label="创建者" header-align="center" align="center"></fast-creator-column>
+						<el-table-column prop="createTime" label="创建时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column>
 						<!-- <fast-creator-column prop="updater_name" label="更新者" header-align="center" align="center"></fast-creator-column>
 						<el-table-column prop="update_time" label="更新时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column> -->
 						
@@ -322,10 +322,10 @@ const database_state: IHooksOptions = reactive({
 
 	// 这个才对
 	queryForm: {
-		datasource_id: '',
+		datasourceId: '',
 		name: '', 
 		status: '',
-		creator_name: '',
+		creatorName: '',
 	},
 
 	direction: 'rtl',
@@ -408,7 +408,7 @@ const test_datasource = (row) => {
 const test_database = (row) => {
 	const test_form = {
 		datasource_id: datatable_state.datasource_id,
-		database_name: row['database_name'],
+		database_name: row['databaseName'],
 	}
 	console.log(test_form)
 	testOnline_database(test_form).then(() => {
@@ -428,14 +428,14 @@ const database_tables = (id) => {
 
 	// Mine
 	database_state.datasource_id = id
-	database_state.queryForm.datasource_id = id
+	database_state.queryForm.datasourceId = id
 
 	// getTablesById(id).then(res => {
 	// 	state.tableData = res.data
 	// })
 
 	// 记得前面 v3 要改掉
-	database_state.queryForm.datasourceID = id
+	database_state.queryForm.datasourceId = id
 	database_useCrud.getDataList()
 }
 
