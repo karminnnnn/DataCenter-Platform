@@ -1,12 +1,16 @@
 <template>
 	<el-config-provider :locale="locale" :size="size">
-		<router-view />
+		<!-- <router-view /> -->
+		<index />
 	</el-config-provider>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted } from 'vue'
 import { RouterView } from 'vue-router'
+// Mine
+import Index from "./views/data-integrate/database/index.vue"
+
 import { useTitle } from '@vueuse/core'
 import store from '@/store'
 import { useI18n } from 'vue-i18n'

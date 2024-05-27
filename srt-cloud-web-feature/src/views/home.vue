@@ -1,7 +1,7 @@
 <template>
 	<el-card class="layout-home" body-style="height: calc(100vh - 170px )">
 		<h2>介绍</h2>
-		<p>前台基于Vue3、TypeScript、Element Plus、Vue Router、Pinia、Axios、i18n、Vite 等开发</p>
+		<!-- <p>前台基于Vue3、TypeScript、Element Plus、Vue Router、Pinia、Axios、i18n、Vite 等开发</p>
 		<p>后台基于SpringCloudAlibaba、filnk、tidb、dbswitch、neo4j 等开发</p>
 		<p>最新版数睿通数据中台，包含数据集成，数据开发，数据治理，数据资产，数据服务，数据集市六大模块，解决数据孤岛问题，实现数据统一口径标准，自定义数据开发任务，帮助企业，政府等解决数据问题！</p>
 		<br>
@@ -19,7 +19,8 @@
 
 		<h2>交流和反馈</h2>
 		<p>技术解答、交流、反馈、建议等，请关注公众号 <b>螺旋编程极客</b> 联系作者进交流群，备注 <b>“数睿通2.0”</b> ！</p>
-		<br />
+		<br /> -->
+		<p>BETA</p>
 	</el-card>
 </template>
 

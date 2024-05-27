@@ -67,6 +67,7 @@ export default {
 	router: {
 		home: '首页',
 		profilePassword: '修改密码',
+		userInfo: '修改信息',
 		changeProject: '切换项目'
 	}
 }

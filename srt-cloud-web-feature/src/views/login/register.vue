@@ -12,7 +12,7 @@
 		</el-form-item>
 		<el-form-item prop="captcha" class="login-captcha">
 			<el-input v-model="registerForm.captcha" :placeholder="$t('app.captcha')" :prefix-icon="Key"></el-input>
-			<img :src="captchaBase64" @click="onCaptcha" />
+			<!-- <img :src="captchaBase64" @click="onCaptcha" /> -->
 		</el-form-item>
 		<el-form-item class="login-button">
 			<el-button type="success" @click="onRegister()">{{ '注册' }}</el-button>
@@ -50,7 +50,7 @@ const registerRules = ref({
 })
 
 onMounted(() => {
-	onCaptcha()
+	// onCaptcha()
 })
 
 const onCaptcha = async () => {
@@ -60,6 +60,12 @@ const onCaptcha = async () => {
 }
 
 const onRegister = () => {
+	console.log(registerForm.password)
+	console.log(registerForm.confirmPassword)
+	if (registerForm.password != registerForm.confirmPassword) {
+		ElMessage.error('两次密码输入不一致！')
+		return false
+	}
 	registerFormRef.value.validate((valid: boolean) => {
 		if (!valid) {
 			return false
@@ -78,7 +84,7 @@ const onRegister = () => {
 			})
 			.catch(() => {
 				console.log("why????")
-				onCaptcha()
+				// onCaptcha()
 			})
 	})
 
@@ -97,7 +103,7 @@ const onRegister = () => {
 }
 .login-captcha {
 	:deep(.el-input) {
-		width: 200px;
+		width: 350px;
 	}
 }
 .login-captcha img {

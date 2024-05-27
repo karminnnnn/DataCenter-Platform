@@ -7,6 +7,9 @@
 		</div>
 		<template #dropdown>
 			<el-dropdown-menu class="user-dropdown">
+				<router-link to="/profile/info">
+					<el-dropdown-item> {{ $t('router.userInfo') }} </el-dropdown-item>
+				</router-link>
 				<router-link to="/profile/password">
 					<el-dropdown-item> {{ $t('router.profilePassword') }} </el-dropdown-item>
 				</router-link>

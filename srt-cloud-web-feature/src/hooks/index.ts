@@ -53,7 +53,8 @@ export const useCrud = (options: IHooksOptions) => {
 		}
 
 		state.dataListLoading = true
-
+		console.log(state.dataListUrl)
+		console.log(state)
 		service
 			.get(state.dataListUrl, {
 				params: {
