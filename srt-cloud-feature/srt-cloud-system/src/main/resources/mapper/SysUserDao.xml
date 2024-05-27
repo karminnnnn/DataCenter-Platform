@@ -69,4 +69,5 @@
         DELETE FROM data_project_user_rel WHERE data_project_id=#{projectId} AND user_id=#{userId}
     </delete>
 
+
 </mapper>

@@ -1,1 +1,0 @@
-import"./property-info.vue_vue_type_script_setup_true_lang.7a8a206a.js";import{_ as i}from"./property-info.vue_vue_type_script_setup_true_lang.7a8a206a.js";import"./index.afa5927e.js";import"./property-add-or-update.vue_vue_type_script_setup_true_lang.556aa349.js";export{i as default};

@@ -95,7 +95,7 @@ export const getTableDataBySql = (id: number, sqlConsole: any) => {
 
 // 保留，牵扯众多
 export const listDatabase = () => {
-	return service.get('/data-integrate/database/list-all')
+	return service.get('/data-integrate/datasource/list-all')
 }
 
 // 保留？？？

@@ -46,10 +46,4 @@ public class DataTableEntity extends BaseEntity {
 	*/
 	private Date recentlySyncTime;
 
-
-
-
-
-
-
 }

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.srt.api.module.data.governance.DataMasterApi;
 import net.srt.api.module.data.governance.dto.DataGovernanceMasterDistributeDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceMasterDistributeLogDto;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.constant.CommonRunStatus;
 import net.srt.flink.common.utils.LogUtil;
 import net.srt.framework.security.cache.TokenStoreCache;
@@ -25,7 +25,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class DataMasterDistributeTask {
 
-	private final DataDatabaseApi databaseApi;
+	private final DataSourceApi databaseApi;
 	private final DataMasterApi dataMasterApi;
 	private final TokenStoreCache tokenStoreCache;
 

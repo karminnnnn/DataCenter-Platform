@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import net.srt.api.FlinkApiFactory;
 import net.srt.api.FlinkVersion;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
 import net.srt.constant.SqlDbType;
 import net.srt.convert.DataProductionTaskConvert;
@@ -118,7 +118,7 @@ public class DataProductionTaskServiceImpl extends BaseServiceImpl<DataProductio
 	private final DataProductionTaskStatementDao statementDao;
 	private final DataProductionCatalogueDao catalogueDao;
 	private final DataProductionClusterService clusterService;
-	private final DataDatabaseApi dataDatabaseApi;
+	private final DataSourceApi DataSourceApi;
 	private final DataProductionTaskInstanceService instanceService;
 	private final DataProductionTaskInstanceHistoryService instanceHistoryService;
 	private final DataProductionTaskHistoryService historyService;
@@ -267,7 +267,7 @@ public class DataProductionTaskServiceImpl extends BaseServiceImpl<DataProductio
 			database.setPassword(project.getDbPassword());
 			database.setDatabaseType(project.getDbType());
 		} else {
-			database = dataDatabaseApi.getById(studioExecuteDto.getDatabaseId().longValue()).getData();
+			database = DataSourceApi.getById(studioExecuteDto.getDatabaseId().longValue()).getData();
 		}
 		try {
 			// zrx
@@ -976,7 +976,7 @@ public class DataProductionTaskServiceImpl extends BaseServiceImpl<DataProductio
 		} else {
 			history.setSqlDbType(SqlDbType.DATABASE.getValue());
 			history.setDatabaseId(sqlDto.getDatabaseId());
-			database = dataDatabaseApi.getById(sqlDto.getDatabaseId().longValue()).getData();
+			database = DataSourceApi.getById(sqlDto.getDatabaseId().longValue()).getData();
 		}
 		sqlConfigJson.setDatabase(database);
 		history.setConfigJson(SingletonObject.OBJECT_MAPPER.writeValueAsString(sqlConfigJson));
@@ -1092,7 +1092,7 @@ public class DataProductionTaskServiceImpl extends BaseServiceImpl<DataProductio
 		process.info("Initializing database connection...");
 		//调用dataBase的Api
 		boolean ifMiddleDb = SqlDbType.MIDDLE_DB.getValue().equals(studioExecuteDTO.getSqlDbType());
-		DataDatabaseDto dataBase = ifMiddleDb ? null : dataDatabaseApi.getById(studioExecuteDTO.getDatabaseId().longValue()).getData();
+		DataDatabaseDto dataBase = ifMiddleDb ? null : DataSourceApi.getById(studioExecuteDTO.getDatabaseId().longValue()).getData();
 		// zrx
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(ifMiddleDb ? getProject().getDbType() : dataBase.getDatabaseType());
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);

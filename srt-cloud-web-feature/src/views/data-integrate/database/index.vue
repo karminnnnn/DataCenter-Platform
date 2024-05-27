@@ -300,8 +300,8 @@ const datasource_state: IHooksOptions = reactive({
 
 // 数据库
 const database_state: IHooksOptions = reactive({
-	dataListUrl: '/data-integrate/database/page',
-	deleteUrl: '/data-integrate/database',
+	dataListUrl: '/data-integrate/datasource/page',
+	deleteUrl: '/data-integrate/datasource',
 
 	// Mine
 	datasource_id: '',
@@ -337,8 +337,8 @@ const database_state: IHooksOptions = reactive({
 
 // 数据表
 const datatable_state: IHooksOptions = reactive({
-	dataListUrl: '/data-integrate/database/page',
-	deleteUrl: '/data-integrate/database',
+	dataListUrl: '/data-integrate/datasource/page',
+	deleteUrl: '/data-integrate/datasource',
 
 	// Mine
 	datasource_id: '',

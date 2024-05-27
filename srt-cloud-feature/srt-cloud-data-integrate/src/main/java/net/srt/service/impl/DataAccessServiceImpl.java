@@ -16,12 +16,12 @@ import net.srt.convert.DataAccessConvert;
 import net.srt.convert.DataAccessTaskConvert;
 import net.srt.dao.DataAccessDao;
 import net.srt.dao.DataAccessIncreaseLogDao;
-import net.srt.dao.DataDatabaseDao;
+import net.srt.dao.DataSourceDao;
 import net.srt.dto.DataAccessClientDto;
 import net.srt.dto.PreviewMapDto;
 import net.srt.entity.DataAccessEntity;
 import net.srt.entity.DataAccessIncreaseLogEntity;
-import net.srt.entity.DataDatabaseEntity;
+import net.srt.entity.DataSourceEntity;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.config.Config;
 import net.srt.framework.common.exception.ServerException;
@@ -75,7 +75,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAccessEntity> implements DataAccessService {
 
-	private final DataDatabaseDao dataDatabaseDao;
+	private final DataSourceDao DataSourceDao;
 	private final QuartzDataAccessApi quartzDataAccessApi;
 	private final DataAccessTaskService dataAccessTaskService;
 	private final DataAccessTaskDetailService dataAccessTaskDetailService;
@@ -161,7 +161,7 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 		sourceDataSourceProperties.setSourceType(dto.getSourceType());
 		sourceDataSourceProperties.setSourceSql(SourceType.SQL.getCode().equals(dto.getSourceType()) ? dto.getSourceSql() : null);
 		sourceDataSourceProperties.setSourcePrimaryKeys(dto.getSourcePrimaryKeys());
-		DataDatabaseEntity sourceDatabase = dataDatabaseDao.selectById(dto.getSourceDatabaseId());
+		DataSourceEntity sourceDatabase = DataSourceDao.selectById(dto.getSourceDatabaseId());
 		//构建源端
 		ProductTypeEnum sourceProductType = ProductTypeEnum.getByIndex(sourceDatabase.getDatabaseType());
 		sourceDataSourceProperties.setSourceProductType(sourceProductType);
@@ -207,7 +207,7 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 			target.setTargetSchema(project.getDbSchema());
 			target.setTablePrefix(DataHouseLayer.ODS.getTablePrefix());
 		} else {
-			DataDatabaseEntity targetDatabase = dataDatabaseDao.selectById(dto.getTargetDatabaseId());
+			DataSourceEntity targetDatabase = DataSourceDao.selectById(dto.getTargetDatabaseId());
 			ProductTypeEnum targetProductType = ProductTypeEnum.getByIndex(targetDatabase.getDatabaseType());
 			target.setTargetProductType(targetProductType);
 			target.setUrl(StringUtil.isBlank(targetDatabase.getJdbcUrl()) ? targetProductType.getUrl()
@@ -392,11 +392,11 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 		}
 
 		List<PreviewNameMapperVo> result = new ArrayList<>(10);
-		DataDatabaseEntity databaseEntity;
+		DataSourceEntity databaseEntity;
 		if (previewMapDto.getSourceDatabaseId() == -1) {
 			databaseEntity = buildDatabase();
 		} else {
-			databaseEntity = dataDatabaseDao.selectById(previewMapDto.getSourceDatabaseId());
+			databaseEntity = DataSourceDao.selectById(previewMapDto.getSourceDatabaseId());
 		}
 		if (databaseEntity == null) {
 			throw new ServerException("选择的源端数据库已不存在！");
@@ -435,10 +435,10 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 		return result;
 	}
 
-	private DataDatabaseEntity buildDatabase() {
-		DataDatabaseEntity databaseEntity;
+	private DataSourceEntity buildDatabase() {
+		DataSourceEntity databaseEntity;
 		DataProjectCacheBean project = getProject();
-		databaseEntity = new DataDatabaseEntity();
+		databaseEntity = new DataSourceEntity();
 		databaseEntity.setJdbcUrl(project.getDbUrl());
 		databaseEntity.setDatabaseName(project.getDbName());
 		databaseEntity.setDatabaseSchema(project.getDbSchema());
@@ -501,14 +501,14 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 
 
 	private List<TableDescription> getAllTableNames(PreviewMapDto previewMapDto) {
-		DataDatabaseEntity databaseEntity;
+		DataSourceEntity databaseEntity;
 		if (previewMapDto.getSourceDatabaseId() == null) {
 			throw new ServerException("请选择源端数据库");
 		} else {
 			if (previewMapDto.getSourceDatabaseId() == -1) {
 				databaseEntity = buildDatabase();
 			} else {
-				databaseEntity = dataDatabaseDao.selectById(previewMapDto.getSourceDatabaseId());
+				databaseEntity = DataSourceDao.selectById(previewMapDto.getSourceDatabaseId());
 			}
 		}
 

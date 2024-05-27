@@ -1,1 +1,0 @@
-import{ad as t}from"./index.afa5927e.js";const e=s=>t.get("/data-assets/catalog/"+s),r=s=>s.id?t.put("/data-assets/catalog/",s):t.post("/data-assets/catalog/",s),o=s=>t.get("/data-assets/catalog/list-tree"),l=s=>t.delete("/data-assets/catalog/"+s);export{r as a,l as d,o as l,e as u};

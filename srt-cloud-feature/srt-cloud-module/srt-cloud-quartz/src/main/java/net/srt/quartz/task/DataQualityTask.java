@@ -10,7 +10,7 @@ import net.srt.api.module.data.governance.dto.DataGovernanceQualityConfigDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceQualityTaskDto;
 import net.srt.api.module.data.governance.dto.quality.QualityCheck;
 import net.srt.api.module.data.governance.dto.quality.QulaityColumn;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.constant.CommonRunStatus;
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
 import net.srt.flink.common.utils.LogUtil;
@@ -37,7 +37,7 @@ public class DataQualityTask {
 
 	private final DataQualityApi dataQualityApi;
 	private final DataMetadataApi dataMetadataApi;
-	private final DataDatabaseApi dataDatabaseApi;
+	private final DataSourceApi DataSourceApi;
 	private final TokenStoreCache tokenStoreCache;
 
 	public void run(String id, Thread currentThread) {
@@ -81,7 +81,7 @@ public class DataQualityTask {
 					qualityCheck.setPassword(project.getDbPassword());
 					qualityCheck.setDatabaseType(project.getDbType());
 				} else {
-					DataDatabaseDto database = dataDatabaseApi.getById(tableMeta.getDatasourceId()).getData();
+					DataDatabaseDto database = DataSourceApi.getById(tableMeta.getDatasourceId()).getData();
 					qualityCheck.setDatabaseName(database.getDatabaseName());
 					qualityCheck.setDatabaseSchema(database.getDatabaseSchema());
 					qualityCheck.setJdbcUrl(database.getJdbcUrl());

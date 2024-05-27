@@ -12,7 +12,7 @@ import net.srt.api.module.data.governance.dto.DataGovernanceMetadataCollectDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceMetadataCollectRecordDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceMetadataDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceMetadataPropertyDto;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.DataProjectApi;
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
 import net.srt.flink.common.utils.LogUtil;
@@ -40,7 +40,7 @@ import java.util.List;
 public class DataGovernanceMetadataCollectTask {
 
 	private final DataMetadataCollectApi dataMetadataCollectApi;
-	private final DataDatabaseApi dataDatabaseApi;
+	private final DataSourceApi DataSourceApi;
 	private final DataProjectApi dataProjectApi;
 
 	public void run(String metadataCollectId, Thread currentThread) {
@@ -71,7 +71,7 @@ public class DataGovernanceMetadataCollectTask {
 			//如果是数据库
 			DataDatabaseDto databaseDto;
 			if (DbType.DATABASE.getValue().equals(dbType)) {
-				databaseDto = dataDatabaseApi.getById(metadataCollectDto.getDatabaseId()).getData();
+				databaseDto = DataSourceApi.getById(metadataCollectDto.getDatabaseId()).getData();
 				if (databaseDto == null) {
 					realTimeLog.append(DateUtils.formatDateTime(new Date())).append(" ").append("Database not exists or get database info failed,get metadata info failed\r\n");
 					collectRecord.setRealTimeLog(realTimeLog.toString());

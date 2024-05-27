@@ -1,1 +1,0 @@
-import{ad as e}from"./index.afa5927e.js";const o=()=>e.get("/sys/role/menu"),u=s=>e.get("/sys/role/"+s),i=()=>e.get("/sys/role/list"),l=s=>s.id?e.put("/sys/role",s):e.post("/sys/role",s),n=s=>e.put("/sys/role/data-scope",s),p=(s,t)=>e.post("/sys/role/user/"+s,t);export{o as a,u as b,l as c,n as d,p as e,i as u};
