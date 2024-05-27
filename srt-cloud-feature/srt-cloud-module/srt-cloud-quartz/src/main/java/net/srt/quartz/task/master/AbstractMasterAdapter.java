@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.srt.api.module.data.governance.DataMasterApi;
 import net.srt.api.module.data.governance.dto.DataGovernanceMasterDistributeDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceMasterDistributeLogDto;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import srt.cloud.framework.dbswitch.common.type.ProductTypeEnum;
 import srt.cloud.framework.dbswitch.common.util.DbswitchStrUtils;
@@ -38,7 +38,7 @@ public abstract class AbstractMasterAdapter {
 
 	protected DataGovernanceMasterDistributeDto distributeDto;
 	protected DataMasterApi dataMasterApi;
-	protected DataDatabaseApi databaseApi;
+	protected DataSourceApi databaseApi;
 	protected DataGovernanceMasterDistributeLogDto distributeLogDto;
 	protected Thread currentThread;
 	protected DataProjectCacheBean project;
@@ -47,7 +47,7 @@ public abstract class AbstractMasterAdapter {
 		this.distributeDto = distributeDto;
 	}
 
-	public void prepare(DataMasterApi dataMasterApi, DataDatabaseApi databaseApi, DataGovernanceMasterDistributeLogDto distributeLogDto, Thread currentThread) {
+	public void prepare(DataMasterApi dataMasterApi, DataSourceApi databaseApi, DataGovernanceMasterDistributeLogDto distributeLogDto, Thread currentThread) {
 		this.dataMasterApi = dataMasterApi;
 		this.databaseApi = databaseApi;
 		this.distributeLogDto = distributeLogDto;

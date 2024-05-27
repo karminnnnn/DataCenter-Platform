@@ -1,11 +1,11 @@
 package net.srt.api;
 
 import lombok.RequiredArgsConstructor;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
-import net.srt.convert.DataDatabaseConvert;
+import net.srt.convert.DataSourceConvert;
 import net.srt.framework.common.utils.Result;
-import net.srt.service.DataDatabaseService;
+import net.srt.service.DataSourceService;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor
-public class DataDatabaseApiImpl implements DataDatabaseApi {
+public class DataDatabaseApiImpl implements DataSourceApi {
 
-	private final DataDatabaseService databaseService;
+	private final DataSourceService DataSourceService;
 
 	@Override
 	public Result<DataDatabaseDto> getById(Long id) {
-		return Result.ok(DataDatabaseConvert.INSTANCE.convertDto(databaseService.getById(id)));
+		return Result.ok(DataSourceConvert.INSTANCE.convertDto(DataSourceService.getById(id)));
 	}
 }

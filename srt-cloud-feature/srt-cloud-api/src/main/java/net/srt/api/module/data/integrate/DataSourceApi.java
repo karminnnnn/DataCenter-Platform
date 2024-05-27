@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @Date 2022/10/26 11:39
  */
 @FeignClient(name = ServerNames.DATA_INTEGRATE_NAME, contextId = "data-integrate-database")
-public interface DataDatabaseApi {
+public interface DataSourceApi {
 	/**
 	 * 根据id获取
 	 */
-	@GetMapping(value = "api/data/integrate/database/{id}")
+	@GetMapping(value = "api/data/integrate/datasource/{id}")
 	Result<DataDatabaseDto> getById(@PathVariable Long id);
 }

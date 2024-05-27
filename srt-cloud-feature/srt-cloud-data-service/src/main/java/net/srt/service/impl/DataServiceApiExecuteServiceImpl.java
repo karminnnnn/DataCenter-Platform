@@ -2,7 +2,7 @@ package net.srt.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.AllArgsConstructor;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
 import net.srt.constant.SqlDbType;
 import net.srt.dao.DataServiceApiConfigDao;
@@ -35,7 +35,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class DataServiceApiExecuteServiceImpl extends BaseServiceImpl<DataServiceApiConfigDao, DataServiceApiConfigEntity> implements DataServiceApiExecuteService {
 
-	private final DataDatabaseApi dataDatabaseApi;
+	private final DataSourceApi DataSourceApi;
 	private final RedisCache redisCache;
 
 	public JdbcSelectResult sqlExecute(SqlDto sqlDto) {
@@ -52,7 +52,7 @@ public class DataServiceApiExecuteServiceImpl extends BaseServiceImpl<DataServic
 			database.setPassword(project.getDbPassword());
 			database.setDatabaseType(project.getDbType());
 		} else {
-			database = dataDatabaseApi.getById(sqlDto.getDatabaseId()).getData();
+			database = DataSourceApi.getById(sqlDto.getDatabaseId()).getData();
 		}
 		try {
 			// zrx

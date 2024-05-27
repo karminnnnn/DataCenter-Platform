@@ -19,31 +19,9 @@ import java.util.Date;
 public class DataDatabaseEntity extends BaseEntity {
 
 	/**
-	 * 名称
-	 */
-	private String name;
-
-	/**
-	 * 数据库类型
-	 */
-	private Integer databaseType;
-
-	/**
-	 * 主机ip
-	 */
-	private String databaseIp;
-
-	/**
-	 * 端口
-	 */
-	private String databasePort;
-
-	/**
 	 * 库名
 	 */
 	private String databaseName;
-
-	private String databaseSchema;
 
 	/**
 	 * 状态
@@ -51,36 +29,13 @@ public class DataDatabaseEntity extends BaseEntity {
 	private Integer status;
 
 	/**
-	 * 用户名
+	 * 同步状态
 	 */
-	private String userName;
+	private Integer synStatus;
 
 	/**
-	 * 密码
+	 * 数据源ID
 	 */
-	private String password;
-
-	/**
-	 * 是否支持实时接入
-	 */
-	private Integer isRtApprove;
-
-	/**
-	 * 不支持实时接入原因
-	 */
-	private String noRtReason;
-
-	/**
-	 * jdbcUrl
-	 */
-	private String jdbcUrl;
-
-	/**
-	 * 所属项目
-	 */
-	private Long projectId;
-
-	private Long orgId;
-
+	private Integer datasourceId;
 
 }

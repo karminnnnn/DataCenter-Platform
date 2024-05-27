@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.srt.api.module.data.integrate.DataAccessApi;
-import net.srt.api.module.data.integrate.DataDatabaseApi;
+import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.DataProjectApi;
 import net.srt.api.module.data.integrate.DataTableApi;
 import net.srt.api.module.data.integrate.constant.AccessMode;
@@ -88,7 +88,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DataAccessTask {
 
-	private final DataDatabaseApi dataDatabaseApi;
+	private final DataSourceApi DataSourceApi;
 	private final DataAccessApi dataAccessApi;
 	private final DataTableApi dataTableApi;
 	private final DatabaseRepository databaseRepository;
@@ -309,7 +309,7 @@ public class DataAccessTask {
 	 */
 	private void buildLineage(DataAccessDto dataAccessDto) {
 		try {
-			DataDatabaseDto sourceDatabaseDto = dataDatabaseApi.getById(dataAccessDto.getSourceDatabaseId()).getData();
+			DataDatabaseDto sourceDatabaseDto = DataSourceApi.getById(dataAccessDto.getSourceDatabaseId()).getData();
 			DataDatabaseDto targetDataDatabaseDto;
 			if (dataAccessDto.getTargetDatabaseId() == null) {
 				targetDataDatabaseDto = new DataDatabaseDto();
@@ -322,7 +322,7 @@ public class DataAccessTask {
 				targetDataDatabaseDto.setPassword(project.getDbPassword());
 				targetDataDatabaseDto.setJdbcUrl(project.getDbUrl());
 			} else {
-				targetDataDatabaseDto = dataDatabaseApi.getById(dataAccessDto.getTargetDatabaseId()).getData();
+				targetDataDatabaseDto = DataSourceApi.getById(dataAccessDto.getTargetDatabaseId()).getData();
 			}
 			//数据库节点
 			Database sourceDatabase = addOrUpdateDatabase(sourceDatabaseDto);

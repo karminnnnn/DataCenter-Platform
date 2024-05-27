@@ -41,4 +41,6 @@ public interface SysUserDao extends BaseDao<SysUserEntity> {
 	List<Long> getProjectIds(@Param("userId") Long userId);
 
 	Long getByProjectIdAndUserId(@Param("projectId") Long projectId, @Param("userId") Long userId);
+
+
 }

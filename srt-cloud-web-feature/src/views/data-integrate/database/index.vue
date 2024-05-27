@@ -229,8 +229,8 @@
 
 
 		<!-- 弹窗, 新增 / 修改 -->
-		<!-- <add-or-update ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update> -->
-		<add-or-update-datasource ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update-datasource>
+		<add-or-update ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update>
+		<!-- <add-or-update-datasource ref="addOrUpdateRef_datasource" @refreshDataList="datasource_useCrud.getDataList"></add-or-update-datasource> -->
 	</el-card>
 </template>
 
@@ -245,8 +245,8 @@ import { ElMessage } from 'element-plus/es'
 
 // 数据源
 const datasource_state: IHooksOptions = reactive({
-	dataListUrl: '/data-integrate/database/page',
-	deleteUrl: '/data-integrate/database',
+	dataListUrl: '/data-integrate/datasource/page',
+	deleteUrl: '/data-integrate/datasource',
 
 	// Mine
 	dataListUrl_v2: '/metadata/datasource/page',
@@ -294,8 +294,8 @@ const datasource_state: IHooksOptions = reactive({
 
 // 数据库
 const database_state: IHooksOptions = reactive({
-	dataListUrl: '/data-integrate/database/page',
-	deleteUrl: '/data-integrate/database',
+	dataListUrl: '/data-integrate/datasource/page',
+	deleteUrl: '/data-integrate/datasource',
 
 	// Mine
 	datasource_id: '',
@@ -342,8 +342,8 @@ const database_state: IHooksOptions = reactive({
 
 // 数据表
 const datatable_state: IHooksOptions = reactive({
-	dataListUrl: '/data-integrate/database/page',
-	deleteUrl: '/data-integrate/database',
+	dataListUrl: '/data-integrate/datasource/page',
+	deleteUrl: '/data-integrate/datasource',
 
 	// Mine
 	datasource_id: '',

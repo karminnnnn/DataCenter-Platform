@@ -209,6 +209,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
 	 * MyBatis-Plus 数据权限
 	 */
 	protected void dataScopeWithOrgId(LambdaQueryWrapper<T> queryWrapper) {
+		// 通过dataScope构造一条string类型的sql片段，加入到wrapper中,此片段用于控制这次的数据库操作不能操作到用户没有数据权限的数据表
 		DataScope dataScope = getDataScope(null, null, null, null, true, true);
 		if (dataScope != null) {
 			queryWrapper.apply(dataScope.getSqlFilter());
