@@ -17,4 +17,9 @@ public interface DataSourceDao extends BaseDao<DataSourceEntity> {
 	void changeStatusById(@Param("id") Long id, @Param("status") Integer status);
 
 	String getNameById(@Param("id") Integer id);
+
+	String getPortById(@Param("id") Integer id);
+
+	String getIpById(@Param("id") Integer id);
+
 }

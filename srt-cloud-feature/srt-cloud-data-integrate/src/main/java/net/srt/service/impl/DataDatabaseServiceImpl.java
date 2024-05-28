@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
+import net.srt.constants.YesOrNo;
 import net.srt.convert.DataDatabaseConvert;
 import net.srt.convert.DataSourceConvert;
 import net.srt.dao.DataAccessTaskDao;
@@ -24,12 +25,17 @@ import net.srt.vo.DataDatabaseVO;
 import net.srt.vo.DataSourceVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import srt.cloud.framework.dbswitch.common.type.ProductTypeEnum;
+import srt.cloud.framework.dbswitch.common.util.StringUtil;
+import srt.cloud.framework.dbswitch.core.service.IMetaDataByJdbcService;
+import srt.cloud.framework.dbswitch.core.service.impl.MetaDataByJdbcServiceImpl;
 
 @Service
 @AllArgsConstructor
 public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, DataDatabaseEntity> implements DataDatabaseService {
     private final DataDatabaseDao dataDatabaseDao;
     private final DataSourceDao dataSourceDao;
+
 
     public PageResult<DataDatabaseVO> page(DataDatabaseQuery query) {
         IPage<DataDatabaseEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
@@ -43,7 +49,7 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         wrapper.eq( query.getStatus() != null,DataDatabaseEntity::getStatus, query.getStatus());
         wrapper.eq( StrUtil.isNotBlank(query.getCreatorName()),DataDatabaseEntity::getCreator, query.getCreatorName());
         wrapper.eq( DataDatabaseEntity::getDatasourceId, query.getDatasourceId());
-        dataScopeWithOrgId(wrapper);  // 加限制条件，不能对权限范围之外的数据库进行操作
+        //dataScopeWithOrgId(wrapper);  // 加限制条件，不能对权限范围之外的数据库进行操作
         return wrapper;
     }
 
@@ -90,6 +96,35 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         vo.setUpdaterName(updaterName);
         return vo;
     }
+
+
+    @Override
+    public void testOnline(Integer datasourceId,String databaseName){
+        ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
+        IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
+        DataSourceEntity dataSourceEntity = dataSourceDao.selectById(datasourceId);
+
+
+        String jdbcUrl = productTypeEnum.getUrl();
+        jdbcUrl = jdbcUrl.replace("{host}",dataSourceEntity.getDatabaseIp())
+                .replace("{port}",dataSourceEntity.getDatabasePort())
+                .replace("{database}",databaseName);
+        System.out.println(jdbcUrl);
+
+        metaDataService.testQuerySQL(
+                jdbcUrl,
+                dataSourceEntity.getUserName(),
+                dataSourceEntity.getPassword(),
+                productTypeEnum.getTestSql()
+        );
+
+        if(!databaseName.isEmpty()){
+            dataDatabaseDao.changeStatusByName(databaseName,1); // 更新状态
+        }
+
+
+    }
+
 }
 
 

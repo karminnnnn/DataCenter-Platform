@@ -2,6 +2,7 @@ package net.srt.dto;
 
 import lombok.Data;
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 
 /**
  * @ClassName SqlConfigJson
@@ -11,6 +12,6 @@ import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
 @Data
 public class SqlConfigJson {
 	private Integer sqlDbType;
-	private DataDatabaseDto database;
+	private DataSourceDto database;
 	private Integer pvdataNum;
 }

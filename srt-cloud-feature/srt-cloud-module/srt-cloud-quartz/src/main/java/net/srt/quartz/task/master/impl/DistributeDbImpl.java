@@ -6,7 +6,7 @@ import net.srt.api.module.data.governance.dto.DataGovernanceMasterDistributeDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceMasterModelDto;
 import net.srt.api.module.data.governance.dto.distribute.DistributeDb;
 import net.srt.api.module.data.integrate.constant.CommonRunStatus;
-import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.quartz.task.master.AbstractMasterAdapter;
 import org.springframework.util.Assert;
 import srt.cloud.framework.dbswitch.common.constant.MapperType;
@@ -58,7 +58,7 @@ public class DistributeDbImpl extends AbstractMasterAdapter {
 		//目的端
 		TargetDataSourceProperties targetDataSourceProperties = dbswichProperties.getTarget();
 		//获取数据库信息
-		DataDatabaseDto databaseDto = databaseApi.getById(distributeDb.getDatabaseId()).getData();
+		DataSourceDto databaseDto = databaseApi.getById(distributeDb.getDatabaseId()).getData();
 		Assert.notNull(databaseDto, "派发数据库查询失败，可能已被删除！");
 		ProductTypeEnum targetProduct = ProductTypeEnum.getByIndex(databaseDto.getDatabaseType());
 		targetDataSourceProperties.setTargetProductType(targetProduct);

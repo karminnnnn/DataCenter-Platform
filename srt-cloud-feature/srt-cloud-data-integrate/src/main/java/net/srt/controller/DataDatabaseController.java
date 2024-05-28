@@ -14,6 +14,7 @@ import net.srt.query.DataDatabaseQuery;
 import net.srt.service.DataDatabaseService;
 import net.srt.vo.DataDatabaseVO;
 import net.srt.vo.DataSourceVO;
+import net.srt.vo.DatabaseTestOnlineVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DataDatabaseController {
     private final DataDatabaseService DataDatabaseService;
+
 
     @GetMapping("page")
     @Operation(summary = "数据库分页")
@@ -67,6 +69,13 @@ public class DataDatabaseController {
     public Result<String> update(@RequestBody @Valid DataDatabaseVO vo) {
         DataDatabaseService.update(vo);
 
+        return Result.ok();
+    }
+
+    @PostMapping("/test-online")
+    @Operation(summary = "测试连接")
+    public Result<String> testOnline(@RequestBody @Valid DatabaseTestOnlineVO vo) {
+        DataDatabaseService.testOnline(vo.getDatasourceId(), vo.getDatabaseName());
         return Result.ok();
     }
 }

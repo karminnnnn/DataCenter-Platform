@@ -89,7 +89,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		wrapper.eq(query.getDatabaseType() != null, DataSourceEntity::getDatabaseType, query.getDatabaseType());
 		wrapper.eq(query.getStatus() != null, DataSourceEntity::getStatus, query.getStatus());
 		wrapper.eq(query.getIsRtApprove() != null, DataSourceEntity::getIsRtApprove, query.getIsRtApprove());
-		dataScopeWithOrgId(wrapper);
+		//dataScopeWithOrgId(wrapper);
 		return wrapper;
 	}
 
@@ -130,7 +130,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		entity.setJdbcUrl(StringUtil.isBlank(entity.getJdbcUrl()) ? productTypeEnum.getUrl()
 				.replace("{host}", entity.getDatabaseIp())
 				.replace("{port}", entity.getDatabasePort())
-				.replace("{database}", entity.getDatabaseName()) : entity.getJdbcUrl());
+				.replace("{database}", "") : entity.getJdbcUrl());
 	}
 
 	@Override
@@ -168,7 +168,8 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 			vo.setJdbcUrl(productTypeEnum.getUrl()
 					.replace("{host}", vo.getDatabaseIp())
 					.replace("{port}", vo.getDatabasePort())
-					.replace("{database}", vo.getDatabaseName()));
+					.replace("{database}", "")
+			);
 		}
 		metaDataService.testQuerySQL(
 				vo.getJdbcUrl(),

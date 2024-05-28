@@ -38,4 +38,9 @@ public class DataDatabaseEntity extends BaseEntity {
 	 */
 	private Integer datasourceId;
 
+	/**
+	 * jdbcUrl
+	 */
+	private String jdbcUrl;
+
 }

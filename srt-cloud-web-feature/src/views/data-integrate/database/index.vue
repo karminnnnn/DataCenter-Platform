@@ -261,12 +261,12 @@ const datasource_state: IHooksOptions = reactive({
 	// 搜索框查询, 没啥问题
 	queryForm: {
 		name: '', 
-		databaseType: '', 
+		databaseType: 1, 
 		databaseName: '', 
 		databaseSchema: '', // 空
-		status: '', // 空
-		isRtApprove: '', 
-		projectId: ''
+		status: 1, // 空
+		isRtApprove: 1, 
+		projectId: 1
 	},
 
 	// // Mine 应该用这个
@@ -300,8 +300,8 @@ const datasource_state: IHooksOptions = reactive({
 
 // 数据库
 const database_state: IHooksOptions = reactive({
-	dataListUrl: '/data-integrate/datasource/page',
-	deleteUrl: '/data-integrate/datasource',
+	dataListUrl: '/data-integrate/database/page',
+	deleteUrl: '/data-integrate/database',
 
 	// Mine
 	datasource_id: '',

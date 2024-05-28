@@ -2,6 +2,7 @@ package net.srt.api.module.data.integrate;
 
 import net.srt.api.ServerNames;
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.framework.common.utils.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,5 +19,5 @@ public interface DataSourceApi {
 	 * 根据id获取
 	 */
 	@GetMapping(value = "api/data/integrate/datasource/{id}")
-	Result<DataDatabaseDto> getById(@PathVariable Long id);
+	Result<DataSourceDto> getById(@PathVariable Long id);
 }

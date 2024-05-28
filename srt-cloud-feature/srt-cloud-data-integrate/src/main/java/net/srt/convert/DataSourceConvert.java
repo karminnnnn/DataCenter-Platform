@@ -1,6 +1,7 @@
 package net.srt.convert;
 
 import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.entity.DataSourceEntity;
 import net.srt.vo.DataSourceVO;
 import org.mapstruct.Mapper;
@@ -22,7 +23,7 @@ public interface DataSourceConvert {
 
     DataSourceVO convert(DataSourceEntity entity);
 
-	DataDatabaseDto convertDto(DataSourceEntity entity);
+	DataSourceDto convertDto(DataSourceEntity entity);
 
     List<DataSourceVO> convertList(List<DataSourceEntity> list);
 

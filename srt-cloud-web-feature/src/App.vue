@@ -1,7 +1,7 @@
 <template>
 	<el-config-provider :locale="locale" :size="size">
-		<!-- <router-view /> -->
-		<index />
+		<router-view />
+		<!-- <index /> -->
 	</el-config-provider>
 </template>
 

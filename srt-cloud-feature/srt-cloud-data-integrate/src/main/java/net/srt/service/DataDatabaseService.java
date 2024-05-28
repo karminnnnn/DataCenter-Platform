@@ -17,4 +17,6 @@ public interface DataDatabaseService extends BaseService<DataDatabaseEntity> {
     void update(DataDatabaseVO vo);
 
     DataDatabaseVO get(Long id);
+
+    void testOnline(Integer databaseId,String databaseName);
 }

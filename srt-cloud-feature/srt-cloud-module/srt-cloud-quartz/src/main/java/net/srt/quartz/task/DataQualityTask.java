@@ -12,7 +12,7 @@ import net.srt.api.module.data.governance.dto.quality.QualityCheck;
 import net.srt.api.module.data.governance.dto.quality.QulaityColumn;
 import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.constant.CommonRunStatus;
-import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.flink.common.utils.LogUtil;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.utils.DateUtils;
@@ -81,7 +81,7 @@ public class DataQualityTask {
 					qualityCheck.setPassword(project.getDbPassword());
 					qualityCheck.setDatabaseType(project.getDbType());
 				} else {
-					DataDatabaseDto database = DataSourceApi.getById(tableMeta.getDatasourceId()).getData();
+					DataSourceDto database = DataSourceApi.getById(tableMeta.getDatasourceId()).getData();
 					qualityCheck.setDatabaseName(database.getDatabaseName());
 					qualityCheck.setDatabaseSchema(database.getDatabaseSchema());
 					qualityCheck.setJdbcUrl(database.getJdbcUrl());

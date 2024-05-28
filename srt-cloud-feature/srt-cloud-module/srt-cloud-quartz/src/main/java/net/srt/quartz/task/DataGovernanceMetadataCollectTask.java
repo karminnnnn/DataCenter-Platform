@@ -14,7 +14,7 @@ import net.srt.api.module.data.governance.dto.DataGovernanceMetadataDto;
 import net.srt.api.module.data.governance.dto.DataGovernanceMetadataPropertyDto;
 import net.srt.api.module.data.integrate.DataSourceApi;
 import net.srt.api.module.data.integrate.DataProjectApi;
-import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.flink.common.utils.LogUtil;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.utils.DateUtils;
@@ -69,7 +69,7 @@ public class DataGovernanceMetadataCollectTask {
 			realTimeLog.append(DateUtils.formatDateTime(new Date())).append(" ").append("Start to collect database info...\r\n");
 			Integer dbType = metadataCollectDto.getDbType();
 			//如果是数据库
-			DataDatabaseDto databaseDto;
+			DataSourceDto databaseDto;
 			if (DbType.DATABASE.getValue().equals(dbType)) {
 				databaseDto = DataSourceApi.getById(metadataCollectDto.getDatabaseId()).getData();
 				if (databaseDto == null) {
@@ -83,7 +83,7 @@ public class DataGovernanceMetadataCollectTask {
 				}
 			} else {
 				//获取中台库信息
-				databaseDto = new DataDatabaseDto();
+				databaseDto = new DataSourceDto();
 				DataProjectCacheBean project = dataProjectApi.getById(projectId).getData();
 				databaseDto.setId(-1L);
 				databaseDto.setDatabaseIp(project.getDbIp());

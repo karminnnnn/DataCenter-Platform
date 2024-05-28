@@ -16,7 +16,7 @@ import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.api.module.data.integrate.dto.DataAccessIncreaseLogDto;
 import net.srt.api.module.data.integrate.dto.DataAccessRunDto;
 import net.srt.api.module.data.integrate.dto.DataAccessTaskDto;
-import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.api.module.data.integrate.dto.DataTableDto;
 import net.srt.api.module.data.integrate.dto.PreviewNameMapperDto;
 import net.srt.api.module.data.integrate.dto.QueryIncreaseLog;
@@ -309,31 +309,31 @@ public class DataAccessTask {
 	 */
 	private void buildLineage(DataAccessDto dataAccessDto) {
 		try {
-			DataDatabaseDto sourceDatabaseDto = DataSourceApi.getById(dataAccessDto.getSourceDatabaseId()).getData();
-			DataDatabaseDto targetDataDatabaseDto;
+			DataSourceDto sourceDatabaseDto = DataSourceApi.getById(dataAccessDto.getSourceDatabaseId()).getData();
+			DataSourceDto targetDataSourceDto;
 			if (dataAccessDto.getTargetDatabaseId() == null) {
-				targetDataDatabaseDto = new DataDatabaseDto();
+				targetDataSourceDto = new DataSourceDto();
 				DataProjectCacheBean project = dataProjectApi.getById(dataAccessDto.getProjectId()).getData();
-				targetDataDatabaseDto.setId(-1L);
-				targetDataDatabaseDto.setName(project.getName() + "<中台库>");
-				targetDataDatabaseDto.setDatabaseName(project.getDbName());
-				targetDataDatabaseDto.setDatabaseSchema(project.getDbSchema());
-				targetDataDatabaseDto.setUserName(project.getDbUsername());
-				targetDataDatabaseDto.setPassword(project.getDbPassword());
-				targetDataDatabaseDto.setJdbcUrl(project.getDbUrl());
+				targetDataSourceDto.setId(-1L);
+				targetDataSourceDto.setName(project.getName() + "<中台库>");
+				targetDataSourceDto.setDatabaseName(project.getDbName());
+				targetDataSourceDto.setDatabaseSchema(project.getDbSchema());
+				targetDataSourceDto.setUserName(project.getDbUsername());
+				targetDataSourceDto.setPassword(project.getDbPassword());
+				targetDataSourceDto.setJdbcUrl(project.getDbUrl());
 			} else {
-				targetDataDatabaseDto = DataSourceApi.getById(dataAccessDto.getTargetDatabaseId()).getData();
+				targetDataSourceDto = DataSourceApi.getById(dataAccessDto.getTargetDatabaseId()).getData();
 			}
 			//数据库节点
 			Database sourceDatabase = addOrUpdateDatabase(sourceDatabaseDto);
-			Database targetDatabase = addOrUpdateDatabase(targetDataDatabaseDto);
+			Database targetDatabase = addOrUpdateDatabase(targetDataSourceDto);
 			//数据库关联关系
 			addOrUpdateDatabaseRelation(dataAccessDto, sourceDatabase, targetDatabase);
 			//构建表级血缘
 			List<PreviewNameMapperDto> tableMap = dataAccessApi.getTableMap(dataAccessDto.getId()).getData();
 			for (PreviewNameMapperDto tableMapper : tableMap) {
 				Table sourceTable = new Table(tableMapper.getRemarks(), tableMapper.getOriginalName(), sourceDatabaseDto.getId(), sourceDatabase.getId());
-				Table targetTable = new Table(tableMapper.getRemarks(), tableMapper.getTargetName(), targetDataDatabaseDto.getId(), targetDatabase.getId());
+				Table targetTable = new Table(tableMapper.getRemarks(), tableMapper.getTargetName(), targetDataSourceDto.getId(), targetDatabase.getId());
 				//表节点
 				sourceTable = addOrUpdateTable(sourceTable);
 				targetTable = addOrUpdateTable(targetTable);
@@ -346,7 +346,7 @@ public class DataAccessTask {
 				List<PreviewNameMapperDto> columnMap = dataAccessApi.getColumnMap(dataAccessDto.getId(), sourceTable.getCode()).getData();
 				for (PreviewNameMapperDto columnMapper : columnMap) {
 					Column sourceColumn = new Column(columnMapper.getRemarks(), columnMapper.getOriginalName(), sourceDatabaseDto.getId(), sourceTable.getId());
-					Column targetColumn = new Column(columnMapper.getRemarks(), columnMapper.getTargetName(), targetDataDatabaseDto.getId(), targetTable.getId());
+					Column targetColumn = new Column(columnMapper.getRemarks(), columnMapper.getTargetName(), targetDataSourceDto.getId(), targetTable.getId());
 					//字段节点
 					sourceColumn = addOrUpdateColumn(sourceColumn);
 					targetColumn = addOrUpdateColumn(targetColumn);
@@ -432,9 +432,9 @@ public class DataAccessTask {
 		}
 	}
 
-	private Database addOrUpdateDatabase(DataDatabaseDto dataDatabaseDto) {
-		Database database = new Database(dataDatabaseDto.getName(), dataDatabaseDto.getDatabaseName(), dataDatabaseDto.getJdbcUrl(), dataDatabaseDto.getUserName(), dataDatabaseDto.getPassword(), dataDatabaseDto.getId());
-		Database dbDatabase = databaseRepository.getByDatabaseId(dataDatabaseDto.getId());
+	private Database addOrUpdateDatabase(DataSourceDto DataSourceDto) {
+		Database database = new Database(DataSourceDto.getName(), DataSourceDto.getDatabaseName(), DataSourceDto.getJdbcUrl(), DataSourceDto.getUserName(), DataSourceDto.getPassword(), DataSourceDto.getId());
+		Database dbDatabase = databaseRepository.getByDatabaseId(DataSourceDto.getId());
 		if (dbDatabase != null) {
 			database.setId(dbDatabase.getId());
 			databaseRepository.update(database);
