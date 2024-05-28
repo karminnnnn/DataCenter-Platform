@@ -1,4 +1,5 @@
 ## 项目说明
+
 srt-cloud 是采用 Vue3，Ts，Spring Cloud Alibaba、SpringSecurity、Spring Cloud Gateway、SpringBoot、Nacos、Redis、Mybatis-Plus，Tidb，Flink，Hadoop 等最新技术，开发的全新数睿通数据中台，包含数据集成，数据开发，数据治理，数据资产，数据服务，数据集市六大模块，解决数据孤岛问题，实现数据统一口径标准，自定义数据开发任务，帮助企业，政府等解决数据问题！目前项目正在开发中，会尽快做出一版成型可用的产品。
 
 ## 功能模块说明
@@ -10,7 +11,8 @@ srt-cloud 是采用 Vue3，Ts，Spring Cloud Alibaba、SpringSecurity、Spring C
   - 数据库管理 — 管理用户添加的数据源，支持 MYSQL/ORACLE/SQLSERVER/POSTGRESQL/GREENPLUM/MARIADB/DB2/DM/OSCAR/KINGBASE8/OSCAR/GBASE8A/HIVE/SQLITE3/SYBASE，支持库表查询，测试连接等
   - 文件管理 — 管理用户上传的文件数据
   - 数据接入 — 接入外部数据源的数据到中台 **ODS** 层，也可自定义接入目的端数据源，支持一次性全量同步和周期性增量同步；可自定义表名，字段名的映射规则，支持正则表达式匹配；支持查看执行记录及详细执行结果，可查看同步的数据量，数据大小，成功表数量，失败表数量，成功信息，失败信息，也可查看具体每张表同步的数据量，数据大小，错误信息等，帮助用户全面掌握数据接入的执行情况
-  - 贴源数据 — 查看接入到ods层的数据表和数据，可查看每张表的同步记录
+  - 贴源数据 — 查看接入到 ods 层的数据表和数据，可查看每张表的同步记录
+
 - 数据开发
   - 数据生产 — 对数据进行作业代码化编辑，自行 DDL 建模，运行，调试等
   - 调度中心
@@ -34,7 +36,7 @@ srt-cloud 是采用 Vue3，Ts，Spring Cloud Alibaba、SpringSecurity、Spring C
   - 数据标准
   - 数据质量
 - 数据资产（开发中）
-  - 资源管理 — 自定义资源目录，在每个目录下自定义资源，挂在数据库，api等
+  - 资源管理 — 自定义资源目录，在每个目录下自定义资源，挂在数据库，api 等
   - 资产总览 — 对中台资源做一个总的统计概览
 - 数据集市（待开发）
   - 资源目录 — 中台资源目录以及目录下资源的查看，可对资源进行申请操作
@@ -51,6 +53,7 @@ srt-cloud 是采用 Vue3，Ts，Spring Cloud Alibaba、SpringSecurity、Spring C
 - 日志管理
 
   - 登录日志 — 系统登录产生的日志
+
 - 系统管理
   - 用户管理 — 对系统用户进行管理
   - 菜单管理 — 对系统菜单进行管理，用于实现动态菜单
@@ -63,7 +66,7 @@ srt-cloud 是采用 Vue3，Ts，Spring Cloud Alibaba、SpringSecurity、Spring C
 
 ## 系统数仓架构
 
-系统数仓可以在全局项目管理中配置不同租户的数据仓库，在数据集成集成到ods层之后， 可以通过数据生产进行数据开发，数据整体流向图如下：
+系统数仓可以在全局项目管理中配置不同租户的数据仓库，在数据集成集成到 ods 层之后， 可以通过数据生产进行数据开发，数据整体流向图如下：
 
 ###### ![数睿通数仓架构图](images/数睿通数仓架构图.png)
 
@@ -77,7 +80,7 @@ srt-cloud 是采用 Vue3，Ts，Spring Cloud Alibaba、SpringSecurity、Spring C
 - vite
 - typeScript
 - element-plus
-- pinia 
+- pinia
 - 。。。
 
 后台：
@@ -95,23 +98,23 @@ srt-cloud 是采用 Vue3，Ts，Spring Cloud Alibaba、SpringSecurity、Spring C
 - flink
 - flink cdc
 - flink sql
-- neo4j 
+- neo4j
 - 。。。
 
 ## 系统运行方式
 
-### 下载Nacos
+### 下载 Nacos
 
-需要从GitHub下载Nacos，下载地址：https://github.com/alibaba/nacos/releases
-下载2.1.1版本，因为本项目使用的是Nacos 2.1.1，如果版本号对应不上，后面项目启动会出错。
+需要从 GitHub 下载 Nacos，下载地址：https://github.com/alibaba/nacos/releases
+下载 2.1.1 版本，因为本项目使用的是 Nacos 2.1.1，如果版本号对应不上，后面项目启动会出错。
 
-### nacos数据库
+### nacos 数据库
 
-注意：Nacos 目前只支持MySQL数据库，请安装MySQL8.0版本，以免出现其他错误。
+注意：Nacos 目前只支持 MySQL 数据库，请安装 MySQL8.0 版本，以免出现其他错误。
 
-新建数据库nacos_config，并运行【conf/nacos-mysql.sql】文件，初始化数据库即可。
+新建数据库 nacos_config，并运行【conf/nacos-mysql.sql】文件，初始化数据库即可。
 
-### 修改Nacos的配置文件
+### 修改 Nacos 的配置文件
 
 需要在【conf/application.properties】文件末尾，新增如下配置：
 
@@ -127,19 +130,19 @@ db.user.0=root
 db.password.0=root
 ```
 
-### 启动Nacos
+### 启动 Nacos
 
 ```bash
 Windows：
 startup.cmd -m standalone
 
-Linux: 
+Linux:
 sh startup.sh -m standalone
 
 # 集群启动可关注公众号 螺旋编程极客 查看
 ```
 
-访问Nacos管理界面(http://localhost:8848/nacos) ，初始用户名nacos，密码nacos，登录之后，如下所示：
+访问 Nacos 管理界面(http://localhost:8848/nacos) ，初始用户名 nacos，密码 nacos，登录之后，如下所示：
 
 ![image-20221030203128590](images/nacos.png)
 
@@ -148,25 +151,25 @@ sh startup.sh -m standalone
 创建 `srt_cloud` 数据库，数据库编码为`utf8mb4`
 执行`db/srt_cloud.sql`文件，初始化数据库脚本
 
-### 导入Nacos配置文件
+### 导入 Nacos 配置文件
 
-导入Nacos配置文件，配置文件在项目里，文件名为：【deploy/nacos_config.zip】，如下所示：
+导入 Nacos 配置文件，配置文件在项目里，文件名为：【deploy/nacos_config.zip】，如下所示：
 
 ![](images/nacos-config.png)
 
-导入配置文件后，还需要在Nacos里，修改datasource.yaml，如：Redis、MySQL信息等。
+导入配置文件后，还需要在 Nacos 里，修改 datasource.yaml，如：Redis、MySQL 信息等。
 
 ### 下载安装 neo4j
 
 具体参考
 
-[neo4j安装](https://blog.csdn.net/weixin_44593504/article/details/119903908)
+[neo4j 安装](https://blog.csdn.net/weixin_44593504/article/details/119903908)
 
 安装 neo4j-community-3.5.3-unix.tar.gz 版本（相关安装包文件夹里有），否则可能不适配
 
 ### 启动后端
 
-把系统导入 idea，注意部门 jdbc  驱动包 maven 官方仓库不存在，需要手动在本地 mvn install 一下，jar 包在网盘 jdbc 驱动包自取，导入项目后，右上角 profiles 勾选 flink1.14，多刷新几次，导入完 maven 依赖之后，依次启动：
+把系统导入 idea，注意部门 jdbc 驱动包 maven 官方仓库不存在，需要手动在本地 mvn install 一下，jar 包在网盘 jdbc 驱动包自取，导入项目后，右上角 profiles 勾选 flink1.14，多刷新几次，导入完 maven 依赖之后，依次启动：
 
 #### 启动 srt-cloud-gateway
 
@@ -194,7 +197,7 @@ sh startup.sh -m standalone
 
 #### 启动 srt-cloud-quartz
 
-运行  QuartzApplication.java
+运行 QuartzApplication.java
 
 #### 启动 srt-cloud-message
 
@@ -204,7 +207,7 @@ sh startup.sh -m standalone
 
 安装版本号为`16.15.0`的`nodejs`，如果已经安装了，请先卸载，推荐使用 nvm 安装 node.js，方便切换不同版本
 
-1. 需要先把本地安装的`nodejs`卸载，然后再下载nvm，地址：
+1. 需要先把本地安装的`nodejs`卸载，然后再下载 nvm，地址：
    https://github.com/coreybutler/nvm-windows/releases
 2. 一般情况，找到最新版本，然后下载`nvm-setup.exe`文件就可以了，下载后，我们双击安装即可。
 3. 我们使用`PowerShell`打开命令行，这里需要注意下，要使用`管理员`身份打开`PowerShell`

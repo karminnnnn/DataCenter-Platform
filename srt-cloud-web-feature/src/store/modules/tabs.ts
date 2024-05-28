@@ -64,7 +64,6 @@ export const tabsStore = defineStore('tabsStore', {
 	}
 })
 
-
 // import { defineStore } from 'pinia'：从 Pinia 库中导入 defineStore 函数，用于定义一个新的状态管理模块。
 // import { RouteLocationNormalizedLoaded } from 'vue-router'：从 Vue Router 中导入 RouteLocationNormalizedLoaded 类型，表示已加载的路由位置信息。
 // export const tabsStore = defineStore('tabsStore', { ... })：使用 defineStore 函数定义了一个名为 tabsStore 的状态管理模块。
@@ -87,9 +86,3 @@ export const tabsStore = defineStore('tabsStore', {
 // 		只保留固定标签页（affix 属性为 true）和当前标签页。
 // 	delAllViews()：删除所有标签页，保留固定标签页。
 // 		这样就定义了一个包含标签页相关状态和操作的状态管理模块 tabsStore，可以在应用中使用该模块来管理标签页。
-
-
-
-
-
-

@@ -27,7 +27,6 @@ export const validateMobile = (mobile: string): boolean => {
 	return /^1[3456789]\d{9}$/.test(mobile)
 }
 
-
 // import { i18n } from '@/i18n'：从 i18n 模块中导入 i18n 对象，用于国际化处理。
 // export const isExternalLink = (path: string): boolean => { ... }：判断传入的路径是否为外部链接（以 http、https、mailto、tel 开头），返回布尔值。
 // export const validateEmail = (rule: any, value: any, callback: (e?: Error) => any) => { ... }：用于验证邮箱格式的函数。

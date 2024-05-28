@@ -13,18 +13,17 @@ export const useAppSubmitApi = (dataForm: any) => {
 }
 
 export const authApi = (dataForm: any) => {
-	if(dataForm.id) {
+	if (dataForm.id) {
 		return service.put('/data-service/app/auth', dataForm)
 	} else {
 		return service.post('/data-service/app/auth', dataForm)
 	}
-	
 }
 
 export const cancelAuthApi = (id: number) => {
-	return service.delete('/data-service/app/cancel-auth/'+id)
+	return service.delete('/data-service/app/cancel-auth/' + id)
 }
 
 export const getAuthInfoApi = (authId: number) => {
-	return service.get('/data-service/api-config/auth-info/'+authId)
+	return service.get('/data-service/api-config/auth-info/' + authId)
 }

@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts" name="FastCreatorColumn">
-	
 import store from '@/store'
 import { getNameByUserId } from '@/utils/tool'
 

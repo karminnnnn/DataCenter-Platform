@@ -17,5 +17,5 @@ export const useCatalogueListApi = () => {
 }
 
 export const useCatalogueDelApi = (id: any) => {
-	return service.delete('/data-service/api-group/'+id)
+	return service.delete('/data-service/api-group/' + id)
 }

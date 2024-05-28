@@ -1,32 +1,32 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
-				<el-form-item prop="orgId" label="所属机构">
-					<el-tree-select
-						clearable
-						v-model="dataForm.orgId"
-						:data="orgList"
-						check-strictly
-						value-key="id"
-						:props="{ label: 'name', children: 'children' }"
-						style="width: 100%"
-					/>
-				</el-form-item>
-				<el-form-item label="父级目录" prop="parentPath">
-					<el-input disabled v-model="dataForm.parentPath" placeholder=""></el-input>
-				</el-form-item>
-				<el-form-item label="名称" prop="name">
-					<el-input v-model="dataForm.name" placeholder="名称"></el-input>
-				</el-form-item>
-				<el-form-item label="类型" prop="type" v-if="dataForm.parentId != 0">
-					<fast-select :disabled="!!dataForm.id" v-model="dataForm.type" placeholder="类型" dict-type="api_group_type" clearable></fast-select>
-				</el-form-item>
-				<el-form-item label="序号" prop="orderNo">
-					<el-input-number v-model="dataForm.orderNo" :max='9999' placeholder="序号"></el-input-number>
-				</el-form-item>
-				<el-form-item label="描述" prop="description">
-					<el-input type="textarea" v-model="dataForm.description"></el-input>
-				</el-form-item>
+			<el-form-item prop="orgId" label="所属机构">
+				<el-tree-select
+					clearable
+					v-model="dataForm.orgId"
+					:data="orgList"
+					check-strictly
+					value-key="id"
+					:props="{ label: 'name', children: 'children' }"
+					style="width: 100%"
+				/>
+			</el-form-item>
+			<el-form-item label="父级目录" prop="parentPath">
+				<el-input disabled v-model="dataForm.parentPath" placeholder=""></el-input>
+			</el-form-item>
+			<el-form-item label="名称" prop="name">
+				<el-input v-model="dataForm.name" placeholder="名称"></el-input>
+			</el-form-item>
+			<el-form-item label="类型" prop="type" v-if="dataForm.parentId != 0">
+				<fast-select :disabled="!!dataForm.id" v-model="dataForm.type" placeholder="类型" dict-type="api_group_type" clearable></fast-select>
+			</el-form-item>
+			<el-form-item label="序号" prop="orderNo">
+				<el-input-number v-model="dataForm.orderNo" :max="9999" placeholder="序号"></el-input-number>
+			</el-form-item>
+			<el-form-item label="描述" prop="description">
+				<el-input type="textarea" v-model="dataForm.description"></el-input>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
@@ -56,11 +56,11 @@ const dataForm = reactive({
 	type: 1,
 	orderNo: 0,
 	description: ''
-	})
+})
 
 const init = (id?: number, parentId: any, parentPath: any) => {
 	visible.value = true
-	
+
 	dataForm.id = ''
 
 	// 重置表单数据
@@ -69,10 +69,10 @@ const init = (id?: number, parentId: any, parentPath: any) => {
 	}
 	dataForm.parentId = parentId
 	dataForm.parentPath = parentPath
-	
-	if(parentId) {
+
+	if (parentId) {
 		useApiGroupApi(parentId).then(res => {
-			if(res.data) {
+			if (res.data) {
 				useOrgListApi(res.data.orgId).then(res => {
 					orgList.value = res.data
 				})
@@ -84,7 +84,7 @@ const init = (id?: number, parentId: any, parentPath: any) => {
 			orgList.value = res.data
 		})
 	}
-	
+
 	if (id) {
 		getCatalogue(id)
 	}
@@ -100,7 +100,7 @@ const dataRules = ref({
 	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	orderNo: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	orderNo: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交

@@ -99,7 +99,6 @@ export const getValByOrgId = (orgList: any[], orgId: number) => {
 	}
 }
 
-
 // 获取用户名称
 // 根据传入的用户列表和用户ID，返回对应的用户名（如果找不到，则返回用户ID）
 export const getNameByUserId = (sysUserList: any[], userId: number) => {

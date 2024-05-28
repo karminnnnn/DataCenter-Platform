@@ -1,21 +1,21 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
-	    	<el-form-item label="分层英文名称" prop="name">
-					<el-input v-model="dataForm.name" placeholder="分层英文名称" :disabled="true"></el-input>
-				</el-form-item>
-				<el-form-item label="分层中文名称" prop="cnName">
-					<el-input v-model="dataForm.cnName" placeholder="分层中文名称" :disabled="true"></el-input>
-				</el-form-item>
-				<el-form-item label="分层描述" prop="note">
-					<el-input type="textarea" v-model="dataForm.note"></el-input>
-				</el-form-item>
-				<el-form-item label="表名前缀" prop="tablePrefix">
-					<el-input v-model="dataForm.tablePrefix" placeholder="表名前缀" :disabled="true"></el-input>
-				</el-form-item>
-				<el-form-item label="创建时间" prop="createTime">
-					<el-date-picker type="datetime" placeholder="创建时间" v-model="dataForm.createTime" :disabled="true"></el-date-picker>
-				</el-form-item>
+			<el-form-item label="分层英文名称" prop="name">
+				<el-input v-model="dataForm.name" placeholder="分层英文名称" :disabled="true"></el-input>
+			</el-form-item>
+			<el-form-item label="分层中文名称" prop="cnName">
+				<el-input v-model="dataForm.cnName" placeholder="分层中文名称" :disabled="true"></el-input>
+			</el-form-item>
+			<el-form-item label="分层描述" prop="note">
+				<el-input type="textarea" v-model="dataForm.note"></el-input>
+			</el-form-item>
+			<el-form-item label="表名前缀" prop="tablePrefix">
+				<el-input v-model="dataForm.tablePrefix" placeholder="表名前缀" :disabled="true"></el-input>
+			</el-form-item>
+			<el-form-item label="创建时间" prop="createTime">
+				<el-date-picker type="datetime" placeholder="创建时间" v-model="dataForm.createTime" :disabled="true"></el-date-picker>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
@@ -39,7 +39,8 @@ const dataForm = reactive({
 	cnName: '',
 	note: '',
 	tablePrefix: '',
-	createTime: ''})
+	createTime: ''
+})
 
 const init = (id?: number) => {
 	visible.value = true
@@ -61,8 +62,7 @@ const getLayer = (id: number) => {
 	})
 }
 
-const dataRules = ref({
-})
+const dataRules = ref({})
 
 // 表单提交
 const submitHandle = () => {

@@ -3,24 +3,24 @@
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
 				<el-date-picker
-						 v-model="state.queryForm.startTime"
-						 type="datetime"
-						 placeholder="开始时间"
-						 format="YYYY-MM-DD hh:mm:ss"
-						 value-format="YYYY-MM-DD hh:mm:ss"
-				     />
+					v-model="state.queryForm.startTime"
+					type="datetime"
+					placeholder="开始时间"
+					format="YYYY-MM-DD hh:mm:ss"
+					value-format="YYYY-MM-DD hh:mm:ss"
+				/>
 			</el-form-item>
 			<el-form-item>
 				<el-date-picker
-						 v-model="state.queryForm.endTime"
-						 type="datetime"
-						 placeholder="结束时间"
-						 format="YYYY-MM-DD hh:mm:ss"
-						 value-format="YYYY-MM-DD hh:mm:ss"
-				     />
+					v-model="state.queryForm.endTime"
+					type="datetime"
+					placeholder="结束时间"
+					format="YYYY-MM-DD hh:mm:ss"
+					value-format="YYYY-MM-DD hh:mm:ss"
+				/>
 			</el-form-item>
 			<el-form-item>
-			   <fast-select v-model="state.queryForm.status" dict-type="metadata_collect_status" placeholder="状态" clearable filterable></fast-select>
+				<fast-select v-model="state.queryForm.status" dict-type="metadata_collect_status" placeholder="状态" clearable filterable></fast-select>
 			</el-form-item>
 			<el-form-item>
 				<el-button @click="getDataList()">查询</el-button>
@@ -66,20 +66,19 @@
 		>
 		</el-pagination>
 	</el-dialog>
-	
+
 	<el-dialog v-model="realTimeLogVisbale" title="实时日志" width="55%">
 		<el-button type="primary" @click="getNewestRealTimeLog">获取最新日志</el-button>
 		<div style="padding: 15px">
 			<ReadonlyStudio id="collectRealTimeLog" ref="collectRealTimeLogRef" style="height: 500px"></ReadonlyStudio>
 		</div>
 	</el-dialog>
-	
+
 	<el-dialog v-model="errorLogVisbale" title="错误日志" width="55%">
 		<div style="padding: 15px">
 			<ReadonlyStudio id="collectErrorLog" ref="collectErrorLogRef" style="height: 500px"></ReadonlyStudio>
 		</div>
 	</el-dialog>
-	
 </template>
 
 <script setup lang="ts" name="SrtRecordIndex">
@@ -110,10 +109,10 @@ const init = (id: number) => {
 const collectRealTimeLogRef = ref()
 const realTimeLogVisbale = ref(false)
 const currentId = ref()
-const getRealTimeLog = (id) => {
+const getRealTimeLog = id => {
 	realTimeLogVisbale.value = true
 	getCollectRecordApi(id).then(res => {
-		currentId.value = id 
+		currentId.value = id
 		collectRealTimeLogRef.value.setEditorValue(res.data.realTimeLog)
 	})
 }
@@ -126,12 +125,11 @@ const getNewestRealTimeLog = () => {
 
 const errorLogVisbale = ref(false)
 const collectErrorLogRef = ref()
-const getErrorLog = (errorLog) => {
+const getErrorLog = errorLog => {
 	errorLogVisbale.value = true
-	setTimeout(()=>{
+	setTimeout(() => {
 		collectErrorLogRef.value.setEditorValue(errorLog)
 	}, 500)
-	
 }
 
 defineExpose({

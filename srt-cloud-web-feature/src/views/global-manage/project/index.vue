@@ -1,17 +1,17 @@
 <template>
 	<el-card>
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
-					<el-form-item>
-			  <el-input v-model="state.queryForm.name" placeholder="项目名称"></el-input>
+			<el-form-item>
+				<el-input v-model="state.queryForm.name" placeholder="项目名称"></el-input>
 			</el-form-item>
 			<el-form-item>
-			  <el-input v-model="state.queryForm.engName" placeholder="英文名称"></el-input>
+				<el-input v-model="state.queryForm.engName" placeholder="英文名称"></el-input>
 			</el-form-item>
 			<el-form-item>
-			  <fast-radio-group v-model="state.queryForm.status" dict-type="project_status"></fast-radio-group>
+				<fast-radio-group v-model="state.queryForm.status" dict-type="project_status"></fast-radio-group>
 			</el-form-item>
 			<el-form-item>
-			  <el-input v-model="state.queryForm.dutyPerson" placeholder="负责人"></el-input>
+				<el-input v-model="state.queryForm.dutyPerson" placeholder="负责人"></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button @click="getDataList()">查询</el-button>
@@ -70,9 +70,9 @@ const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/project/page',
 	deleteUrl: '/data-integrate/project',
 	queryForm: {
-		name: '', 
-		engName: '', 
-		status: '', 
+		name: '',
+		engName: '',
+		status: '',
 		dutyPerson: ''
 	}
 })

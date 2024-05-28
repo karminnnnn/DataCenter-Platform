@@ -17,5 +17,5 @@ export const getByMetadataApi = (metadataId: number) => {
 }
 
 export const delMetadataRelApi = (metadataId: number, standardId: number) => {
-	return service.delete('/data-governance/standard-rel/' + metadataId + '/'+ standardId)
+	return service.delete('/data-governance/standard-rel/' + metadataId + '/' + standardId)
 }

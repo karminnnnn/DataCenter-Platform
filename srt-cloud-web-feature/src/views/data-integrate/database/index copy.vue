@@ -2,17 +2,17 @@
 	<el-card>
 		<div class="databaseDivClass">
 			<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
-						<el-form-item>
-				  <el-input v-model="state.queryForm.name" placeholder="名称"></el-input>
+				<el-form-item>
+					<el-input v-model="state.queryForm.name" placeholder="名称"></el-input>
 				</el-form-item>
 				<el-form-item>
-				  <fast-select v-model="state.queryForm.databaseType" dict-type="database_type" placeholder="数据库类型" clearable></fast-select>
+					<fast-select v-model="state.queryForm.databaseType" dict-type="database_type" placeholder="数据库类型" clearable></fast-select>
 				</el-form-item>
 				<el-form-item>
-				  <el-input v-model="state.queryForm.databaseName" placeholder="库名(服务名)"></el-input>
+					<el-input v-model="state.queryForm.databaseName" placeholder="库名(服务名)"></el-input>
 				</el-form-item>
 				<el-form-item>
-				  <el-input v-model="state.queryForm.databaseSchema" placeholder="schema"></el-input>
+					<el-input v-model="state.queryForm.databaseSchema" placeholder="schema"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<fast-select v-model="state.queryForm.status" dict-type="database_status" placeholder="状态" clearable></fast-select>
@@ -33,7 +33,14 @@
 					<el-button v-auth="'data-integrate:database:delete'" type="danger" @click="deleteBatchHandle()">删除</el-button>
 				</el-form-item>
 			</el-form>
-			<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
+			<el-table
+				v-loading="state.dataListLoading"
+				:data="state.dataList"
+				border
+				style="width: 100%"
+				max-height="calc(100vh - 400px )"
+				@selection-change="selectionChangeHandle"
+			>
 				<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 				<el-table-column prop="name" label="名称" header-align="center" align="center" show-overflow-tooltip></el-table-column>
 				<fast-table-column prop="databaseType" label="数据库类型" dict-type="database_type"></fast-table-column>
@@ -64,52 +71,39 @@
 				@current-change="currentChangeHandle"
 			>
 			</el-pagination>
-			
-			<div class="drawerClass" style="height:100%">
-				<el-drawer
-				    v-model="state.drawer"
-				    title="查看库表"
-						size="100%"
-						:before-close="drawerClose"
-				    :direction="state.direction"
-				  >
+
+			<div class="drawerClass" style="height: 100%">
+				<el-drawer v-model="state.drawer" title="查看库表" size="100%" :before-close="drawerClose" :direction="state.direction">
 					<div class="tableMain">
-						<div style="margin-top:10px">
-							 <el-input v-model="search" size="large" placeholder="输入表名或注释"/>
-							 <el-table :data="filterTableData" style="width: 100%">
-								  <el-table-column label="序号" type="index" width="60"/>
-							    <el-table-column label="名称" prop="tableName" />
-							    <el-table-column label="注释" prop="remarks" />
-							  </el-table>
+						<div style="margin-top: 10px">
+							<el-input v-model="search" size="large" placeholder="输入表名或注释" />
+							<el-table :data="filterTableData" style="width: 100%">
+								<el-table-column label="序号" type="index" width="60" />
+								<el-table-column label="名称" prop="tableName" />
+								<el-table-column label="注释" prop="remarks" />
+							</el-table>
 						</div>
-						<div style="margin-top:10px">
-							 <el-button type="primary" round style="margin-left: 50px;" @click="runSql()">执行sql</el-button>
-							 <br>
-							 <el-input
-									style="margin-left: 50px; margin-top: 20px; width: 80%;"
-							     v-model="sql"
-							     :rows="2"
-							     type="textarea"
-							     placeholder="请输入sql语句"
-							   />
-							 <p style="margin-left: 50px; margin-top: 20px;">若超过100条，只显示前100条数据！</p>
-							 <el-table :data="state.sqlData" style="margin-left: 50px; margin-top: 20px; width: 90%;">
-										 <el-table-column
-										   :show-overflow-tooltip="true"
-											 width="100px"
-											 :prop="index"
-											 :label="item"
-											 v-for="(item, index) in state.sqlDataHeader"
-											 :key="index"
-										 >
-										 </el-table-column>
-								</el-table>
+						<div style="margin-top: 10px">
+							<el-button type="primary" round style="margin-left: 50px" @click="runSql()">执行sql</el-button>
+							<br />
+							<el-input style="margin-left: 50px; margin-top: 20px; width: 80%" v-model="sql" :rows="2" type="textarea" placeholder="请输入sql语句" />
+							<p style="margin-left: 50px; margin-top: 20px">若超过100条，只显示前100条数据！</p>
+							<el-table :data="state.sqlData" style="margin-left: 50px; margin-top: 20px; width: 90%">
+								<el-table-column
+									:show-overflow-tooltip="true"
+									width="100px"
+									:prop="index"
+									:label="item"
+									v-for="(item, index) in state.sqlDataHeader"
+									:key="index"
+								>
+								</el-table-column>
+							</el-table>
 						</div>
 					</div>
 				</el-drawer>
 			</div>
 		</div>
-
 
 		<!-- 弹窗, 新增 / 修改 -->
 		<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
@@ -128,27 +122,27 @@ const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/database/page',
 	deleteUrl: '/data-integrate/database',
 	queryForm: {
-		name: '', 
-		databaseType: '', 
-		databaseName: '', 
+		name: '',
+		databaseType: '',
+		databaseName: '',
 		databaseSchema: '',
-		status: '', 
-		isRtApprove: '', 
+		status: '',
+		isRtApprove: '',
 		projectId: ''
 	},
 	// Mine
 	queryForm_v2: {
-		name: '', 
-		databaseType: '', 
-		databaseName: '', 
+		name: '',
+		databaseType: '',
+		databaseName: '',
 		databaseSchema: '',
-		status: '', 
-		isRtApprove: '', 
+		status: '',
+		isRtApprove: '',
 		projectId: ''
 	},
 	drawer: false,
 	direction: 'rtl',
-	databaseId: '', 
+	databaseId: '',
 	sqlDataHeader: {},
 	sqlData: [],
 	tableData: []
@@ -160,7 +154,7 @@ const addOrUpdateHandle = (id?: number) => {
 }
 
 // 测试连接
-const test = (row) => {
+const test = row => {
 	testOnline(row).then(() => {
 		ElMessage.success({
 			message: '测试连接成功',
@@ -172,7 +166,7 @@ const test = (row) => {
 	})
 }
 
-const tables = (id) => {
+const tables = id => {
 	state.drawer = true
 	state.databaseId = id
 	getTablesById(id).then(res => {
@@ -186,7 +180,7 @@ const runSql = () => {
 		ElMessage.error('请输入sql')
 		return
 	}
-	getTableDataBySql(state.databaseId, {"sql" : sql.value}).then(res=>{
+	getTableDataBySql(state.databaseId, { sql: sql.value }).then(res => {
 		state.sqlDataHeader = res.data.columns
 		state.sqlData = res.data.rows
 	})
@@ -194,17 +188,17 @@ const runSql = () => {
 
 const search = ref('')
 const filterTableData = computed(() =>
-  state.tableData.filter(
-    (data) =>
-      !search.value ||
-      data.tableName && data.tableName.toLowerCase().includes(search.value.toLowerCase()) ||
-			data.remarks && data.remarks.toLowerCase().includes(search.value.toLowerCase())
-  )
+	state.tableData.filter(
+		data =>
+			!search.value ||
+			(data.tableName && data.tableName.toLowerCase().includes(search.value.toLowerCase())) ||
+			(data.remarks && data.remarks.toLowerCase().includes(search.value.toLowerCase()))
+	)
 )
 
 const drawerClose = (done: () => void) => {
-	search.value=''
-	sql.value=''
+	search.value = ''
+	sql.value = ''
 	state.sqlData = []
 	state.sqlDataHeader = []
 	state.tableData = []
@@ -215,25 +209,24 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 </script>
 
 <style>
-	.databaseDivClass {
-		height: calc(100vh - 170px );
-		position: relative;
-		overflow: hidden;
-	}
-	.databaseDivClass > .drawerClass > div {
-		height: 100%;
-		position: absolute !important;
-		overflow: hidden;
-	}
-	
-	.tableMain {
-		display : flex;
-		
-	}
-	.tableMain div:nth-child(1){
-		flex : 1;
-	}
-	.tableMain div:nth-child(2){
-		flex : 2;
-	}
+.databaseDivClass {
+	height: calc(100vh - 170px);
+	position: relative;
+	overflow: hidden;
+}
+.databaseDivClass > .drawerClass > div {
+	height: 100%;
+	position: absolute !important;
+	overflow: hidden;
+}
+
+.tableMain {
+	display: flex;
+}
+.tableMain div:nth-child(1) {
+	flex: 1;
+}
+.tableMain div:nth-child(2) {
+	flex: 2;
+}
 </style>

@@ -2,7 +2,6 @@ import mitt, { Emitter } from 'mitt'
 
 export default mitt() as Emitter<any>
 
-
 // 这段代码使用了 mitt 库创建了一个事件总线，并将其导出为默认的事件发射器。让我们逐行解释它：
 // import mitt, { Emitter } from 'mitt'：从 mitt 库中导入 mitt 函数和 Emitter 类型。
 //     mitt 函数用于创建一个新的事件总线实例。

@@ -3,8 +3,8 @@
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px">
 			<el-form-item label="调用次数" prop="limited" label-width="auto">
 				<el-radio-group v-model="dataForm.limited">
-				  <el-radio :label="false" size="large">不限次数</el-radio>
-				  <el-radio :label="true" size="large">指定次数</el-radio>
+					<el-radio :label="false" size="large">不限次数</el-radio>
+					<el-radio :label="true" size="large">指定次数</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="次数" prop="requestTimes" label-width="auto" v-if="dataForm.limited">
@@ -34,7 +34,7 @@ const dataFormRef = ref()
 const dataForm = reactive({
 	limited: false,
 	requestTimes: 100,
-	requestedTimes: 0,
+	requestedTimes: 0
 })
 
 const init = (authForm: any) => {
@@ -46,7 +46,7 @@ const init = (authForm: any) => {
 
 const dataRules = ref({
 	limited: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	requestTimes: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	requestTimes: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交

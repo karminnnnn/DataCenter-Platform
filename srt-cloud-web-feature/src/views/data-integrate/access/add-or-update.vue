@@ -1,14 +1,14 @@
 <template>
 	<el-drawer v-model="visible" :title="!dataForm.id ? '新增' : '修改'" size="100%">
-		<br>
+		<br />
 		<el-steps :active="active">
-		  <el-step title="基本信息配置" />
-		  <el-step title="同步源端配置" />
-		  <el-step title="目标端(ods)配置" />
-		  <!-- <el-step title="映射转换配置" /> -->
-		  <el-step title="配置确认提交" />
+			<el-step title="基本信息配置" />
+			<el-step title="同步源端配置" />
+			<el-step title="目标端(ods)配置" />
+			<!-- <el-step title="映射转换配置" /> -->
+			<el-step title="配置确认提交" />
 		</el-steps>
-		<br/>
+		<br />
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px">
 			<!-- 基本信息配置 -->
 			<div v-show="active == 1">
@@ -23,7 +23,7 @@
 						style="width: 100%"
 					/>
 				</el-form-item>
-				<el-form-item label="任务名称" prop="taskName" >
+				<el-form-item label="任务名称" prop="taskName">
 					<el-input v-model="dataForm.taskName" placeholder="任务名称"></el-input>
 				</el-form-item>
 				<el-form-item label="描述" prop="description">
@@ -35,7 +35,7 @@
 				<el-form-item label="调度类型" prop="taskType">
 					<fast-radio-group v-model="dataForm.taskType" dict-type="task_type"></fast-radio-group>
 				</el-form-item>
-				<el-form-item label="cron表达式" prop="cron" v-if="dataForm.taskType=='3'">
+				<el-form-item label="cron表达式" prop="cron" v-if="dataForm.taskType == '3'">
 					<el-input v-model="dataForm.cron" placeholder="cron表达式"></el-input>
 					<!-- <el-popover ref="cronPopover" :width="550" trigger="click">
 						<Cron @submit="changeCron" @close="cronPopover.hide()"></Cron>
@@ -48,122 +48,88 @@
 			<!-- 同步源端配置 -->
 			<div v-show="active == 2">
 				<el-form-item label="源端数据库" prop="sourceDatabaseId" label-width="auto">
-					<el-select v-model="dataForm.sourceDatabaseId"
-					           @change="selectChangedSourceDatabase"
-										 clearable
-										 filterable 
-					           placeholder="请选择">
-					  <el-option v-for="(item,index) in dataForm.databases"
-					             :key="item.id"
-					             :label="`[${item.id}]${item.name}`"
-					             :value="item.id"></el-option>
+					<el-select v-model="dataForm.sourceDatabaseId" @change="selectChangedSourceDatabase" clearable filterable placeholder="请选择">
+						<el-option v-for="(item, index) in dataForm.databases" :key="item.id" :label="`[${item.id}]${item.name}`" :value="item.id"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="源端类型" prop="sourceType" label-width="auto">
-					<fast-select v-model="dataForm.sourceType" dict-type="source_type" placeholder="请选择"  @change="sourceTypeChange"></fast-select>
+					<fast-select v-model="dataForm.sourceType" dict-type="source_type" placeholder="请选择" @change="sourceTypeChange"></fast-select>
 				</el-form-item>
-				<el-form-item v-if="dataForm.sourceType == 1"  label="配置方式" prop="includeOrExclude" label-width="auto">
-				  <el-select placeholder="请选择配置方式"
-				             v-model="dataForm.includeOrExclude"
-							 @change="configTypeChange">
-				    <el-option label="包含表"
-				               :value="1"></el-option>
-				    <el-option label="排除表"
-				               :value="0"></el-option>
-				  </el-select>
+				<el-form-item v-if="dataForm.sourceType == 1" label="配置方式" prop="includeOrExclude" label-width="auto">
+					<el-select placeholder="请选择配置方式" v-model="dataForm.includeOrExclude" @change="configTypeChange">
+						<el-option label="包含表" :value="1"></el-option>
+						<el-option label="排除表" :value="0"></el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item v-if="dataForm.sourceType == 1" label="表名配置" prop="sourceSelectedTables" label-width="auto">
-				  <el-select placeholder="请选择表名"
-				             multiple
-							 filterable
-							 clearable
-							  @change="selectedTablesChange"
-				             v-model="dataForm.sourceSelectedTables">
-				    <el-option v-for="(item,index) in dataForm.sourceTables"
-				               :key="item.tableName"
-				               :label="item.tableName"
-				               :value="item.tableName"></el-option>
-				  </el-select>
-					<el-tooltip v-if="dataForm.sourceType == 1" placement="top"  content="当为包含表时，选择所要精确包含的表名，如果不选则代表选择所有；当为排除表时，选择需要精确排除的表名。">
-					   <el-icon><QuestionFilled /></el-icon>
+					<el-select placeholder="请选择表名" multiple filterable clearable @change="selectedTablesChange" v-model="dataForm.sourceSelectedTables">
+						<el-option
+							v-for="(item, index) in dataForm.sourceTables"
+							:key="item.tableName"
+							:label="item.tableName"
+							:value="item.tableName"
+						></el-option>
+					</el-select>
+					<el-tooltip
+						v-if="dataForm.sourceType == 1"
+						placement="top"
+						content="当为包含表时，选择所要精确包含的表名，如果不选则代表选择所有；当为排除表时，选择需要精确排除的表名。"
+					>
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item label="SQL" prop="sourceSql" v-if="dataForm.sourceType == 2" label-width="auto">
 					<div>
-						<div style="padding-bottom: 5px;">
+						<div style="padding-bottom: 5px">
 							<el-button type="warning" size="small" @click="getColumnInfo()">解析 SQL</el-button>
-							<el-tooltip placement="right"  content="SQL 为单条 SELECT 语句,点击解析 SQL 可以获取字段列表, 选择唯一键">
-							   <el-icon><QuestionFilled /></el-icon>
+							<el-tooltip placement="right" content="SQL 为单条 SELECT 语句,点击解析 SQL 可以获取字段列表, 选择唯一键">
+								<el-icon><QuestionFilled /></el-icon>
 							</el-tooltip>
 						</div>
-						<div style="height:150px;width: 1000px;">
+						<div style="height: 150px; width: 1000px">
 							<SqlStudio ref="sqlStudioRef" id="accessSourceSql"></SqlStudio>
 						</div>
 					</div>
 				</el-form-item>
 				<el-form-item label="主键" prop="sourcePrimaryKeys" v-if="dataForm.sourceType == 2" label-width="auto">
-					<el-select v-model="dataForm.sourcePrimaryKeys"
-								 multiple
-								 clearable
-								 filterable 
-					           placeholder="请选择">
-					  <el-option v-for="(item,index) in sqlColumns"
-					             :key="item.fieldName"
-					             :label="`${item.fieldName}`"
-					             :value="item.fieldName"></el-option>
+					<el-select v-model="dataForm.sourcePrimaryKeys" multiple clearable filterable placeholder="请选择">
+						<el-option v-for="(item, index) in sqlColumns" :key="item.fieldName" :label="`${item.fieldName}`" :value="item.fieldName"></el-option>
 					</el-select>
-					<el-tooltip placement="right"  content="如果要根据主键增量同步,则选择的主键必须与目标表的主键保持一致,若目标表不存在,创建目标表会以当前选择的字段作为主键!">
-					   <el-icon><QuestionFilled /></el-icon>
+					<el-tooltip
+						placement="right"
+						content="如果要根据主键增量同步,则选择的主键必须与目标表的主键保持一致,若目标表不存在,创建目标表会以当前选择的字段作为主键!"
+					>
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item label="增量字段" prop="increaseColumnName" v-if="dataForm.sourceType == 2" label-width="auto">
-					<el-select v-model="dataForm.increaseColumnName"
-								 clearable
-								 filterable 
-					           placeholder="请选择">
-					  <el-option v-for="(item,index) in sqlColumns"
-					             :key="item.fieldName"
-					             :label="`${item.fieldName}`"
-					             :value="item.fieldName"></el-option>
+					<el-select v-model="dataForm.increaseColumnName" clearable filterable placeholder="请选择">
+						<el-option v-for="(item, index) in sqlColumns" :key="item.fieldName" :label="`${item.fieldName}`" :value="item.fieldName"></el-option>
 					</el-select>
-					<el-tooltip placement="right"  content="如果要根据增量字段增量同步,请选择增量字段">
-					   <el-icon><QuestionFilled /></el-icon>
+					<el-tooltip placement="right" content="如果要根据增量字段增量同步,请选择增量字段">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
 			</div>
 			<!-- 目标端配置 -->
 			<div v-show="active == 3">
-				<el-form-item label="接入方式" label-width="auto"
-				              prop="accessMode">
-				  <el-select placeholder="请选择接入方式"
-				             v-model="dataForm.accessMode"
-							 @change="accessModeChange">
-				    <el-option label="接入到ods层"
-				               :value="1"></el-option>
-				    <el-option label="自定义接入"
-				               :value="2"></el-option>
-				  </el-select>
+				<el-form-item label="接入方式" label-width="auto" prop="accessMode">
+					<el-select placeholder="请选择接入方式" v-model="dataForm.accessMode" @change="accessModeChange">
+						<el-option label="接入到ods层" :value="1"></el-option>
+						<el-option label="自定义接入" :value="2"></el-option>
+					</el-select>
 				</el-form-item>
-				<el-form-item label="接入数据库" v-if="dataForm.accessMode=='2'" label-width="auto"
-				              prop="targetDatabaseId">
-				  <el-select v-model="dataForm.targetDatabaseId"
-										 @change="selectChangedTargetDatabase"
-										 clearable
-										 filterable
-				             placeholder="请选择">
-				    <el-option v-for="(item,index) in dataForm.databases"
-				               :key="item.id"
-				               :label="`[${item.id}]${item.name}`"
-				               :value="item.id"></el-option>
-				  </el-select>
+				<el-form-item label="接入数据库" v-if="dataForm.accessMode == '2'" label-width="auto" prop="targetDatabaseId">
+					<el-select v-model="dataForm.targetDatabaseId" @change="selectChangedTargetDatabase" clearable filterable placeholder="请选择">
+						<el-option v-for="(item, index) in dataForm.databases" :key="item.id" :label="`[${item.id}]${item.name}`" :value="item.id"></el-option>
+					</el-select>
 				</el-form-item>
-				<el-form-item v-if="dataForm.sourceType == 2" label="接入表"
-				              prop="targetTable" label-width="auto">
-				  <el-input style="width: 300px;" v-model="dataForm.targetTable" placeholder="接入表"></el-input>
-				  <el-tooltip placement="top"  content="若目的端没有该表,则会自动创建">
-				     <el-icon><QuestionFilled /></el-icon>
-				  </el-tooltip>
-				  <!-- <el-select placeholder="请选择表名"
+				<el-form-item v-if="dataForm.sourceType == 2" label="接入表" prop="targetTable" label-width="auto">
+					<el-input style="width: 300px" v-model="dataForm.targetTable" placeholder="接入表"></el-input>
+					<el-tooltip placement="top" content="若目的端没有该表,则会自动创建">
+						<el-icon><QuestionFilled /></el-icon>
+					</el-tooltip>
+					<!-- <el-select placeholder="请选择表名"
 							 filterable
 							 clearable
 				             v-model="dataForm.targetTable">
@@ -173,130 +139,108 @@
 				               :value="item.tableName"></el-option>
 				  </el-select> -->
 				</el-form-item>
-				<el-form-item v-if="dataForm.sourceType == 1 && !ifMongoDB" label="只创建表" label-width="auto"
-				              prop="targetOnlyCreate">
-				  <el-select v-model="dataForm.targetOnlyCreate">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="只在目标端创建表，不同步数据内容。">
-					   <el-icon><QuestionFilled /></el-icon>
+				<el-form-item v-if="dataForm.sourceType == 1 && !ifMongoDB" label="只创建表" label-width="auto" prop="targetOnlyCreate">
+					<el-select v-model="dataForm.targetOnlyCreate">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
+					<el-tooltip placement="top" content="只在目标端创建表，不同步数据内容。">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
-				<el-form-item label="是否同步已存在的表" label-width="auto"
-				              prop="targetSyncExit">
-				  <el-select v-model="dataForm.targetSyncExit">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
+				<el-form-item label="是否同步已存在的表" label-width="auto" prop="targetSyncExit">
+					<el-select v-model="dataForm.targetSyncExit">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
 				</el-form-item>
-				<el-form-item label="同步前是否删除目的表" v-if="!ifMongoDB" label-width="auto"
-				              prop="targetDropTable">
-				  <el-select v-model="dataForm.targetDropTable">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
+				<el-form-item label="同步前是否删除目的表" v-if="!ifMongoDB" label-width="auto" prop="targetDropTable">
+					<el-select v-model="dataForm.targetDropTable">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
 				</el-form-item>
-				<el-form-item label="是否启用增量变更同步" v-if="!ifMongoDB" label-width="auto"
-				              prop="targetDataSync" >
-				  <el-select v-model="dataForm.targetDataSync" @change="dataSyncChange">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="表不存在时会自动建表,根据主键排序比对同步">
-					   <el-icon><QuestionFilled /></el-icon>
+				<el-form-item label="是否启用增量变更同步" v-if="!ifMongoDB" label-width="auto" prop="targetDataSync">
+					<el-select v-model="dataForm.targetDataSync" @change="dataSyncChange">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
+					<el-tooltip placement="top" content="表不存在时会自动建表,根据主键排序比对同步">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
-				<el-form-item label="增量变更同步类型" v-if="!ifMongoDB && dataForm.targetDataSync" label-width="auto"
-				              prop="changeDataSyncType">
+				<el-form-item label="增量变更同步类型" v-if="!ifMongoDB && dataForm.targetDataSync" label-width="auto" prop="changeDataSyncType">
 					<fast-select v-model="dataForm.changeDataSyncType" dict-type="change_data_sync_type" placeholder="增量变更同步类型" clearable></fast-select>
 				</el-form-item>
-				<el-form-item v-if="dataForm.sourceType == 1 && !ifMongoDB" label="是否同步索引" label-width="auto"
-				              prop="targetIndexCreate">
-				  <el-select v-model="dataForm.targetIndexCreate">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="仅生效于部分数据库,表不存在时建表时才生效">
-					   <el-icon><QuestionFilled /></el-icon>
+				<el-form-item v-if="dataForm.sourceType == 1 && !ifMongoDB" label="是否同步索引" label-width="auto" prop="targetIndexCreate">
+					<el-select v-model="dataForm.targetIndexCreate">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
+					<el-tooltip placement="top" content="仅生效于部分数据库,表不存在时建表时才生效">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
-				<el-form-item v-if="dataForm.sourceType == 1 && !ifMongoDB" label="是否同步默认值" label-width="auto"
-				              prop="syncDefaultVal">
-				  <el-select v-model="dataForm.syncDefaultVal">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="仅生效于部分数据库,表不存在时建表时才生效">
-					   <el-icon><QuestionFilled /></el-icon>
+				<el-form-item v-if="dataForm.sourceType == 1 && !ifMongoDB" label="是否同步默认值" label-width="auto" prop="syncDefaultVal">
+					<el-select v-model="dataForm.syncDefaultVal">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
+					<el-tooltip placement="top" content="仅生效于部分数据库,表不存在时建表时才生效">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
-				<el-form-item label="是否表名字段名转小写" label-width="auto"
-											v-if="!dataForm.targetUpperCase && dataForm.accessMode =='2' && !ifMongoDB"
-				              prop="targetLowerCase">
-				  <el-select v-model="dataForm.targetLowerCase">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="表不存在时建表时才生效">
-					   <el-icon><QuestionFilled /></el-icon>
+				<el-form-item
+					label="是否表名字段名转小写"
+					label-width="auto"
+					v-if="!dataForm.targetUpperCase && dataForm.accessMode == '2' && !ifMongoDB"
+					prop="targetLowerCase"
+				>
+					<el-select v-model="dataForm.targetLowerCase">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
+					<el-tooltip placement="top" content="表不存在时建表时才生效">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
-				<el-form-item label="是否表名字段名转大写" label-width="auto"
-											v-if="!dataForm.targetLowerCase && dataForm.accessMode =='2' && !ifMongoDB"
-				              prop="targetUpperCase">
-				  <el-select v-model="dataForm.targetUpperCase">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="表不存在时建表时才生效">
-					   <el-icon><QuestionFilled /></el-icon>
+				<el-form-item
+					label="是否表名字段名转大写"
+					label-width="auto"
+					v-if="!dataForm.targetLowerCase && dataForm.accessMode == '2' && !ifMongoDB"
+					prop="targetUpperCase"
+				>
+					<el-select v-model="dataForm.targetUpperCase">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
+					<el-tooltip placement="top" content="表不存在时建表时才生效">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item label="是否主键自动递增" label-width="auto" prop="targetAutoIncrement" v-if="!ifMongoDB">
-				  <el-select v-model="dataForm.targetAutoIncrement">
-				    <el-option label='是'
-				               :value="true"></el-option>
-				    <el-option label='否'
-				               :value="false"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="仅生效于部分数据库,表不存在时生效,不支持复合主键">
-					   <el-icon><QuestionFilled /></el-icon>
+					<el-select v-model="dataForm.targetAutoIncrement">
+						<el-option label="是" :value="true"></el-option>
+						<el-option label="否" :value="false"></el-option>
+					</el-select>
+					<el-tooltip placement="top" content="仅生效于部分数据库,表不存在时生效,不支持复合主键">
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item label="数据处理批次大小" label-width="auto" prop="batchSize">
-				  <el-select v-model="dataForm.batchSize">
-				    <el-option label="1000"
-				               :value="1000"></el-option>
-				    <el-option label="2000"
-				               :value="2000"></el-option>
-				    <el-option label="3000"
-				               :value="3000"></el-option>
-				    <el-option label="4000"
-							  :value="4000"></el-option>
-					<el-option label="5000"
-							  :value="5000"></el-option>
-					<el-option label="10000"
-							  :value="10000"></el-option>
-				  </el-select>
-					<el-tooltip placement="top"  content="数据同步时单个批次处理的行记录总数，该值越大越占用内存空间。建议：小字段表设置为5000，大字段表设置为1000">
-					   <el-icon><QuestionFilled /></el-icon>
+					<el-select v-model="dataForm.batchSize">
+						<el-option label="1000" :value="1000"></el-option>
+						<el-option label="2000" :value="2000"></el-option>
+						<el-option label="3000" :value="3000"></el-option>
+						<el-option label="4000" :value="4000"></el-option>
+						<el-option label="5000" :value="5000"></el-option>
+						<el-option label="10000" :value="10000"></el-option>
+					</el-select>
+					<el-tooltip
+						placement="top"
+						content="数据同步时单个批次处理的行记录总数，该值越大越占用内存空间。建议：小字段表设置为5000，大字段表设置为1000"
+					>
+						<el-icon><QuestionFilled /></el-icon>
 					</el-tooltip>
 				</el-form-item>
 			</div>
@@ -530,71 +474,54 @@
 					</div>
 				</div>
 			</div> -->
-			
+
 			<div v-show="active == 4">
-				<el-descriptions size="default"
-				                 :column="1"
-				                 label-class-name="el-descriptions-item-label-class"
-				                 border>
-				  <el-descriptions-item label="任务名称">{{dataForm.taskName}}</el-descriptions-item>
-				  <el-descriptions-item label="任务描述">{{dataForm.description}}</el-descriptions-item>
-				  <el-descriptions-item label="接入类型">
-				  	<span v-if="dataForm.accessMode == '1'">
-				  		接入ods贴源层
-				  	</span>
-				  	<span v-if="dataForm.accessMode == '2'">
-				  		自定义接入
-				  	</span>
-				  </el-descriptions-item>
-				  <el-descriptions-item label="调度类型">
-				    <span v-if="dataForm.taskType == '1'">
-				      实时同步
-				    </span>
-				    <span v-if="dataForm.taskType == '2'">
-				      一次性
-				    </span>
-					<span v-if="dataForm.taskType == '3'">
-					  周期性
-					</span>
-				  </el-descriptions-item>
-				  <el-descriptions-item v-if="dataForm.taskType == '3'"
-				                        label="cron表达式">{{dataForm.cron}}</el-descriptions-item>
-				  <el-descriptions-item label="源端类型">
-					  <span v-if="dataForm.sourceType == '1'">
-						指定表
-					  </span>
-					  <span v-if="dataForm.sourceType == '2'">
-						自定义 SQL
-					  </span>
-				  </el-descriptions-item>						
-				  <el-descriptions-item label="源端数据库">[{{dataForm.sourceDatabaseId}}]{{dataForm.sourceDatabase.name}}</el-descriptions-item>
-				  <el-descriptions-item label="源端SQL" v-if="dataForm.sourceType == '2'">{{dataForm.sourceSql}}</el-descriptions-item>
-				  <el-descriptions-item label="源端表选择方式" v-if="dataForm.sourceType == '1'">
-				    <span v-if="dataForm.includeOrExclude == '1'">
-				      包含表
-				    </span>
-				    <span v-if="dataForm.includeOrExclude == '0'">
-				      排除表
-				    </span>
-				  </el-descriptions-item>
-				  <el-descriptions-item label="源端表名列表" v-if="dataForm.sourceType == '1'">
-				    <span v-show="dataForm.includeOrExclude == '1' && (!dataForm.sourceSelectedTables || dataForm.sourceSelectedTables.length==0)"><b>所有物理表</b></span>
-				    <p v-for="item in dataForm.sourceSelectedTables"
-				       v-bind:key="item">{{item}}</p>
-				  </el-descriptions-item>
-				  <el-descriptions-item label="目的端数据源" v-if="dataForm.accessMode =='2'">[{{dataForm.targetDatabaseId}}]{{dataForm.targetDatabase.name}}</el-descriptions-item>
-				  <el-descriptions-item label="目的表" v-if="dataForm.sourceType =='2'">{{dataForm.targetTable}}</el-descriptions-item>
-				  <el-descriptions-item label="只创建表" v-if="dataForm.sourceType == '1'">{{dataForm.targetOnlyCreate}}</el-descriptions-item>
-					<el-descriptions-item label="是否同步已存在的表">{{dataForm.targetSyncExit}}</el-descriptions-item>
-					<el-descriptions-item label="同步前是否先删除目的表">{{dataForm.targetDropTable}}</el-descriptions-item>
-					<el-descriptions-item label="是否启用增量变更同步">{{dataForm.targetDataSync}}</el-descriptions-item>
-					<el-descriptions-item label="增量变更同步类型" v-if="dataForm.targetDataSync">{{dataForm.changeDataSyncType == 'PK_ORDER_COMPARE'?'主键排序比对':'增量字段'}}</el-descriptions-item>
-					<el-descriptions-item label="是否创建索引" v-if="dataForm.sourceType == '1'">{{dataForm.targetIndexCreate}}</el-descriptions-item>
-					<el-descriptions-item label="是否表名字段名转小写" v-if="dataForm.accessMode =='2'">{{dataForm.targetLowerCase}}</el-descriptions-item>
-					<el-descriptions-item label="是否表名字段名转大写" v-if="dataForm.accessMode =='2'">{{dataForm.targetUpperCase}}</el-descriptions-item>
-					<el-descriptions-item label="是否主键自动递增">{{dataForm.targetAutoIncrement}}</el-descriptions-item>
-				  <el-descriptions-item label="数据处理批次量">{{dataForm.batchSize}}</el-descriptions-item>
-				  <!-- <el-descriptions-item label="表名统一映射规则" v-if="dataForm.sourceType == '1'">
+				<el-descriptions size="default" :column="1" label-class-name="el-descriptions-item-label-class" border>
+					<el-descriptions-item label="任务名称">{{ dataForm.taskName }}</el-descriptions-item>
+					<el-descriptions-item label="任务描述">{{ dataForm.description }}</el-descriptions-item>
+					<el-descriptions-item label="接入类型">
+						<span v-if="dataForm.accessMode == '1'"> 接入ods贴源层 </span>
+						<span v-if="dataForm.accessMode == '2'"> 自定义接入 </span>
+					</el-descriptions-item>
+					<el-descriptions-item label="调度类型">
+						<span v-if="dataForm.taskType == '1'"> 实时同步 </span>
+						<span v-if="dataForm.taskType == '2'"> 一次性 </span>
+						<span v-if="dataForm.taskType == '3'"> 周期性 </span>
+					</el-descriptions-item>
+					<el-descriptions-item v-if="dataForm.taskType == '3'" label="cron表达式">{{ dataForm.cron }}</el-descriptions-item>
+					<el-descriptions-item label="源端类型">
+						<span v-if="dataForm.sourceType == '1'"> 指定表 </span>
+						<span v-if="dataForm.sourceType == '2'"> 自定义 SQL </span>
+					</el-descriptions-item>
+					<el-descriptions-item label="源端数据库">[{{ dataForm.sourceDatabaseId }}]{{ dataForm.sourceDatabase.name }}</el-descriptions-item>
+					<el-descriptions-item label="源端SQL" v-if="dataForm.sourceType == '2'">{{ dataForm.sourceSql }}</el-descriptions-item>
+					<el-descriptions-item label="源端表选择方式" v-if="dataForm.sourceType == '1'">
+						<span v-if="dataForm.includeOrExclude == '1'"> 包含表 </span>
+						<span v-if="dataForm.includeOrExclude == '0'"> 排除表 </span>
+					</el-descriptions-item>
+					<el-descriptions-item label="源端表名列表" v-if="dataForm.sourceType == '1'">
+						<span v-show="dataForm.includeOrExclude == '1' && (!dataForm.sourceSelectedTables || dataForm.sourceSelectedTables.length == 0)"
+							><b>所有物理表</b></span
+						>
+						<p v-for="item in dataForm.sourceSelectedTables" v-bind:key="item">{{ item }}</p>
+					</el-descriptions-item>
+					<el-descriptions-item label="目的端数据源" v-if="dataForm.accessMode == '2'"
+						>[{{ dataForm.targetDatabaseId }}]{{ dataForm.targetDatabase.name }}</el-descriptions-item
+					>
+					<el-descriptions-item label="目的表" v-if="dataForm.sourceType == '2'">{{ dataForm.targetTable }}</el-descriptions-item>
+					<el-descriptions-item label="只创建表" v-if="dataForm.sourceType == '1'">{{ dataForm.targetOnlyCreate }}</el-descriptions-item>
+					<el-descriptions-item label="是否同步已存在的表">{{ dataForm.targetSyncExit }}</el-descriptions-item>
+					<el-descriptions-item label="同步前是否先删除目的表">{{ dataForm.targetDropTable }}</el-descriptions-item>
+					<el-descriptions-item label="是否启用增量变更同步">{{ dataForm.targetDataSync }}</el-descriptions-item>
+					<el-descriptions-item label="增量变更同步类型" v-if="dataForm.targetDataSync">{{
+						dataForm.changeDataSyncType == 'PK_ORDER_COMPARE' ? '主键排序比对' : '增量字段'
+					}}</el-descriptions-item>
+					<el-descriptions-item label="是否创建索引" v-if="dataForm.sourceType == '1'">{{ dataForm.targetIndexCreate }}</el-descriptions-item>
+					<el-descriptions-item label="是否表名字段名转小写" v-if="dataForm.accessMode == '2'">{{ dataForm.targetLowerCase }}</el-descriptions-item>
+					<el-descriptions-item label="是否表名字段名转大写" v-if="dataForm.accessMode == '2'">{{ dataForm.targetUpperCase }}</el-descriptions-item>
+					<el-descriptions-item label="是否主键自动递增">{{ dataForm.targetAutoIncrement }}</el-descriptions-item>
+					<el-descriptions-item label="数据处理批次量">{{ dataForm.batchSize }}</el-descriptions-item>
+					<!-- <el-descriptions-item label="表名统一映射规则" v-if="dataForm.sourceType == '1'">
 				    <span v-show="dataForm.tableNameMapper.length==0">[映射关系为空]</span>
 				    <table v-if="dataForm.tableNameMapper.length>0"
 				           class="name-mapper-table">
@@ -628,67 +555,30 @@
 			</div>
 		</el-form>
 		<template #footer>
-			<el-button round size="large"
-			           v-if="active > 1"
-			           @click="pre()">
-			  上一步
-			</el-button>
-			<el-button round size="large"
-			           @click="next()"
-			           v-if="active > 0 && active < 4">
-			  下一步
-			</el-button>
-			<el-button type="primary" round size="large"
-			           @click="submitHandle()"
-			           v-if="active == 4">
-			  提交
-			</el-button>
+			<el-button round size="large" v-if="active > 1" @click="pre()"> 上一步 </el-button>
+			<el-button round size="large" @click="next()" v-if="active > 0 && active < 4"> 下一步 </el-button>
+			<el-button type="primary" round size="large" @click="submitHandle()" v-if="active == 4"> 提交 </el-button>
 		</template>
-		
-		<el-dialog v-if="active == 4"
-		           title="查看表名映射关系"
-		           v-model="tableNameMapperDialogVisible">
-		  <el-table :header-cell-style="{background:'#eef1f6',color:'#606266'}"
-		            :data="tableNamesMapperData"
-		            size="small"
-		            border>
-		    <el-table-column prop="originalName"
-		                     label="源端表名"
-		                     min-width="20%"></el-table-column>
-		    <el-table-column prop="targetName"
-		                     label="目标表名"
-		                     min-width="20%"></el-table-column>
-		  </el-table>
+
+		<el-dialog v-if="active == 4" title="查看表名映射关系" v-model="tableNameMapperDialogVisible">
+			<el-table :header-cell-style="{ background: '#eef1f6', color: '#606266' }" :data="tableNamesMapperData" size="small" border>
+				<el-table-column prop="originalName" label="源端表名" min-width="20%"></el-table-column>
+				<el-table-column prop="targetName" label="目标表名" min-width="20%"></el-table-column>
+			</el-table>
 		</el-dialog>
-		
-		<el-dialog v-if="active == 4"
-		           title="查看字段映射关系"
-		           v-model="columnNameMapperDialogVisible">
-		  <div v-if="dataForm.sourceType == 1 && dataForm.mapperType=='ALL'" >
-			 <el-select @change="queryPreviewColumnNameMapperList"
-			            v-model="preiveTableName"
-			 					 clearable
-			 					 filterable
-			            placeholder="请选择">
-			   <el-option v-for="(item,index) in preiveSeeTableNameList"
-			              :key="index"
-			              :label="item"
-			              :value="item"></el-option>
-			 </el-select>
-			<br >
-			<br > 
-		  </div>
-		  <el-table :header-cell-style="{background:'#eef1f6',color:'#606266'}"
-		            :data="columnNamesMapperData"
-		            size="small"
-		            border>
-		    <el-table-column prop="originalName"
-		                     label="原始字段名"
-		                     min-width="20%"></el-table-column>
-		    <el-table-column prop="targetName"
-		                     label="目标表字段名"
-		                     min-width="20%"></el-table-column>
-		  </el-table>
+
+		<el-dialog v-if="active == 4" title="查看字段映射关系" v-model="columnNameMapperDialogVisible">
+			<div v-if="dataForm.sourceType == 1 && dataForm.mapperType == 'ALL'">
+				<el-select @change="queryPreviewColumnNameMapperList" v-model="preiveTableName" clearable filterable placeholder="请选择">
+					<el-option v-for="(item, index) in preiveSeeTableNameList" :key="index" :label="item" :value="item"></el-option>
+				</el-select>
+				<br />
+				<br />
+			</div>
+			<el-table :header-cell-style="{ background: '#eef1f6', color: '#606266' }" :data="columnNamesMapperData" size="small" border>
+				<el-table-column prop="originalName" label="原始字段名" min-width="20%"></el-table-column>
+				<el-table-column prop="targetName" label="目标表字段名" min-width="20%"></el-table-column>
+			</el-table>
 		</el-dialog>
 	</el-drawer>
 </template>
@@ -707,7 +597,7 @@ const emit = defineEmits(['refreshDataList'])
 const visible = ref(false)
 const dataFormRef = ref()
 const orgList = ref([])
-const sqlStudioRef = ref() 
+const sqlStudioRef = ref()
 const targetTables = ref([])
 
 const active = ref(1)
@@ -728,7 +618,7 @@ const dataForm = reactive({
 	sourceTables: [],
 	sourceSelectedTables: [],
 	accessMode: 1,
-	targetDatabaseId: '', 
+	targetDatabaseId: '',
 	targetDatabase: {},
 	targetTable: '',
 	targetOnlyCreate: false,
@@ -746,8 +636,8 @@ const dataForm = reactive({
 	increaseColumnName: '',
 	tableNameMapper: [],
 	columnNameMapper: [],
-	changeDataSyncType: '',
-	})
+	changeDataSyncType: ''
+})
 
 const cronPopover = ref()
 const changeCron = (val: any) => {
@@ -774,7 +664,7 @@ const init = (id?: number) => {
 	useOrgListApi().then(res => {
 		orgList.value = res.data
 	})
-	
+
 	if (id) {
 		getAccess(id)
 	}
@@ -789,61 +679,61 @@ const mapperTypeChange = (typeVal: any) => {
 	if (typeVal == 'SINGLE') {
 		console.log(dataForm.sourceTables)
 		buildConfigMap()
-		console.log("configMap:"+JSON.stringify(configMap) )
+		console.log('configMap:' + JSON.stringify(configMap))
 	}
 }
 
 const configTypeChange = () => {
 	//如果是单独映射
-	if(dataForm.mapperType = 'SINGLE') {
+	if ((dataForm.mapperType = 'SINGLE')) {
 		buildConfigMap()
 	}
 }
 
 const selectedTablesChange = () => {
 	//如果是单独映射
-	if(dataForm.mapperType = 'SINGLE') {
+	if ((dataForm.mapperType = 'SINGLE')) {
 		buildConfigMap()
-		if(mapperTableName.value) {
+		if (mapperTableName.value) {
 			//查询表的字段列表
-			listColumnsByIdAndTableName(dataForm.sourceDatabaseId, mapperTableName.value).then(res=>{
-				 mapperTableColumns.value = res.data
+			listColumnsByIdAndTableName(dataForm.sourceDatabaseId, mapperTableName.value).then(res => {
+				mapperTableColumns.value = res.data
 			})
 		}
 	}
 }
 
 const buildConfigMap = () => {
-	if(!dataForm.sourceSelectedTables || dataForm.sourceSelectedTables.length == 0) {
+	if (!dataForm.sourceSelectedTables || dataForm.sourceSelectedTables.length == 0) {
 		mapperTableList.value = []
-		for(var i in dataForm.sourceTables) {
+		for (var i in dataForm.sourceTables) {
 			mapperTableList.value.push(dataForm.sourceTables[i].tableName)
 		}
 	}
 	//构建选择的表
-	else if(dataForm.includeOrExclude == 1) {
+	else if (dataForm.includeOrExclude == 1) {
 		//如果是包含表
 		mapperTableList.value = [...dataForm.sourceSelectedTables]
 	} else {
 		//如果是排除表
 		mapperTableList.value = dataForm.sourceTables.filter(item => {
-			return !dataForm.sourceSelectedTables.includes(item);
-		});
+			return !dataForm.sourceSelectedTables.includes(item)
+		})
 	}
-	console.log("mapperTableList:"+mapperTableList.value)
+	console.log('mapperTableList:' + mapperTableList.value)
 	mapperTableName.value = ''
 	resetConfigMap(mapperTableList.value)
 	for (var i in mapperTableList.value) {
 		let tableName = mapperTableList.value[i]
-		if(!configMap[tableName]) {
+		if (!configMap[tableName]) {
 			configMap[tableName] = {}
-			configMap[tableName].regexTableMapper = [{"fromPattern":tableName,"toValue":tableName}]
+			configMap[tableName].regexTableMapper = [{ fromPattern: tableName, toValue: tableName }]
 			configMap[tableName].regexColumnMapper = []
 			configMap[tableName].sourcePrimaryKeys = []
 			configMap[tableName].increaseColumnName = ''
 		} else {
-			if(configMap[tableName].regexTableMapper.length == 0) {
-				configMap[tableName].regexTableMapper = [{"fromPattern":tableName,"toValue":tableName}]
+			if (configMap[tableName].regexTableMapper.length == 0) {
+				configMap[tableName].regexTableMapper = [{ fromPattern: tableName, toValue: tableName }]
 			}
 		}
 	}
@@ -853,29 +743,29 @@ const buildConfigMap = () => {
 
 const resetConfigMap = (tableList: any) => {
 	for (var key in configMap) {
-		if(!tableList.includes(key)) {
-			 delete configMap[key];
-		} 
+		if (!tableList.includes(key)) {
+			delete configMap[key]
+		}
 	}
 }
 
 const mapperTableColumns = ref([])
 const mapperTableNameChange = (tableName: any) => {
- if(!tableName) {
-	 return
- }
- if(configMap[tableName].regexTableMapper.length == 0) {
-	 //设置表名映射
-	 configMap[tableName].regexTableMapper = [{"fromPattern":tableName,"toValue":tableName}]
- }
- //查询表的字段列表
- listColumnsByIdAndTableName(dataForm.sourceDatabaseId, tableName).then(res=>{
-	 mapperTableColumns.value = res.data
- })
+	if (!tableName) {
+		return
+	}
+	if (configMap[tableName].regexTableMapper.length == 0) {
+		//设置表名映射
+		configMap[tableName].regexTableMapper = [{ fromPattern: tableName, toValue: tableName }]
+	}
+	//查询表的字段列表
+	listColumnsByIdAndTableName(dataForm.sourceDatabaseId, tableName).then(res => {
+		mapperTableColumns.value = res.data
+	})
 }
 
-const dataSyncChange = (syncVal) => {
-	if(!syncVal) {
+const dataSyncChange = syncVal => {
+	if (!syncVal) {
 		dataForm.changeDataSyncType = null
 	}
 }
@@ -883,9 +773,9 @@ const dataSyncChange = (syncVal) => {
 const getAccess = (id: number) => {
 	useAccessApi(id).then(res => {
 		Object.assign(dataForm, res.data)
-		if(res.data.configMap) {
+		if (res.data.configMap) {
 			mapperTableList.value = []
-			for(var tableName in res.data.configMap) {
+			for (var tableName in res.data.configMap) {
 				mapperTableList.value.push(tableName)
 			}
 			//console.log(mapperTableList.value)
@@ -893,36 +783,36 @@ const getAccess = (id: number) => {
 			Object.assign(configMap, res.data.configMap)
 			console.log(configMap)
 			//查询表字段
-			listColumnsByIdAndTableName(dataForm.sourceDatabaseId, tableName).then(res=>{
-				 mapperTableColumns.value = res.data
+			listColumnsByIdAndTableName(dataForm.sourceDatabaseId, tableName).then(res => {
+				mapperTableColumns.value = res.data
 			})
 		}
-		
-		if(dataForm.sourcePrimaryKeys && dataForm.sourcePrimaryKeys.length > 0) {
-			var str = "";
+
+		if (dataForm.sourcePrimaryKeys && dataForm.sourcePrimaryKeys.length > 0) {
+			var str = ''
 			for (var i = 0; i < dataForm.sourcePrimaryKeys.length; i++) {
-				str += dataForm.sourcePrimaryKeys[i] + ","
+				str += dataForm.sourcePrimaryKeys[i] + ','
 			}
-		    if (str.length > 0) {
-				str = str.substr(0, str.length - 1);
+			if (str.length > 0) {
+				str = str.substr(0, str.length - 1)
 			}
 			dataForm.pks = str
 		}
-		
+
 		if (dataForm.sourceDatabaseId) {
-			dataForm.sourceDatabase = dataForm.databases.find((item) => {
+			dataForm.sourceDatabase = dataForm.databases.find(item => {
 				return item.id == dataForm.sourceDatabaseId
 			})
 			//获取库所包含的表
-			getTablesById(dataForm.sourceDatabaseId).then( res => {
+			getTablesById(dataForm.sourceDatabaseId).then(res => {
 				dataForm.sourceTables = res.data
 			})
 		}
 		if (dataForm.targetDatabaseId) {
-			dataForm.targetDatabase = dataForm.databases.find((item) => {
+			dataForm.targetDatabase = dataForm.databases.find(item => {
 				return item.id == dataForm.targetDatabaseId
 			})
-			if(dataForm.targetDatabase && dataForm.targetDatabase.databaseType == 18) {
+			if (dataForm.targetDatabase && dataForm.targetDatabase.databaseType == 18) {
 				ifMongoDB.value = true
 			} else {
 				ifMongoDB.value = false
@@ -939,23 +829,23 @@ const getAccess = (id: number) => {
 				})
 			} */
 		}
-		if(dataForm.sourceType == 2) {
-			listColumnsByIdAndSql(dataForm.sourceDatabaseId, {sql: dataForm.sourceSql}).then(res=>{
+		if (dataForm.sourceType == 2) {
+			listColumnsByIdAndSql(dataForm.sourceDatabaseId, { sql: dataForm.sourceSql }).then(res => {
 				sqlColumns.value = res.data
 			})
 			//获取sql
-			setTimeout(()=>{
+			setTimeout(() => {
 				sqlStudioRef.value.setEditorValue(dataForm.sourceSql)
-			},300)
+			}, 300)
 		}
 	})
 }
 
 const sourceTypeChange = (sourceType: any) => {
-	if(sourceType == 2) {
-		setTimeout(()=>{
+	if (sourceType == 2) {
+		setTimeout(() => {
 			sqlStudioRef.value.setEditorValue(dataForm.sourceSql)
-		},300)
+		}, 300)
 	}
 }
 
@@ -983,11 +873,11 @@ const dataRules = ref({
 	targetAutoIncrement: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	batchSize: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	mapperType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	changeDataSyncType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	changeDataSyncType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 const pre = () => {
-	 if (active.value-- < 2) active.value = 1
+	if (active.value-- < 2) active.value = 1
 }
 
 const next = () => {
@@ -995,21 +885,21 @@ const next = () => {
 }
 
 //源端数据库变化
-const selectChangedSourceDatabase = (id) => {
+const selectChangedSourceDatabase = id => {
 	if (!id) {
 		return
 	}
-	dataForm.sourceDatabase = dataForm.databases.find((item) => {
+	dataForm.sourceDatabase = dataForm.databases.find(item => {
 		return item.id == id
 	})
 	dataForm.sourceSelectedTables = []
 	//获取库所包含的表
-	getTablesById(id).then( res => {
+	getTablesById(id).then(res => {
 		dataForm.sourceTables = res.data
 	})
 }
-const accessModeChange = (value) => {
-	if(value == 1 && dataForm.sourceType == 2) {
+const accessModeChange = value => {
+	if (value == 1 && dataForm.sourceType == 2) {
 		dataForm.targetTable = ''
 		//获取中台库的表
 		/* getTablesById(0).then( res => {
@@ -1020,20 +910,20 @@ const accessModeChange = (value) => {
 
 const ifMongoDB = ref(false)
 //目的端数据库变化
-const selectChangedTargetDatabase = (id) => {
-	if(!id) {
+const selectChangedTargetDatabase = id => {
+	if (!id) {
 		return
 	}
-	dataForm.targetDatabase = dataForm.databases.find((item) => {
+	dataForm.targetDatabase = dataForm.databases.find(item => {
 		return item.id == id
 	})
-	if(dataForm.targetDatabase.databaseType == 18) {
+	if (dataForm.targetDatabase.databaseType == 18) {
 		ifMongoDB.value = true
 	} else {
 		ifMongoDB.value = false
 	}
 	//获取表名列表
-	if(dataForm.sourceType == 2) {
+	if (dataForm.sourceType == 2) {
 		dataForm.targetTable = ''
 		/* getTablesById(id).then( res => {
 			targetTables.value = res.data
@@ -1045,43 +935,43 @@ const sqlColumns = ref([])
 const getColumnInfo = () => {
 	const sourceSql = sqlStudioRef.value.getEditorValue()
 	if (!sourceSql) {
-		ElMessage.warning("请填写 SQL 语句（单条 SELECT）！");
+		ElMessage.warning('请填写 SQL 语句（单条 SELECT）！')
 		return
 	}
-	if(!dataForm.sourceDatabaseId) {
-		ElMessage.warning("请选择源端数据库！");
+	if (!dataForm.sourceDatabaseId) {
+		ElMessage.warning('请选择源端数据库！')
 		return
 	}
 	//获取字段
-	listColumnsByIdAndSql(dataForm.sourceDatabaseId, {sql: sourceSql}).then(res=>{
+	listColumnsByIdAndSql(dataForm.sourceDatabaseId, { sql: sourceSql }).then(res => {
 		sqlColumns.value = res.data
-		ElMessage.success("解析成功！");
+		ElMessage.success('解析成功！')
 	})
 }
 
 //添加表名映射
 const addTableNameMapperListRow = () => {
-  dataForm.tableNameMapper.push({ "fromPattern": "", "toValue": "" });
+	dataForm.tableNameMapper.push({ fromPattern: '', toValue: '' })
 }
 
-const deleteTableNameMapperListItem = (index) => {
-	 dataForm.tableNameMapper.splice(index, 1);
+const deleteTableNameMapperListItem = index => {
+	dataForm.tableNameMapper.splice(index, 1)
 }
 
 const addColumnNameMapperListRow = () => {
-   dataForm.columnNameMapper.push({ "fromPattern": "", "toValue": "" });
+	dataForm.columnNameMapper.push({ fromPattern: '', toValue: '' })
 }
 
-const deleteColumnNameMapperListItem = (index) => {
-	 dataForm.columnNameMapper.splice(index, 1);
+const deleteColumnNameMapperListItem = index => {
+	dataForm.columnNameMapper.splice(index, 1)
 }
 
 const addSingleColumnNameMapper = () => {
-	configMap[mapperTableName.value].regexColumnMapper.push({ "fromPattern": "", "toValue": "" });
+	configMap[mapperTableName.value].regexColumnMapper.push({ fromPattern: '', toValue: '' })
 }
 
-const deleteSingleColumnName = (index) => {
-	configMap[mapperTableName.value].regexColumnMapper.splice(index, 1);
+const deleteSingleColumnName = index => {
+	configMap[mapperTableName.value].regexColumnMapper.splice(index, 1)
 }
 
 const tableNamesMapperData = ref([])
@@ -1090,29 +980,31 @@ const tableNameMapperDialogVisible = ref(false)
 const previewTableNameMapList = () => {
 	if (!dataForm.sourceDatabaseId) {
 		ElMessage({
-		   message: '请选择【源端数据库】！',
-		   type: 'warning',
-		 })
-	  return;
+			message: '请选择【源端数据库】！',
+			type: 'warning'
+		})
+		return
 	}
-	
+
 	//调用方法
-	previewTableNameMap(JSON.stringify({
+	previewTableNameMap(
+		JSON.stringify({
 			sourceDatabaseId: dataForm.sourceDatabaseId,
 			includeOrExclude: dataForm.includeOrExclude,
 			sourceSelectedTables: dataForm.sourceSelectedTables,
 			tableNameMapper: dataForm.tableNameMapper,
 			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
 			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
-			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : '',
-        })).then( res=> {
-			tableNamesMapperData.value = res.data;
-			tableNameMapperDialogVisible.value = true;
+			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
+		})
+	).then(res => {
+		tableNamesMapperData.value = res.data
+		tableNameMapperDialogVisible.value = true
 	})
 }
 
 const preiveSeeTableNameList = ref([])
-const preiveTableName = ref("")
+const preiveTableName = ref('')
 const columnNamesMapperData = ref([])
 const columnNameMapperDialogVisible = ref(false)
 //预览字段名映射
@@ -1120,12 +1012,12 @@ const previewColumnNameMapList = () => {
 	if (dataForm.sourceType == 1) {
 		if (!dataForm.sourceDatabaseId) {
 			ElMessage({
-			   message: '请选择【源端数据库】！',
-			   type: 'warning',
-			 })
-		  return;
+				message: '请选择【源端数据库】！',
+				type: 'warning'
+			})
+			return
 		}
-		if (dataForm.includeOrExclude == "1") {
+		if (dataForm.includeOrExclude == '1') {
 			if (dataForm.sourceSelectedTables.length == 0) {
 				preiveSeeTableNameList.value = dataForm.sourceTables.map(item => {
 					return item.tableName
@@ -1138,45 +1030,47 @@ const previewColumnNameMapList = () => {
 				return item.tableName
 			})
 			// 去除排除的表
-			 for (var i = 0; i < dataForm.sourceSelectedTables.length; i++) {
-				 var exclude = dataForm.sourceSelectedTables[i];
-				 preiveSeeTableNameList.value.some((item, index) => {
-					 if (item == exclude) {
-						 preiveSeeTableNameList.value.splice(index, 1)
-						 return true;
-					 }
-				 })
-			 }
+			for (var i = 0; i < dataForm.sourceSelectedTables.length; i++) {
+				var exclude = dataForm.sourceSelectedTables[i]
+				preiveSeeTableNameList.value.some((item, index) => {
+					if (item == exclude) {
+						preiveSeeTableNameList.value.splice(index, 1)
+						return true
+					}
+				})
+			}
 		}
-		preiveTableName.value = "";
-		columnNamesMapperData.value = [];
-		columnNameMapperDialogVisible.value = true;
+		preiveTableName.value = ''
+		columnNamesMapperData.value = []
+		columnNameMapperDialogVisible.value = true
 	} else {
 		//查询映射字段名列表
 		if (!dataForm.sourceDatabaseId) {
 			ElMessage({
-			   message: '请选择【源端数据库】！',
-			   type: 'warning',
-			 })
-		  return;
+				message: '请选择【源端数据库】！',
+				type: 'warning'
+			})
+			return
 		}
 		dataForm.sourceSql = sqlStudioRef.value.getEditorValue()
 		if (!dataForm.sourceSql) {
 			ElMessage({
-			   message: '请填写源端 SQL 语句（单条 SELECT）',
-			   type: 'warning',
-			 })
-		  return;
+				message: '请填写源端 SQL 语句（单条 SELECT）',
+				type: 'warning'
+			})
+			return
 		}
 		//调用映射接口
-		previewColumnNameMap(JSON.stringify({
-			  sourceType: dataForm.sourceType,
-		      sourceDatabaseId: dataForm.sourceDatabaseId,
-		      columnNameMapper: dataForm.columnNameMapper,
-			  sourceSql: dataForm.sourceSql
-		    })).then( res=> {
-				columnNamesMapperData.value = res.data
-				columnNameMapperDialogVisible.value = true;
+		previewColumnNameMap(
+			JSON.stringify({
+				sourceType: dataForm.sourceType,
+				sourceDatabaseId: dataForm.sourceDatabaseId,
+				columnNameMapper: dataForm.columnNameMapper,
+				sourceSql: dataForm.sourceSql
+			})
+		).then(res => {
+			columnNamesMapperData.value = res.data
+			columnNameMapperDialogVisible.value = true
 		})
 	}
 }
@@ -1185,111 +1079,115 @@ const previewColumnNameMapList = () => {
 const queryPreviewColumnNameMapperList = () => {
 	if (!dataForm.sourceDatabaseId) {
 		ElMessage({
-		   message: '请选择【源端数据库】！',
-		   type: 'warning',
-		 })
-	  return;
+			message: '请选择【源端数据库】！',
+			type: 'warning'
+		})
+		return
 	}
 	if (!preiveTableName.value) {
-	  ElMessage({
-	     message: '请选择一个表名！',
-	     type: 'warning',
-	   })
-	  return;
+		ElMessage({
+			message: '请选择一个表名！',
+			type: 'warning'
+		})
+		return
 	}
-	previewColumnNameMap(JSON.stringify({
-          sourceDatabaseId: dataForm.sourceDatabaseId,
-          includeOrExclude:dataForm.includeOrExclude,
-          preiveTableName: preiveTableName.value,
-          columnNameMapper: dataForm.columnNameMapper,
+	previewColumnNameMap(
+		JSON.stringify({
+			sourceDatabaseId: dataForm.sourceDatabaseId,
+			includeOrExclude: dataForm.includeOrExclude,
+			preiveTableName: preiveTableName.value,
+			columnNameMapper: dataForm.columnNameMapper,
 			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
 			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
-			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : '',
-        })).then( res=> {
-			columnNamesMapperData.value = res.data
+			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
+		})
+	).then(res => {
+		columnNamesMapperData.value = res.data
 	})
 }
 
 const previewSingleColumnName = () => {
 	if (!dataForm.sourceDatabaseId) {
 		ElMessage({
-		   message: '请选择【源端数据库】！',
-		   type: 'warning',
-		 })
-	  return;
+			message: '请选择【源端数据库】！',
+			type: 'warning'
+		})
+		return
 	}
-	previewColumnNameMap(JSON.stringify({
-	      sourceDatabaseId: dataForm.sourceDatabaseId,
-	      includeOrExclude:dataForm.includeOrExclude,
-	      preiveTableName: mapperTableName.value,
-	      columnNameMapper: configMap[mapperTableName.value].regexColumnMapper,
+	previewColumnNameMap(
+		JSON.stringify({
+			sourceDatabaseId: dataForm.sourceDatabaseId,
+			includeOrExclude: dataForm.includeOrExclude,
+			preiveTableName: mapperTableName.value,
+			columnNameMapper: configMap[mapperTableName.value].regexColumnMapper,
 			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
 			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
-			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : '',
-	    })).then( res=> {
-			columnNamesMapperData.value = res.data
-			columnNameMapperDialogVisible.value = true;
+			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
+		})
+	).then(res => {
+		columnNamesMapperData.value = res.data
+		columnNameMapperDialogVisible.value = true
 	})
 }
 
 // 表单提交
 const submitHandle = () => {
-	if(dataForm.sourceType == 2) {
+	if (dataForm.sourceType == 2) {
 		dataForm.sourceSql = sqlStudioRef.value.getEditorValue()
-	}	
+	}
 	dataFormRef.value.validate((valid: boolean) => {
 		if (!valid) {
-			 ElMessage({
-			    message: '请将每一步的参数必填项填写完毕后再提交！',
-			    type: 'warning',
-			  })
+			ElMessage({
+				message: '请将每一步的参数必填项填写完毕后再提交！',
+				type: 'warning'
+			})
 			return false
 		}
 
-	  //如果不是周期性增量同步
-		if(dataForm.taskType != '3') {
+		//如果不是周期性增量同步
+		if (dataForm.taskType != '3') {
 			dataForm.cron = ''
 		}
-		if(!dataForm.targetDataSync) {
+		if (!dataForm.targetDataSync) {
 			dataForm.changeDataSyncType = null
 		}
 		//ods接入
-		if(dataForm.accessMode == '1') {
+		if (dataForm.accessMode == '1') {
 			dataForm.targetDatabaseId = ''
 			dataForm.targetLowerCase = true
 			dataForm.targetUpperCase = false
 			dataForm.targetDatabase = {}
 		}
-		if(dataForm.sourceType == 2) {
-			dataForm.mapperType = "ALL"
+		if (dataForm.sourceType == 2) {
+			dataForm.mapperType = 'ALL'
 			//获取sql
 			dataForm.sourceSql = sqlStudioRef.value.getEditorValue()
-			if(!dataForm.sourceSql) {
-				ElMessage.warning("请将每一步的参数必填项填写完毕后再提交！")
+			if (!dataForm.sourceSql) {
+				ElMessage.warning('请将每一步的参数必填项填写完毕后再提交！')
 				return false
 			}
 			dataForm.targetOnlyCreate = false
 			dataForm.targetIndexCreate = false
 			dataForm.syncDefaultVal = false
-			if(dataForm.changeDataSyncType == 'INCREASE_COLUMN') {
-				if(!dataForm.increaseColumnName) {
-					ElMessage.warning("请填写增量字段");
+			if (dataForm.changeDataSyncType == 'INCREASE_COLUMN') {
+				if (!dataForm.increaseColumnName) {
+					ElMessage.warning('请填写增量字段')
 					return false
 				}
-			} 
+			}
 		} else {
-			if(dataForm.mapperType == "ALL") {
+			if (dataForm.mapperType == 'ALL') {
 				dataForm.configMap = null
-				if(dataForm.pks) {
-					if(dataForm.pks.trim() != "") {
-						dataForm.sourcePrimaryKeys = dataForm.pks.split(",")
+				if (dataForm.pks) {
+					if (dataForm.pks.trim() != '') {
+						dataForm.sourcePrimaryKeys = dataForm.pks.split(',')
 					}
 				} else {
 					dataForm.sourcePrimaryKeys = []
 				}
-				if(dataForm.changeDataSyncType == 'INCREASE_COLUMN') {
-					if(!dataForm.increaseColumnName) {
-						ElMessage.warning("请填写增量字段");
+				if (dataForm.changeDataSyncType == 'INCREASE_COLUMN') {
+					if (!dataForm.increaseColumnName) {
+						ElMessage.warning('请填写增量字段')
 						return false
 					}
 				}
@@ -1299,11 +1197,11 @@ const submitHandle = () => {
 				dataForm.regexTableMapper = []
 				dataForm.regexColumnMapper = []
 				dataForm.configMap = configMap
-				if(dataForm.changeDataSyncType == 'INCREASE_COLUMN') {
+				if (dataForm.changeDataSyncType == 'INCREASE_COLUMN') {
 					//判断是否增量字段都已填写
-					for(var tableName in configMap) {
-						if(!configMap[tableName].increaseColumnName) {
-							ElMessage.warning("请选择表【"+ tableName+ "】的增量字段");
+					for (var tableName in configMap) {
+						if (!configMap[tableName].increaseColumnName) {
+							ElMessage.warning('请选择表【' + tableName + '】的增量字段')
 							return false
 						}
 					}
@@ -1311,7 +1209,7 @@ const submitHandle = () => {
 			}
 			dataForm.sourceSql = ''
 		}
-		if(ifMongoDB.value) {
+		if (ifMongoDB.value) {
 			dataForm.targetOnlyCreate = false
 			dataForm.targetDropTable = true
 			dataForm.targetDataSync = false
@@ -1321,7 +1219,7 @@ const submitHandle = () => {
 			dataForm.targetUpperCase = false
 			dataForm.targetAutoIncrement = false
 		}
-		
+
 		useAccessSubmitApi(dataForm).then(() => {
 			ElMessage.success({
 				message: '操作成功',
@@ -1341,7 +1239,7 @@ defineExpose({
 </script>
 
 <style scoped>
-	.tip-content {
-	  font-size: 12px;
-	}
+.tip-content {
+	font-size: 12px;
+}
 </style>

@@ -27,7 +27,6 @@ export const routerStore = defineStore('routerStore', {
 	}
 })
 
-
 // import { defineStore } from 'pinia'：从 Pinia 库中导入 defineStore 函数，用于定义一个新的状态管理模块。
 // import { useMenuNavApi } from '@/api/sys/menu'：导入从后端获取菜单数据的 API 函数。
 // import { generateRoutes, constantMenu } from '@/router'：导入路由生成函数和常量菜单数据。

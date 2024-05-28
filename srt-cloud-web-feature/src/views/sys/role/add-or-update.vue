@@ -52,7 +52,6 @@ const init = (id?: number) => {
 
 	// 菜单列表
 	getMenuList(id)
-
 }
 
 // 获取菜单列表

@@ -36,8 +36,6 @@ export const toLastView = (router: any, visitedViews: any[], view: any) => {
 	}
 }
 
-
-
 // import store from '@/store'：导入 Vuex 的 store 实例。
 // export const closeTab = (router: any, tab: any) => { ... }：导出一个名为 closeTab 的函数，用于关闭标签页。
 // 	如果标签页的 meta 中包含 affix 属性，则直接返回，不做任何操作（这通常表示该标签页是固定的，不能关闭）。

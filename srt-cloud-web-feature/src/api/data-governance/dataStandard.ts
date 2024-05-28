@@ -24,7 +24,6 @@ import service from '@/utils/request'
 // 	}
 // }
 
-
 export const listTreeApi = () => {
 	return service.get('/data-governance/standard-category/list-tree')
 }
@@ -38,5 +37,5 @@ export const listTreeApi = () => {
 // }
 
 export const dataStandardCheckApi = (metadataId, standardId) => {
-	return service.get('/data-governance/data-standard/check/'+metadataId+'/'+standardId)
+	return service.get('/data-governance/data-standard/check/' + metadataId + '/' + standardId)
 }

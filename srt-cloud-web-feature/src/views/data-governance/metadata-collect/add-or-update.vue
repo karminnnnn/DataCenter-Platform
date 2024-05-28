@@ -35,17 +35,9 @@
 					<el-radio :label="2" border>中台库</el-radio>
 				</el-radio-group>
 			</el-form-item>
-			<el-form-item label="数据库" prop="databaseId" v-if="dataForm.dbType =='1'" label-width="auto">
-				<el-select v-model="dataForm.databaseId"
-						  :disabled="!!dataForm.id"
-						  clearable
-						  filterable
-						  @change="databaseChange"
-				          placeholder="请选择">
-				  <el-option v-for="(item,index) in dataForm.databaseList"
-				             :key="item.id"
-				             :label="`[${item.id}]${item.name}`"
-				             :value="item.id"></el-option>
+			<el-form-item label="数据库" prop="databaseId" v-if="dataForm.dbType == '1'" label-width="auto">
+				<el-select v-model="dataForm.databaseId" :disabled="!!dataForm.id" clearable filterable @change="databaseChange" placeholder="请选择">
+					<el-option v-for="(item, index) in dataForm.databaseList" :key="item.id" :label="`[${item.id}]${item.name}`" :value="item.id"></el-option>
 				</el-select>
 			</el-form-item>
 			<!-- <div v-if="!!dataForm.databaseId && dataForm.dbType =='1'" :disabled="!!dataForm.id">
@@ -74,20 +66,20 @@
 			<el-form-item label="归属元数据目录" prop="metadataId" label-width="auto">
 				<el-tree-select :disabled="!!dataForm.id" v-model="dataForm.metadataId" :data="metadataFloderList" clearable>
 					<template #default="{ node, data }">
-						 <div>
-							 <span>
-								 <img v-if="data.icon=='/src/assets/folder.png'" src="/src/assets/folder.png"/>
-								 <img v-if="data.icon=='/src/assets/database.png'" src="/src/assets/database.png"/>
-								 <img v-if="data.icon=='/src/assets/table.png'" src="/src/assets/table.png"/>
-								 <img v-if="data.icon=='/src/assets/column.png'" src="/src/assets/column.png"/>
-								 <img v-if="data.icon=='/src/assets/model.png'" src="/src/assets/model.png"/>
-								 <span style="margin-left: 8px;">{{ data.name }}</span>
-							 </span>
-						 </div>
+						<div>
+							<span>
+								<img v-if="data.icon == '/src/assets/folder.png'" src="/src/assets/folder.png" />
+								<img v-if="data.icon == '/src/assets/database.png'" src="/src/assets/database.png" />
+								<img v-if="data.icon == '/src/assets/table.png'" src="/src/assets/table.png" />
+								<img v-if="data.icon == '/src/assets/column.png'" src="/src/assets/column.png" />
+								<img v-if="data.icon == '/src/assets/model.png'" src="/src/assets/model.png" />
+								<span style="margin-left: 8px">{{ data.name }}</span>
+							</span>
+						</div>
 					</template>
 				</el-tree-select>
 			</el-form-item>
-	    </el-form>
+		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
@@ -96,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref,onMounted } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus/es'
 import { listDatabase } from '@/api/data-integrate/database'
 import { getDictLabel } from '@/utils/tool'
@@ -107,7 +99,7 @@ import { useOrgListApi } from '@/api/sys/orgs'
 
 const orgList = ref([])
 
-onMounted(()=>{
+onMounted(() => {
 	//获取数据库列表
 	getDatabaseList()
 	listMetadataFloder()
@@ -125,11 +117,11 @@ const listMetadataFloder = () => {
 	})
 }
 
-const databaseChange = (databaseId) => {
+const databaseChange = databaseId => {
 	//获取数据库信息
-	for(var i in dataForm.databaseList) {
+	for (var i in dataForm.databaseList) {
 		var database = dataForm.databaseList[i]
-		if(database.id == databaseId) {
+		if (database.id == databaseId) {
 			//赋值
 			Object.assign(currentDatabase, database)
 		}
@@ -143,8 +135,7 @@ const dataFormRef = ref()
 const metadataFloderList = ref([])
 
 //当前选择的数据库
-const currentDatabase = reactive({
-})
+const currentDatabase = reactive({})
 const dataForm = reactive({
 	orgId: '',
 	name: '',
@@ -191,7 +182,7 @@ const dataRules = ref({
 	cron: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	dbType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	databaseId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	metadataId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	metadataId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交

@@ -41,7 +41,7 @@
 			</el-table-column>
 			<el-table-column show-overflow-tooltip prop="cron" label="cron表达式" header-align="center" align="center"></el-table-column>
 			<!-- <el-table-column prop="note" label="备注" header-align="center" align="center"></el-table-column> -->
-			<!-- <el-table-column prop="projectId" label="项目id" header-align="center" align="center"></el-table-column> 
+<!-- <el-table-column prop="projectId" label="项目id" header-align="center" align="center"></el-table-column> 
 			<fast-creator-column prop="creator" label="创建者" header-align="center" align="center"></fast-creator-column>
 			<el-table-column show-overflow-tooltip prop="createTime" label="创建时间" header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
