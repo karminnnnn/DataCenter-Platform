@@ -23,5 +23,3 @@
 // export const checkStatusApi = (resourceId: number) => {
 // 	return service.get('/data-assets/resource-mount/check/'+resourceId)
 // }
-
-

@@ -23,4 +23,3 @@
 // export const handRunApi = (id: number) => {
 // 	return service.put('/data-governance/master-distribute/hand-run/' + id)
 // }
-

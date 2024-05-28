@@ -1,29 +1,29 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
-				<el-form-item prop="orgId" label="所属机构">
-					<el-tree-select
-						clearable
-						v-model="dataForm.orgId"
-						:data="orgList"
-						check-strictly
-						value-key="id"
-						:props="{ label: 'name', children: 'children' }"
-						style="width: 100%"
-					/>
-				</el-form-item>
-				<el-form-item label="数据表ID" prop="DatatableID">
-					<el-input v-model="dataForm.DatatableID" placeholder="数据表ID"></el-input>
-				</el-form-item>
-				<el-form-item label="数据表名称" prop="DatatableName">
-					<el-input v-model="dataForm.DatatableName" placeholder="数据表名称"></el-input>
-				</el-form-item>
-				<el-form-item label="数据库ID" prop="DatabaseID">
-					<el-input v-model="dataForm.DatabaseID" placeholder="数据库ID"></el-input>
-				</el-form-item>
-				<el-form-item label="数据库名称" prop="DatabaseName">
-					<el-input v-model="dataForm.DatabaseName" placeholder="数据库名称"></el-input>
-				</el-form-item>
+			<el-form-item prop="orgId" label="所属机构">
+				<el-tree-select
+					clearable
+					v-model="dataForm.orgId"
+					:data="orgList"
+					check-strictly
+					value-key="id"
+					:props="{ label: 'name', children: 'children' }"
+					style="width: 100%"
+				/>
+			</el-form-item>
+			<el-form-item label="数据表ID" prop="DatatableID">
+				<el-input v-model="dataForm.DatatableID" placeholder="数据表ID"></el-input>
+			</el-form-item>
+			<el-form-item label="数据表名称" prop="DatatableName">
+				<el-input v-model="dataForm.DatatableName" placeholder="数据表名称"></el-input>
+			</el-form-item>
+			<el-form-item label="数据库ID" prop="DatabaseID">
+				<el-input v-model="dataForm.DatabaseID" placeholder="数据库ID"></el-input>
+			</el-form-item>
+			<el-form-item label="数据库名称" prop="DatabaseName">
+				<el-input v-model="dataForm.DatabaseName" placeholder="数据库名称"></el-input>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDatatableApi_v2, useDatatableSubmitApi_v2,/*testOnline*/ } from '@/api/data-integrate/database'
+import { useDatatableApi_v2, useDatatableSubmitApi_v2 /*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
 
 const emit = defineEmits(['refreshDataList'])
@@ -62,8 +62,8 @@ const dataForm = reactive({
 	DatatableID: '',
 	DatatableName: '',
 	DatabaseID: '',
-	DatabaseName: '',
-	})
+	DatabaseName: ''
+})
 
 const init = (id?: number) => {
 	visible.value = true
@@ -74,7 +74,7 @@ const init = (id?: number) => {
 	if (dataFormRef.value) {
 		dataFormRef.value.resetFields()
 	}
-	
+
 	//获取部门列表
 	useOrgListApi().then(res => {
 		orgList.value = res.data
@@ -110,7 +110,7 @@ const dataRules = ref({
 	DatatableID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	DatatableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	DatabaseID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	DatabaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	DatabaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交

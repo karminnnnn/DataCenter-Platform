@@ -27,5 +27,3 @@
 // export const cancelReleaseMasterModelApi = (id: number) => {
 // 	return service.put('/data-governance/master-model/cancel-release/' + id)
 // }
-
-

@@ -20,11 +20,10 @@ export const currentUserProjectsApi = () => {
 	return service.get('/data-integrate/project/current-user-projects')
 }
 
-export const changeProjectApi = (id) => {
-	return service.put('/data-integrate/project/change-project/'+id)
+export const changeProjectApi = id => {
+	return service.put('/data-integrate/project/change-project/' + id)
 }
 
 export const testOnlineApi = (dataForm: any) => {
 	return service.post('/data-integrate/project/test-online', dataForm)
 }
-

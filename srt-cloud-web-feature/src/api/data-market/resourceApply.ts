@@ -17,5 +17,5 @@ export const checkApi = (dataForm: any) => {
 }
 
 export const authApi = (id: number, auth: number) => {
-	return service.put('/data-assets/resource-apply/auth/'+id + '/' + auth)
+	return service.put('/data-assets/resource-apply/auth/' + id + '/' + auth)
 }

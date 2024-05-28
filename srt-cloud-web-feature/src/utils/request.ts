@@ -46,7 +46,7 @@ service.interceptors.response.use(
 		}
 
 		const res = response.data
-		console.log("res:")
+		console.log('res:')
 		console.log(res)
 		// 响应成功
 		if (res.code === 0) {
@@ -73,9 +73,6 @@ service.interceptors.response.use(
 
 // 导出 axios 实例
 export default service
-
-
-
 
 // import axios from 'axios'：导入 Axios 库，用于发送 HTTP 请求。
 // import qs from 'qs'：导入 qs 库，用于序列化和解析 URL 查询字符串。

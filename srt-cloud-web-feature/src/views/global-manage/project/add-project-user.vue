@@ -1,6 +1,6 @@
 <template>
 	<el-dialog v-model="visible" title="添加项目成员" :close-on-click-modal="false">
-		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()" >
+		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
 				<el-input v-model="state.queryForm.username" placeholder="用户名" clearable></el-input>
 			</el-form-item>
@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { useCrud } from '@/hooks'
-import { ElMessage,ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { IHooksOptions } from '@/hooks/interface'
 import { addUserApi } from '@/api/data-integrate/project'
@@ -68,29 +68,29 @@ const init = (id?: number) => {
 }
 
 const addProjectUser = () => {
-		let data: any[] = []
-		
-		data = state.dataListSelections ? state.dataListSelections : []
+	let data: any[] = []
 
-		if (data.length === 0) {
-			ElMessage.warning('请选择记录添加')
-			return
-		}
-		
-		ElMessageBox.confirm('确定添加吗?', '提示', {
-			confirmButtonText: '确定',
-			cancelButtonText: '取消',
-			type: 'warning'
-		})
-			.then(() => {
-				if (state.projectId) {
-					addUserApi(state.projectId, data).then(() => {
-						ElMessage.success('添加成功')
-					})
-				}
-			})
-			.catch(() => {})
+	data = state.dataListSelections ? state.dataListSelections : []
+
+	if (data.length === 0) {
+		ElMessage.warning('请选择记录添加')
+		return
 	}
+
+	ElMessageBox.confirm('确定添加吗?', '提示', {
+		confirmButtonText: '确定',
+		cancelButtonText: '取消',
+		type: 'warning'
+	})
+		.then(() => {
+			if (state.projectId) {
+				addUserApi(state.projectId, data).then(() => {
+					ElMessage.success('添加成功')
+				})
+			}
+		})
+		.catch(() => {})
+}
 
 defineExpose({
 	init

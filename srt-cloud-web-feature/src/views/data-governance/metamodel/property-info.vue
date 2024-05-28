@@ -1,10 +1,10 @@
 <template>
 	<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 		<el-form-item>
-		  <el-input v-model="state.queryForm.name" placeholder="属性名称"></el-input>
+			<el-input v-model="state.queryForm.name" placeholder="属性名称"></el-input>
 		</el-form-item>
 		<el-form-item>
-		  <el-input v-model="state.queryForm.code" placeholder="属性代码"></el-input>
+			<el-input v-model="state.queryForm.code" placeholder="属性代码"></el-input>
 		</el-form-item>
 		<el-form-item>
 			<el-button @click="getDataList()">查询</el-button>
@@ -22,7 +22,13 @@
 		<el-table-column prop="name" label="属性名称" header-align="center" align="center"></el-table-column>
 		<el-table-column prop="code" label="属性代码" header-align="center" align="center"></el-table-column>
 		<fast-table-column prop="dataType" label="数据类型" header-align="center" align="center" dict-type="model_property_data_type"></fast-table-column>
-		<fast-table-column prop="inputType" label="输入控件" header-align="center" align="center" dict-type="model_property_input_type"></fast-table-column>
+		<fast-table-column
+			prop="inputType"
+			label="输入控件"
+			header-align="center"
+			align="center"
+			dict-type="model_property_input_type"
+		></fast-table-column>
 		<el-table-column prop="dataLength" label="数据长度" header-align="center" align="center"></el-table-column>
 		<fast-table-column prop="nullable" label="允许为空" header-align="center" align="center" dict-type="yes_or_no"></fast-table-column>
 		<fast-table-column prop="builtin" label="是否内置" header-align="center" align="center" dict-type="yes_or_no"></fast-table-column>

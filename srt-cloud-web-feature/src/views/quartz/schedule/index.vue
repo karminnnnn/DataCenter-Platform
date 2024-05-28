@@ -30,7 +30,7 @@
 			<fast-table-column prop="jobGroup" label="任务组名" dict-type="schedule_group"></fast-table-column>
 			<el-table-column prop="typeId" label="系统任务" header-align="center" align="center">
 				<template #default="scope">
-					{{scope.row.typeId?'是(不可编辑)':'否'}}
+					{{ scope.row.typeId ? '是(不可编辑)' : '否' }}
 				</template>
 			</el-table-column>
 			<el-table-column prop="beanName" label="执行方法" dict-type="schedule_group">
@@ -38,7 +38,7 @@
 			</el-table-column>
 			<el-table-column prop="once" label="周期执行" header-align="center" align="center">
 				<template #default="scope">
-					<el-tag v-if="scope.row.once=='1'" type="danger">否</el-tag>
+					<el-tag v-if="scope.row.once == '1'" type="danger">否</el-tag>
 					<el-tag v-else>是</el-tag>
 				</template>
 			</el-table-column>
@@ -46,11 +46,29 @@
 			<fast-table-column prop="status" label="状态" dict-type="schedule_status"></fast-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="200">
 				<template #default="scope">
-					<el-button v-if="!!!scope.row.typeId" v-auth="'schedule:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-					<el-button v-if="scope.row.status === 0 && !!!scope.row.typeId" v-auth="'schedule:update'" type="primary" link @click="statusHandle(scope.row, 1)">恢复</el-button>
-					<el-button v-if="scope.row.status === 1 && !!!scope.row.typeId" v-auth="'schedule:update'" type="primary" link @click="statusHandle(scope.row, 0)">暂停</el-button>
+					<el-button v-if="!!!scope.row.typeId" v-auth="'schedule:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)"
+						>修改</el-button
+					>
+					<el-button
+						v-if="scope.row.status === 0 && !!!scope.row.typeId"
+						v-auth="'schedule:update'"
+						type="primary"
+						link
+						@click="statusHandle(scope.row, 1)"
+						>恢复</el-button
+					>
+					<el-button
+						v-if="scope.row.status === 1 && !!!scope.row.typeId"
+						v-auth="'schedule:update'"
+						type="primary"
+						link
+						@click="statusHandle(scope.row, 0)"
+						>暂停</el-button
+					>
 					<el-button v-auth="'schedule:run'" type="primary" link @click="runHandle(scope.row)">执行</el-button>
-					<el-button v-if="!!!scope.row.typeId" v-auth="'schedule:delete'" type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+					<el-button v-if="!!!scope.row.typeId" v-auth="'schedule:delete'" type="primary" link @click="deleteBatchHandle(scope.row.id)"
+						>删除</el-button
+					>
 				</template>
 			</el-table-column>
 		</el-table>

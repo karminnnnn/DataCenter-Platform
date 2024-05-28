@@ -7,8 +7,8 @@
 		<el-form-item prop="password">
 			<el-input v-model="registerForm.password" :prefix-icon="Lock" show-password :placeholder="$t('app.password')"></el-input>
 		</el-form-item>
-        <el-form-item prop="confirmPassword">
-			<el-input v-model="registerForm.confirmPassword" :prefix-icon="Unlock" show-password :placeholder="'确认'+$t('app.password')"></el-input>
+		<el-form-item prop="confirmPassword">
+			<el-input v-model="registerForm.confirmPassword" :prefix-icon="Unlock" show-password :placeholder="'确认' + $t('app.password')"></el-input>
 		</el-form-item>
 		<el-form-item prop="captcha" class="login-captcha">
 			<el-input v-model="registerForm.captcha" :placeholder="$t('app.captcha')" :prefix-icon="Key"></el-input>
@@ -37,7 +37,7 @@ const captchaBase64 = ref()
 const registerForm = reactive({
 	username: '',
 	password: '',
-    confirmPassword: '',
+	confirmPassword: '',
 	key: '',
 	captcha: ''
 })
@@ -45,7 +45,7 @@ const registerForm = reactive({
 const registerRules = ref({
 	username: [{ required: true, message: t('required'), trigger: 'blur' }],
 	password: [{ required: true, message: t('required'), trigger: 'blur' }],
-    confrimPassword: [{ required: true, message: t('required'), trigger: 'blur' }],
+	confrimPassword: [{ required: true, message: t('required'), trigger: 'blur' }],
 	captcha: [{ required: true, message: t('required'), trigger: 'blur' }]
 })
 
@@ -75,20 +75,20 @@ const onRegister = () => {
 		store.userStore
 			.accountRegisterAction(registerForm)
 			.then(() => {
-				console.log("Good!!!!")
+				console.log('Good!!!!')
 				ElMessage({
-  				  message: '注册成功！',
-  				  type: 'success',
-  				})
+					message: '注册成功！',
+					type: 'success'
+				})
 				router.push({ path: '/home' })
 			})
 			.catch(() => {
-				console.log("why????")
+				console.log('why????')
 				// onCaptcha()
 			})
 	})
 
-    // TODO
+	// TODO
 }
 </script>
 

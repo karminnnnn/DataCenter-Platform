@@ -1,11 +1,11 @@
 <template>
 	<el-card>
 		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
-					<el-form-item>
-			  <el-input v-model="state.queryForm.name" placeholder="分层英文名称"></el-input>
+			<el-form-item>
+				<el-input v-model="state.queryForm.name" placeholder="分层英文名称"></el-input>
 			</el-form-item>
 			<el-form-item>
-			  <el-input v-model="state.queryForm.cnName" placeholder="分层中文名称"></el-input>
+				<el-input v-model="state.queryForm.cnName" placeholder="分层中文名称"></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button @click="getDataList()">查询</el-button>
@@ -50,7 +50,7 @@ const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/layer/page',
 	deleteUrl: '/data-integrate/layer',
 	queryForm: {
-		name: '', 
+		name: '',
 		cnName: ''
 	}
 })

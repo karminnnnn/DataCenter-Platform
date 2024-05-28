@@ -8,7 +8,6 @@
 // 	return service.delete('/data-integrate/fileCategory?id=' + id)
 // }
 
-
 // export const useFileCategoryApi = (id: number) => {
 // 	return service.get('/data-integrate/fileCategory/' + id)
 // }
