@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 import net.srt.api.FlinkApiFactory;
 import net.srt.api.FlinkVersion;
 import net.srt.api.module.data.integrate.DataSourceApi;
-import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.constant.SqlDbType;
 import net.srt.convert.DataProductionTaskConvert;
 import net.srt.dao.DataProductionCatalogueDao;
@@ -255,10 +255,10 @@ public class DataProductionTaskServiceImpl extends BaseServiceImpl<DataProductio
 		result.setStartTimeNow();
 		process.info("Initializing database connection...");
 		boolean ifMiddleDb = SqlDbType.MIDDLE_DB.getValue().equals(studioExecuteDto.getSqlDbType());
-		DataDatabaseDto database;
+		DataSourceDto database;
 		if (ifMiddleDb) {
 			DataProjectCacheBean project = getProject(getProjectId());
-			database = new DataDatabaseDto();
+			database = new DataSourceDto();
 			database.setName(project.getName() + "<中台库>");
 			database.setDatabaseName(project.getDbName());
 			database.setDatabaseSchema(project.getDbSchema());
@@ -961,11 +961,11 @@ public class DataProductionTaskServiceImpl extends BaseServiceImpl<DataProductio
 		sqlConfigJson.setSqlDbType(sqlDto.getSqlDbType());
 		sqlConfigJson.setPvdataNum(sqlDto.getMaxRowNum());
 		boolean ifMiddleDb = SqlDbType.MIDDLE_DB.getValue().equals(sqlDto.getSqlDbType());
-		DataDatabaseDto database;
+		DataSourceDto database;
 		if (ifMiddleDb) {
 			history.setSqlDbType(SqlDbType.MIDDLE_DB.getValue());
 			DataProjectCacheBean project = getProject(task.getProjectId());
-			database = new DataDatabaseDto();
+			database = new DataSourceDto();
 			database.setName(project.getName() + "<中台库>");
 			database.setDatabaseName(project.getDbName());
 			database.setDatabaseSchema(project.getDbSchema());
@@ -1092,7 +1092,7 @@ public class DataProductionTaskServiceImpl extends BaseServiceImpl<DataProductio
 		process.info("Initializing database connection...");
 		//调用dataBase的Api
 		boolean ifMiddleDb = SqlDbType.MIDDLE_DB.getValue().equals(studioExecuteDTO.getSqlDbType());
-		DataDatabaseDto dataBase = ifMiddleDb ? null : DataSourceApi.getById(studioExecuteDTO.getDatabaseId().longValue()).getData();
+		DataSourceDto dataBase = ifMiddleDb ? null : DataSourceApi.getById(studioExecuteDTO.getDatabaseId().longValue()).getData();
 		// zrx
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(ifMiddleDb ? getProject().getDbType() : dataBase.getDatabaseType());
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);

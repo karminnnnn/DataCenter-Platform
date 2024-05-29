@@ -3,7 +3,7 @@ package net.srt.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.AllArgsConstructor;
 import net.srt.api.module.data.integrate.DataSourceApi;
-import net.srt.api.module.data.integrate.dto.DataDatabaseDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.constant.SqlDbType;
 import net.srt.dao.DataServiceApiConfigDao;
 import net.srt.dto.AppToken;
@@ -42,10 +42,10 @@ public class DataServiceApiExecuteServiceImpl extends BaseServiceImpl<DataServic
 		Map<String, Object> sqlParam = JSONUtil.parseObject(sqlDto.getJsonParams(), new TypeReference<Map<String, Object>>() {
 		});
 		boolean ifMiddleDb = SqlDbType.MIDDLE_DB.getValue().equals(sqlDto.getSqlDbType());
-		DataDatabaseDto database;
+		DataSourceDto database;
 		if (ifMiddleDb) {
 			DataProjectCacheBean project = sqlDto.getProjectId() == null ? getProject() : getProject(sqlDto.getProjectId());
-			database = new DataDatabaseDto();
+			database = new DataSourceDto();
 			database.setDatabaseName(project.getDbName());
 			database.setJdbcUrl(project.getDbUrl());
 			database.setUserName(project.getDbUsername());

@@ -71,7 +71,7 @@ export const useDatatableSubmitApi_v2 = (dataForm: any) => {
 // }
 // Mine
 export const testOnline_datasource = (dataForm: any) => {
-	return service.post('/data-integrate/database/test-online', dataForm)
+	return service.post('/data-integrate/datasource/test-online', dataForm)
 }
 // Mine
 export const testOnline_database = (dataForm: any) => {

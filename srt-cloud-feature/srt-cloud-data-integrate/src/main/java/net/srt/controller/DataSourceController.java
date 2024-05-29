@@ -18,14 +18,7 @@ import net.srt.vo.SchemaTableDataVo;
 import net.srt.vo.SqlGenerationVo;
 import net.srt.vo.TableVo;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -45,8 +38,8 @@ public class DataSourceController {
 
 	@GetMapping("page")
 	@Operation(summary = "分页")
-	@PreAuthorize("hasAuthority('data-integrate:database:page')")
-	public Result<PageResult<DataSourceVO>> page(@Valid DataSourceQuery query) {
+	//@PreAuthorize("hasAuthority('data-integrate:database:page')")
+	public Result<PageResult<DataSourceVO>> page(@ModelAttribute @Valid DataSourceQuery query) {
 		PageResult<DataSourceVO> page = DataSourceService.page(query);
 
 		return Result.ok(page);
