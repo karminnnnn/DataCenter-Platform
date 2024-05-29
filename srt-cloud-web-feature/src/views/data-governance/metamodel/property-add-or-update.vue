@@ -14,18 +14,18 @@
 				<fast-select v-model="dataForm.inputType" dict-type="model_property_input_type" placeholder="请选择" clearable></fast-select>
 			</el-form-item>
 			<el-form-item label="数据长度" prop="dataLength">
-				<el-input-number v-model="dataForm.dataLength" :max='9999' placeholder="数据长度"></el-input-number>
+				<el-input-number v-model="dataForm.dataLength" :max="9999" placeholder="数据长度"></el-input-number>
 			</el-form-item>
 			<el-form-item label="允许为空" prop="nullable">
 				<fast-select v-model="dataForm.nullable" dict-type="yes_or_no" placeholder="请选择" clearable></fast-select>
 			</el-form-item>
 			<el-form-item label="序号" prop="orderNo">
-				<el-input-number v-model="dataForm.orderNo" :max='9999' placeholder="数据长度"></el-input-number>
+				<el-input-number v-model="dataForm.orderNo" :max="9999" placeholder="数据长度"></el-input-number>
 			</el-form-item>
 			<el-form-item label="说明" prop="comment">
-				<el-input type="textarea"  :rows="3" v-model="dataForm.comment" placeholder="说明"></el-input>	
+				<el-input type="textarea" :rows="3" v-model="dataForm.comment" placeholder="说明"></el-input>
 			</el-form-item>
-	    </el-form>
+		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
@@ -51,7 +51,7 @@ const dataForm = reactive({
 	dataLength: 10,
 	orderNo: 0,
 	nullable: '',
-	comment: '',
+	comment: ''
 })
 
 const init = (id?: number, metamodelId: number) => {
@@ -62,7 +62,7 @@ const init = (id?: number, metamodelId: number) => {
 	if (dataFormRef.value) {
 		dataFormRef.value.resetFields()
 	}
-	
+
 	dataForm.metamodelId = metamodelId
 
 	if (id) {
@@ -82,7 +82,7 @@ const dataRules = ref({
 	dataType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	inputType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	dataLength: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	nullable: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	nullable: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交

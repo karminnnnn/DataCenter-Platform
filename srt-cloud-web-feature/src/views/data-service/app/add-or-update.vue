@@ -27,7 +27,7 @@
 			<el-form-item label="token有效期" prop="expireDesc">
 				<fast-select v-model="dataForm.expireDesc" placeholder="有效期" dict-type="api_expire_desc" clearable></fast-select>
 			</el-form-item>
-	    </el-form>
+		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
@@ -59,7 +59,7 @@ const dataForm = reactive({
 const dataRules = ref({
 	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	expireDesc: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	expireDesc: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 const init = (id?: number) => {
@@ -71,7 +71,7 @@ const init = (id?: number) => {
 		dataFormRef.value.resetFields()
 	}
 
-//获取部门列表
+	//获取部门列表
 	useOrgListApi().then(res => {
 		orgList.value = res.data
 	})

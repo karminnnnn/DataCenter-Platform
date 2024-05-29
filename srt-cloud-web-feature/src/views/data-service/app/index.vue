@@ -15,7 +15,14 @@
 					<el-button v-auth="'data-service:app:save'" type="primary" @click="addOrUpdateHandle()">创建应用</el-button>
 				</el-form-item>
 			</el-form>
-			<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" max-height="calc(100vh - 400px )" @selection-change="selectionChangeHandle">
+			<el-table
+				v-loading="state.dataListLoading"
+				:data="state.dataList"
+				border
+				style="width: 100%"
+				max-height="calc(100vh - 400px )"
+				@selection-change="selectionChangeHandle"
+			>
 				<el-table-column prop="name" label="名称" header-align="center" align="center"></el-table-column>
 				<fast-table-org-column prop="orgId" label="所属机构" header-align="center" align="center"></fast-table-org-column>
 				<el-table-column prop="appKey" label="appKey" header-align="center" align="center"></el-table-column>
@@ -41,11 +48,11 @@
 				@current-change="currentChangeHandle"
 			>
 			</el-pagination>
-			
+
 			<!-- 弹窗, 新增 / 修改 -->
 			<add-or-update ref="addOrUpdateRef" @refreshDataList="getDataList"></add-or-update>
-			
-			<div class="drawerClass" style="height:100%">
+
+			<div class="drawerClass" style="height: 100%">
 				<el-drawer v-model="authDialogVisable" title="API 授权" size="100%" :destroy-on-close="true">
 					<AppAuth :ifAuth="true"></AppAuth>
 				</el-drawer>
@@ -87,14 +94,14 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 </script>
 
 <style>
-	.appDivClass {
-		height: calc(100vh - 170px );
-		position: relative;
-		overflow: hidden;
-	}
-	.appDivClass > .drawerClass > div {
-		height: 100%;
-		position: absolute !important;
-		overflow: hidden;
-	}
+.appDivClass {
+	height: calc(100vh - 170px);
+	position: relative;
+	overflow: hidden;
+}
+.appDivClass > .drawerClass > div {
+	height: 100%;
+	position: absolute !important;
+	overflow: hidden;
+}
 </style>

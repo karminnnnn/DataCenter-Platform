@@ -65,9 +65,9 @@
 // 					style.fill = 'green'
 // 				}
 // 				return style;
-// 			}	
+// 			}
 // 			getDefaultAnchor() {
-// 				const { width, height, x, y, id } = this; 
+// 				const { width, height, x, y, id } = this;
 // 				return [
 // 					{
 // 						x: x - width / 2,

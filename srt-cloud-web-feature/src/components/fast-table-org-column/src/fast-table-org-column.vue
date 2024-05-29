@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts" name="FastTableOrgColumn">
-	
 import store from '@/store'
 import { getValByOrgId } from '@/utils/tool'
 

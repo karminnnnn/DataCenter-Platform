@@ -12,18 +12,18 @@ export const useMetadataCollectSubmitApi = (dataForm: any) => {
 	}
 }
 
-export const releaseApi = (id) => {
-	return service.put('/data-governance/metadata-collect/release/'+id)
+export const releaseApi = id => {
+	return service.put('/data-governance/metadata-collect/release/' + id)
 }
 
-export const cancelApi = (id) => {
-	return service.put('/data-governance/metadata-collect/cancel/'+id)
+export const cancelApi = id => {
+	return service.put('/data-governance/metadata-collect/cancel/' + id)
 }
 
-export const getCollectRecordApi = (id) => {
-	return service.get('/data-governance/metadata-collect-record/'+id)
+export const getCollectRecordApi = id => {
+	return service.get('/data-governance/metadata-collect-record/' + id)
 }
 
-export const handRunApi = (id) => {
-	return service.post('/data-governance/metadata-collect/hand-run/'+id)
+export const handRunApi = id => {
+	return service.post('/data-governance/metadata-collect/hand-run/' + id)
 }

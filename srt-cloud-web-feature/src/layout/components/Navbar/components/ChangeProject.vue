@@ -7,7 +7,9 @@
 		</div>
 		<template #dropdown>
 			<el-dropdown-menu class="user-dropdown">
-				<el-dropdown-item :disabled="projectId == data.id" v-for="data in store.appStore.projectList" :command="data.id">{{ data.name }}</el-dropdown-item>
+				<el-dropdown-item :disabled="projectId == data.id" v-for="data in store.appStore.projectList" :command="data.id">{{
+					data.name
+				}}</el-dropdown-item>
 			</el-dropdown-menu>
 		</template>
 	</el-dropdown>
@@ -22,19 +24,19 @@ import { changeProjectApi } from '@/api/data-integrate/project'
 
 const projectId = ref('')
 
-onMounted(()=> {
+onMounted(() => {
 	projectId.value = SessionStorage.getItem(store.userStore.token)
-	var hasProject = false;
-	if(projectId.value) {
-		for(var i in store.appStore.projectList) {
-			 if(store.appStore.projectList[i].id == projectId.value) {
-				 hasProject = true
-				 break
-			 }
+	var hasProject = false
+	if (projectId.value) {
+		for (var i in store.appStore.projectList) {
+			if (store.appStore.projectList[i].id == projectId.value) {
+				hasProject = true
+				break
+			}
 		}
 	}
 	if (hasProject) {
-		 changeProjectApi(projectId.value)
+		changeProjectApi(projectId.value)
 	} else {
 		//选择第一个项目为当前项目
 		projectId.value = store.appStore.projectList[0].id
@@ -44,10 +46,9 @@ onMounted(()=> {
 	}
 })
 
-
 const handleCommand = (id: number) => {
 	//存储当前的项目id
-	SessionStorage.setItem(store.userStore.token,id)
+	SessionStorage.setItem(store.userStore.token, id)
 	//请求切换项目的api
 	changeProjectApi(id).then(res => {
 		// 刷新页面

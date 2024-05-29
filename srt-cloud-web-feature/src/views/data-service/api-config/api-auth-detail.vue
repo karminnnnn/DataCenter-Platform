@@ -3,21 +3,21 @@
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px">
 			<el-form-item label="调用次数" prop="limited" label-width="auto">
 				<el-radio-group v-model="dataForm.limited">
-				  <el-radio :label="false" size="large">不限次数</el-radio>
-				  <el-radio :label="true" size="large">指定次数</el-radio>
+					<el-radio :label="false" size="large">不限次数</el-radio>
+					<el-radio :label="true" size="large">指定次数</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item label="次数" prop="requestTimes" label-width="auto" v-if="dataForm.limited">
 				<el-input-number v-model="dataForm.requestTimes" placeholder="次数"></el-input-number>
 			</el-form-item>
 			<el-form-item label="已调用次数" prop="requestedTimes" label-width="auto">
-				<span>{{dataForm.requestedTimes}}</span>
+				<span>{{ dataForm.requestedTimes }}</span>
 			</el-form-item>
 			<el-form-item label="调用成功次数" prop="requestedSuccessTimes" label-width="auto">
-				<span>{{dataForm.requestedSuccessTimes}}</span>
+				<span>{{ dataForm.requestedSuccessTimes }}</span>
 			</el-form-item>
 			<el-form-item label="调用失败次数" prop="requestedFailedTimes" label-width="auto">
-				<span>{{dataForm.requestedFailedTimes}}</span>
+				<span>{{ dataForm.requestedFailedTimes }}</span>
 			</el-form-item>
 		</el-form>
 		<template #footer>
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { ElMessage,ElMessageBox } from 'element-plus/es'
+import { ElMessage, ElMessageBox } from 'element-plus/es'
 import { authApi } from '@/api/data-service/app'
 import { resetRequestedTimesApi } from '@/api/data-service/apiConfig'
 
@@ -42,7 +42,7 @@ const dataFormRef = ref()
 const dataForm = reactive({
 	limited: false,
 	requestTimes: 100,
-	requestedTimes: 0,
+	requestedTimes: 0
 })
 
 const init = (authForm: any) => {
@@ -53,7 +53,7 @@ const init = (authForm: any) => {
 
 const dataRules = ref({
 	limited: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	requestTimes: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	requestTimes: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 const resetRequestedTimes = () => {
@@ -62,15 +62,15 @@ const resetRequestedTimes = () => {
 		cancelButtonText: '取消',
 		type: 'warning'
 	})
-	.then(() => {
-		resetRequestedTimesApi(dataForm.id).then(res=>{
-			ElMessage.success("重置成功")
-			dataForm.requestedTimes = 0
-			dataForm.requestedSuccessTimes = 0
-			dataForm.requestedFailedTimes = 0
+		.then(() => {
+			resetRequestedTimesApi(dataForm.id).then(res => {
+				ElMessage.success('重置成功')
+				dataForm.requestedTimes = 0
+				dataForm.requestedSuccessTimes = 0
+				dataForm.requestedFailedTimes = 0
+			})
 		})
-	})
-	.catch(() => {})
+		.catch(() => {})
 }
 
 // 表单提交

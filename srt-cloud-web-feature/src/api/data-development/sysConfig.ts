@@ -13,7 +13,7 @@ export const useConfigSubmitApi = (dataForm: any) => {
 }
 
 // export const updateSysConfigApi = (dataForm: any) => {
-// 	return service.post('/data-development/sys-config/updateSysConfigByJson', dataForm) 
+// 	return service.post('/data-development/sys-config/updateSysConfigByJson', dataForm)
 // }
 
 // export const getAllApi = () => {

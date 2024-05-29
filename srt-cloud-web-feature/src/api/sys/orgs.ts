@@ -1,9 +1,9 @@
 import service from '@/utils/request'
 
 export const useOrgListApi = (parentId: any) => {
-	if(parentId) {
-		return service.get('/sys/org/list?parentId='+parentId)
-	} 
+	if (parentId) {
+		return service.get('/sys/org/list?parentId=' + parentId)
+	}
 	return service.get('/sys/org/list')
 }
 

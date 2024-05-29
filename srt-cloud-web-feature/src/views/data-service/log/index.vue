@@ -21,8 +21,8 @@
 			<fast-table-org-column prop="orgId" label="所属机构" header-align="center" align="center"></fast-table-org-column>
 			<el-table-column prop="status" label="状态码" header-align="center" align="center">
 				<template #default="scope">
-					<el-tag type="success" v-if="scope.row.status == 200">{{scope.row.status}}</el-tag>
-					<el-tag v-else type="danger">{{scope.row.status}}</el-tag>
+					<el-tag type="success" v-if="scope.row.status == 200">{{ scope.row.status }}</el-tag>
+					<el-tag v-else type="danger">{{ scope.row.status }}</el-tag>
 				</template>
 			</el-table-column>
 			<el-table-column prop="duration" label="时长(ms)" header-align="center" align="center"></el-table-column>
@@ -45,7 +45,6 @@
 			@current-change="currentChangeHandle"
 		>
 		</el-pagination>
-
 	</el-card>
 </template>
 

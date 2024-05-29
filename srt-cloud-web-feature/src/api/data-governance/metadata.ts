@@ -13,19 +13,19 @@ export const useMetadataSubmitApi = (dataForm: any) => {
 }
 
 export const listChildApi = (parentId: number) => {
-	return service.get('/data-governance/metadata/list-child?parentId='+parentId)
+	return service.get('/data-governance/metadata/list-child?parentId=' + parentId)
 }
 
 export const delTreeNodeApi = (id: number) => {
-	return service.delete('/data-governance/metadata/'+id)
+	return service.delete('/data-governance/metadata/' + id)
 }
 
 export const listMetamodelPropertyApi = (metaModelId: number) => {
-	return service.get('/data-governance/metamodel-property/properties/'+metaModelId)
+	return service.get('/data-governance/metamodel-property/properties/' + metaModelId)
 }
 
 export const listKeywordApi = (keyword: any) => {
-	return service.get('/data-governance/metadata/list-keyword?keyword='+keyword)
+	return service.get('/data-governance/metadata/list-keyword?keyword=' + keyword)
 }
 
 export const listMetadataFloderApi = () => {
@@ -43,8 +43,3 @@ export const listMetadataFloderApi = () => {
 // export const listDbApi = () => {
 // 	return service.get('/data-governance/metadata/list-db')
 // }
-
-
-
-
-

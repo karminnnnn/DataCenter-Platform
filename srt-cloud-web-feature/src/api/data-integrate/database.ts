@@ -99,23 +99,23 @@ export const listDatabase = () => {
 }
 
 // 保留？？？
-export const listTreeByIdApi = (id:any) => {
-	return service.get('/data-integrate/database/list-tree/'+id)
+export const listTreeByIdApi = (id: any) => {
+	return service.get('/data-integrate/database/list-tree/' + id)
 }
 
 // 保留？？？
 export const listColumnsByIdAndTableName = (id: any, tableName: any) => {
-	return service.get('/data-integrate/database/'+id+'/'+tableName+'/columns')
+	return service.get('/data-integrate/database/' + id + '/' + tableName + '/columns')
 }
 
 // 保留？？？
 export const listColumnsByIdAndSql = (id: any, sqlConsole: any) => {
-	return service.post('/data-integrate/database/'+id+'/sql/columns', sqlConsole)
+	return service.post('/data-integrate/database/' + id + '/sql/columns', sqlConsole)
 }
 
 // 保留？？？
 export const getSqlGenerationApi = (id: any, tableName: any, tableRemarks) => {
-	return service.get('/data-integrate/database/'+id+'/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
+	return service.get('/data-integrate/database/' + id + '/' + tableName + '/sql-generation?tableRemarks=' + tableRemarks)
 }
 
 // 保留？？？
@@ -125,17 +125,17 @@ export const listMiddleDbTreeApi = () => {
 
 // 保留？？？
 export const listMiddleDbColumnsApi = (tableName: any) => {
-	return service.get('/data-integrate/database/middle-db/'+tableName+'/columns')
+	return service.get('/data-integrate/database/middle-db/' + tableName + '/columns')
 }
 
 // 保留？？？
 export const getMiddleDbSqlGenerationApi = (tableName: any, tableRemarks) => {
-	return service.get('/data-integrate/database/middle-db/'+tableName+'/sql-generation?tableRemarks='+tableRemarks)
+	return service.get('/data-integrate/database/middle-db/' + tableName + '/sql-generation?tableRemarks=' + tableRemarks)
 }
 
 // 保留？？？
 export const getTableInfoApi = (tableName: any) => {
-	return service.get('/data-integrate/database/middle-db/table-info/'+tableName)
+	return service.get('/data-integrate/database/middle-db/table-info/' + tableName)
 }
 
 // 保留？？？
@@ -145,5 +145,5 @@ export const saveTableInfoApi = (dataForm: any) => {
 
 // 保留？？？
 export const deleteTableInfoApi = (tableName: any) => {
-	return service.delete('/data-integrate/database/middle-db/table-info/'+tableName)
+	return service.delete('/data-integrate/database/middle-db/table-info/' + tableName)
 }

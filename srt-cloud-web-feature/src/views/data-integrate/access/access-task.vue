@@ -14,8 +14,22 @@
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" @selection-change="selectionChangeHandle">
 			<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 			<el-table-column prop="id" label="序号" header-align="center" align="center"></el-table-column>
-			<fast-table-column prop="runStatus" label="运行状态" header-align="center" align="center" dict-type="run_status" width="120px"></fast-table-column>
-			<fast-table-column prop="runType" label="任务类型" header-align="center" align="center" dict-type="access_run_type" width="120px"></fast-table-column>
+			<fast-table-column
+				prop="runStatus"
+				label="运行状态"
+				header-align="center"
+				align="center"
+				dict-type="run_status"
+				width="120px"
+			></fast-table-column>
+			<fast-table-column
+				prop="runType"
+				label="任务类型"
+				header-align="center"
+				align="center"
+				dict-type="access_run_type"
+				width="120px"
+			></fast-table-column>
 			<el-table-column prop="startTime" label="开始时间" header-align="center" align="center" width="160px"></el-table-column>
 			<el-table-column prop="endTime" label="结束时间" header-align="center" align="center" width="160px"></el-table-column>
 			<el-table-column prop="dataCount" label="更新数据量" header-align="center" align="center"></el-table-column>
@@ -49,17 +63,16 @@
 			@current-change="currentChangeHandle"
 		>
 		</el-pagination>
-		
+
 		<!-- 弹窗 同步结果 -->
 		<access-task-detail ref="accessTaskDetailRef"></access-task-detail>
-		
+
 		<el-dialog v-model="realTimeLogVisbale" title="实时日志" width="65%">
 			<el-button type="primary" @click="getNewestRealTimeLog">获取最新日志</el-button>
 			<div style="padding: 15px">
 				<ReadonlyStudio id="accessRealTimeLog" ref="accessRealTimeLogRef" style="height: 500px"></ReadonlyStudio>
 			</div>
 		</el-dialog>
-		
 	</el-dialog>
 </template>
 
@@ -68,10 +81,9 @@ import { useCrud } from '@/hooks'
 import { reactive, ref } from 'vue'
 import AccessTaskDetail from './access-task-detail.vue'
 import { IHooksOptions } from '@/hooks/interface'
-import { getTaskByIdApi,stopTaskApi } from '@/api/data-integrate/access'
+import { getTaskByIdApi, stopTaskApi } from '@/api/data-integrate/access'
 import ReadonlyStudio from '../../data-development/production/readonly-studio.vue'
 import { ElMessage, ElMessageBox } from 'element-plus/es'
-
 
 const visible = ref(false)
 const state: IHooksOptions = reactive({
@@ -91,29 +103,29 @@ const init = (id?: number) => {
 }
 
 const accessTaskDetailRef = ref()
-const getResult = (id) => {
+const getResult = id => {
 	accessTaskDetailRef.value.init(id)
 }
 
 const realTimeLogVisbale = ref(false)
 const accessRealTimeLogRef = ref()
 const currentId = ref()
-const getRealTimeLog = (id) => {
+const getRealTimeLog = id => {
 	realTimeLogVisbale.value = true
 	currentId.value = id
-	getTaskByIdApi(id).then(res=> {
+	getTaskByIdApi(id).then(res => {
 		accessRealTimeLogRef.value.setEditorValue(res.data.realTimeLog)
 	})
 }
 const getNewestRealTimeLog = () => {
-	getTaskByIdApi(currentId.value).then(res=> {
+	getTaskByIdApi(currentId.value).then(res => {
 		accessRealTimeLogRef.value.setEditorValue(res.data.realTimeLog)
 	})
 }
 
 const stopTask = (executeNo: any) => {
-	if(!executeNo) {
-		ElMessage.warning("自动调度类型的任务请前往数据接入，点击取消发布停止！")
+	if (!executeNo) {
+		ElMessage.warning('自动调度类型的任务请前往数据接入，点击取消发布停止！')
 		return
 	}
 	ElMessageBox.confirm('确定终止该手动调度的任务吗?', '提示', {
@@ -122,11 +134,11 @@ const stopTask = (executeNo: any) => {
 		type: 'warning'
 	})
 		.then(() => {
-			stopTaskApi(executeNo).then( res => {
+			stopTaskApi(executeNo).then(res => {
 				ElMessage({
-				    message: '任务已成功终止',
-				    type: 'success',
-				  })
+					message: '任务已成功终止',
+					type: 'success'
+				})
 				getDataList()
 			})
 		})
@@ -138,5 +150,4 @@ const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandl
 defineExpose({
 	init
 })
-
 </script>

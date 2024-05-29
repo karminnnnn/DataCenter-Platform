@@ -162,7 +162,7 @@ const whiteList = ['/login']
 // 路由加载前的全局前置守卫，用于处理用户登录状态、权限等。
 router.beforeEach(async (to, from, next) => {
 	NProgress.start()
-	
+
 	// token存在的情况
 	if (store.userStore.token) {
 		if (to.path === '/login') {

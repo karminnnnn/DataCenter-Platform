@@ -17,5 +17,5 @@ export const listTreeApi = () => {
 }
 
 export const delTreeNodeApi = (id: number) => {
-	return service.delete('/data-governance/metamodel/'+id)
+	return service.delete('/data-governance/metamodel/' + id)
 }

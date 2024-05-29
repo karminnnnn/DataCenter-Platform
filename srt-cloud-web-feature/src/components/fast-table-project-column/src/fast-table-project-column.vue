@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts" name="FastTableProjectColumn">
-	
 import store from '@/store'
 import { getValByProjectId } from '@/utils/tool'
 

@@ -68,18 +68,19 @@ export const useCrud = (options: IHooksOptions) => {
 			.then((res: any) => {
 				//console.log(preFun)
 				// zrx 前置执行
-				if (preFun && typeof preFun === 'function' && typeof preFun.nodeType !=='number' && state.isPage) {
-					 preFun(res.data.list)
+				if (preFun && typeof preFun === 'function' && typeof preFun.nodeType !== 'number' && state.isPage) {
+					preFun(res.data.list)
 				}
 				state.dataList = state.isPage ? res.data.list : res.data
 				state.total = state.isPage ? res.data.total : 0
-			}).finally(() => {
+			})
+			.finally(() => {
 				state.dataListLoading = false
 			})
 	}
 
 	// 定义了一个获取数据列表的函数，用于重置页码并重新查询数据列表。
-	const getDataList = (preFun) => {
+	const getDataList = preFun => {
 		state.page = 1
 		query(preFun)
 	}
@@ -171,7 +172,7 @@ export const useCrud = (options: IHooksOptions) => {
 	}
 
 	// 定义了一个处理下载文件的函数，返回一个 Promise 对象。
-	const downloadHandle = (url: string, filename?: string, method: string = 'GET', params: any ): Promise<any> => {
+	const downloadHandle = (url: string, filename?: string, method: string = 'GET', params: any): Promise<any> => {
 		return axios({
 			responseType: 'blob',
 			url: url,

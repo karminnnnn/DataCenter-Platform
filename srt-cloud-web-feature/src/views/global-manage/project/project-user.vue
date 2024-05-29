@@ -1,6 +1,6 @@
 <template>
 	<el-dialog v-model="visible" title="项目成员" :close-on-click-modal="false">
-		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()" >
+		<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 			<el-form-item>
 				<el-input v-model="state.queryForm.username" placeholder="用户名" clearable></el-input>
 			</el-form-item>
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { useCrud } from '@/hooks'
 import service from '@/utils/request'
-import { ElMessage,ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { IHooksOptions } from '@/hooks/interface'
 
@@ -69,35 +69,34 @@ const init = (id?: number) => {
 }
 
 const delProjectBatchHandle = (key?: number | string) => {
-		let data: any[] = []
-		if (key) {
-			data = [key]
-		} else {
-			data = state.dataListSelections ? state.dataListSelections : []
+	let data: any[] = []
+	if (key) {
+		data = [key]
+	} else {
+		data = state.dataListSelections ? state.dataListSelections : []
 
-			if (data.length === 0) {
-				ElMessage.warning('请选择删除记录')
-				return
-			}
+		if (data.length === 0) {
+			ElMessage.warning('请选择删除记录')
+			return
 		}
-
-		ElMessageBox.confirm('确定进行删除操作?', '提示', {
-			confirmButtonText: '确定',
-			cancelButtonText: '取消',
-			type: 'warning'
-		})
-			.then(() => {
-				if (state.deleteUrl) {
-					service.delete(state.deleteUrl, { data }).then(() => {
-						ElMessage.success('删除成功')
-
-						getDataList()
-					})
-				}
-			})
-			.catch(() => {})
 	}
 
+	ElMessageBox.confirm('确定进行删除操作?', '提示', {
+		confirmButtonText: '确定',
+		cancelButtonText: '取消',
+		type: 'warning'
+	})
+		.then(() => {
+			if (state.deleteUrl) {
+				service.delete(state.deleteUrl, { data }).then(() => {
+					ElMessage.success('删除成功')
+
+					getDataList()
+				})
+			}
+		})
+		.catch(() => {})
+}
 
 defineExpose({
 	init

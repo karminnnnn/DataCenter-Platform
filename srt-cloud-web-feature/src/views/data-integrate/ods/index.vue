@@ -21,7 +21,15 @@
 							<el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
 						</el-form-item>
 					</el-form>
-					<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%;" max-height="calc(100vh - 400px )" highlight-current-row  @current-change="handleCurrentChange">
+					<el-table
+						v-loading="state.dataListLoading"
+						:data="state.dataList"
+						border
+						style="width: 100%"
+						max-height="calc(100vh - 400px )"
+						highlight-current-row
+						@current-change="handleCurrentChange"
+					>
 						<fast-table-project-column prop="projectId" label="所属项目" header-align="center" align="center"></fast-table-project-column>
 						<el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
 						<el-table-column prop="remarks" label="注释" header-align="center" align="center"></el-table-column>
@@ -78,21 +86,21 @@
 				<el-header>
 					<el-card body-style="height: calc(100vh - 170px )">
 						<el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleClick" :before-leave="tabBeforeLeave">
-						    <el-tab-pane label="表信息" name="tableInfo">
+							<el-tab-pane label="表信息" name="tableInfo">
 								<!-- 弹窗 同步结果 -->
 								<ods-table-info ref="odsTableInfoRef"></ods-table-info>
 							</el-tab-pane>
-						    <el-tab-pane label="数据预览" name="tableData">
+							<el-tab-pane label="数据预览" name="tableData">
 								<ods-tabledata-info ref="odsTableDataInfoRef"></ods-tabledata-info>
 							</el-tab-pane>
-						    <el-tab-pane label="接入日志" name="tableLog">
+							<el-tab-pane label="接入日志" name="tableLog">
 								<!-- 弹窗 同步结果 -->
 								<ods-task-detail ref="odsTaskDetailRef"></ods-task-detail>
 							</el-tab-pane>
 							<el-tab-pane label="sql执行" name="tableSql">
 								<ods-sql ref="odsSqlRef"></ods-sql>
 							</el-tab-pane>
-						  </el-tabs>
+						</el-tabs>
 					</el-card>
 				</el-header>
 			</el-container>
@@ -101,7 +109,6 @@
 
 	<!-- 弹窗, 表新增 / 修改 -->
 	<odsTableAddOrUpdate ref="odsTableAddOrUpdateRef" @refreshDataList="getDataList"></odsTableAddOrUpdate>
-	
 </template>
 
 <script setup lang="ts" name="Data-integrateOdsIndex">
@@ -116,23 +123,21 @@ import { getTableDataBySql } from '@/api/data-integrate/database'
 import OdsTaskDetail from './ods-task-detail.vue'
 import OdsTableInfo from './ods-tabel-info.vue'
 import OdsSql from './ods-sql.vue'
-import odsTabledataInfo  from './ods-tabledata-info.vue'
+import odsTabledataInfo from './ods-tabledata-info.vue'
 import odsTableAddOrUpdate from './ods-table-add-or-update.vue'
-
-
 
 const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/ods/page',
 	deleteUrl: '',
 	queryForm: {
-		tableName: '', 
-		remarks: '', 
+		tableName: '',
+		remarks: '',
 		projectId: ''
 	},
 	currentRow: {},
 	tableColumns: [],
 	tableData: [],
-	tableDataHeader: {},
+	tableDataHeader: {}
 })
 
 // // 左侧的树形结构
@@ -170,7 +175,7 @@ const state: IHooksOptions = reactive({
 // 	// OptionCardClose()
 // 	//如果是table
 // 	if(data.data.type == 3) {
-		
+
 // 		activeName.value = 'tableInfo'
 // 		// state.currentRow = row
 // 		currentNode.value = data.data
@@ -183,7 +188,7 @@ const state: IHooksOptions = reactive({
 
 // 		// console.log(data.data)
 // 		// infoView.value = true
-		
+
 // 		// tableInfoRef.value.resetFields()
 // 		// columns.value = []
 // 		//获取表和字段信息
@@ -198,7 +203,7 @@ const state: IHooksOptions = reactive({
 // 		// 		isDetail.value = false
 // 		// 	}
 // 		// })
-		
+
 // 	} else {
 // 		currentNode.value = data.data
 // 		// infoView.value = false
@@ -206,28 +211,24 @@ const state: IHooksOptions = reactive({
 // 		// tableInfoRef.value.resetFields()
 // 		// columns.value = []
 // 	}
-// } 
-
-
+// }
 
 // 左侧
 const activeName = ref('')
 const tabBeforeLeave = () => {
-	if(!state.currentRow.tableName) {
+	if (!state.currentRow.tableName) {
 		ElMessage({
-		    message: '请在左侧选择要查看的表',
-		    type: 'warning',
-		  })
-			return false
+			message: '请在左侧选择要查看的表',
+			type: 'warning'
+		})
+		return false
 	}
 }
 
 const odsTableAddOrUpdateRef = ref()
-const addOrUpdateTable = (row?:any) => {
-    odsTableAddOrUpdateRef.value.init(row)
+const addOrUpdateTable = (row?: any) => {
+	odsTableAddOrUpdateRef.value.init(row)
 }
-
-
 
 // 右侧
 const odsTableInfoRef = ref()
@@ -243,17 +244,17 @@ const handleClick = (name: TabPaneName) => {
 		// 	state.tableDataHeader = res.data.columns
 		// 	state.tableData = res.data.rows
 		// 	odsTableDataInfoRef.value.init(state.tableDataHeader, state.tableData)
-		// }) 
-	} else if (name == 'tableLog'){
+		// })
+	} else if (name == 'tableLog') {
 		odsTaskDetailRef.value.init(state.currentRow.projectId, state.currentRow.tableName)
-	} else if (name == 'tableSql'){
+	} else if (name == 'tableSql') {
 		odsSqlRef.value.init(state.currentRow.projectId)
 	}
 }
 
 /* 表切换 */
-const handleCurrentChange = (row) => {
-	if(!row) {
+const handleCurrentChange = row => {
+	if (!row) {
 		return
 	}
 	activeName.value = 'tableInfo'
@@ -267,16 +268,14 @@ const handleCurrentChange = (row) => {
 		state.tableColumns = res.data
 		odsTableInfoRef.value.init(state.currentRow, state.tableColumns)
 	})
-	
 }
-
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
 </script>
 
 <style>
 .demo-tabs > .el-tabs__content {
-  padding: 18px;
-  color: #6b778c;
+	padding: 18px;
+	color: #6b778c;
 }
 </style>

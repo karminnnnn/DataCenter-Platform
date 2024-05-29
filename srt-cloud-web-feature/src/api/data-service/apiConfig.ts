@@ -21,11 +21,11 @@ export const executeSqlApi = (sqlDto: any) => {
 }
 
 export const onlineApi = (id: number) => {
-	return service.put('/data-service/api-config/'+id+'/online')
+	return service.put('/data-service/api-config/' + id + '/online')
 }
 
 export const offlineApi = (id: number) => {
-	return service.put('/data-service/api-config/'+id+'/offline')
+	return service.put('/data-service/api-config/' + id + '/offline')
 }
 
 export const requestTokenApi = (tokenUrl: any) => {
@@ -33,16 +33,13 @@ export const requestTokenApi = (tokenUrl: any) => {
 }
 
 export const getAuthInfoApi = (authId: number) => {
-	return service.get('/data-service/api-config/auth-info/'+authId)
+	return service.get('/data-service/api-config/auth-info/' + authId)
 }
 
 export const ipPortApi = () => {
 	return service.get('/data-service/api-config/ip-port/')
 }
 
-export const resetRequestedTimesApi =(authId: number) => {
-	return service.put('/data-service/api-config/reset-requested/'+ authId)
+export const resetRequestedTimesApi = (authId: number) => {
+	return service.put('/data-service/api-config/reset-requested/' + authId)
 }
-
-
-
