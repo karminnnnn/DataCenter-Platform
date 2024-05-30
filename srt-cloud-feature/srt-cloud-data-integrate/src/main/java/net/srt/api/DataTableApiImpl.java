@@ -22,11 +22,11 @@ public class DataTableApiImpl implements DataTableApi {
 
 	@Override
 	public Result<String> addOds(DataTableDto dataTableDto) {
-		DataTableEntity dataTableEntity = dataTableService.getByTableName(dataTableDto.getProjectId(), dataTableDto.getTableName());
+		DataTableEntity dataTableEntity = dataTableService.getByTableName(dataTableDto.getProjectId(), dataTableDto.getDatatableName());
 		if (dataTableEntity == null) {
 			dataTableService.save(DataOdsConvert.INSTANCE.convertByDto(dataTableDto));
 		} else {
-			dataTableDto.setId(dataTableEntity.getId());
+			dataTableDto.setDatatableId(dataTableEntity.getId());
 			dataTableService.updateById(DataOdsConvert.INSTANCE.convertByDto(dataTableDto));
 		}
 		return Result.ok();

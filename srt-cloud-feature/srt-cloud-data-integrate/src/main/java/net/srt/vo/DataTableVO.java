@@ -19,47 +19,54 @@ import java.util.Date;
 public class DataTableVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Schema(description = "主键id")
-	private Long id;
+	@Schema(description = "数据表主键ID")
+	private Long datatableId;
 
-	@Schema(description = "数据接入id")
-	private Long dataAccessId;
+	//@Schema(description = "数据接入id")
+	//private Long dataAccessId;
 
-	private String layer;
-	private Integer ifMaster;
+	//private String layer;
+	//private Integer ifMaster;
 
-	@Schema(description = "表名")
-	private String tableName;
+	@Schema(description = "数据表名称")
+	private String datatableName;
 
 	@Schema(description = "注释")
 	private String remarks;
-
-	@Schema(description = "项目id")
-	private Long projectId;
 
 	@Schema(description = "最近同步时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private Date recentlySyncTime;
 
-	@Schema(description = "版本号")
-	private Integer version;
+	@Schema(description = "数据库ID")
+	private Long databaseId;
 
-	@Schema(description = "删除标识  0：正常  1：已删除")
-	private Integer deleted;
+	@Schema(description = "数据接入ID")
+	private Long dataAccessId;
 
-	@Schema(description = "创建者")
-	private Long creator;
+	@Schema(description = "项目id")
+	private Long projectId;
 
-	@Schema(description = "创建时间")
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date createTime;
 
-	@Schema(description = "更新者")
-	private Long updater;
+//	@Schema(description = "版本号")
+//	private Integer version;
 
-	@Schema(description = "更新时间")
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
-	private Date updateTime;
+//	@Schema(description = "删除标识  0：正常  1：已删除")
+//	private Integer deleted;
+
+//	@Schema(description = "创建者")
+//	private Long creator;
+
+//	@Schema(description = "创建时间")
+//	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+//	private Date createTime;
+
+//	@Schema(description = "更新者")
+//	private Long updater;
+
+//	@Schema(description = "更新时间")
+//	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+//	private Date updateTime;
 
 
 }
