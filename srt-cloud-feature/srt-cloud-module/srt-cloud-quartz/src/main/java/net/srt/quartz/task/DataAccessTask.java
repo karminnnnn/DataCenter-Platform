@@ -131,7 +131,7 @@ public class DataAccessTask {
 		dataAccessTaskDto.setRunType(accessRunDto.getRunType());
 		dataAccessTaskDto.setExecuteNo(accessRunDto.getExecuteNo());
 		dataAccessTaskDto.setCreator(dataAccessDto.getCreator());
-		dataAccessTaskDto.setOrgId(dataAccessDto.getOrgId());
+		dataAccessTaskDto.setOrgId(dataAccessDto.getPlatformId());
 		dataAccessTaskDto.setProjectId(dataAccessDto.getProjectId());
 		dataAccessTaskDto.setDataAccessId(accessRunDto.getDataAccessId());
 		dataAccessTaskDto.setRunStatus(CommonRunStatus.RUNNING.getCode());
@@ -474,11 +474,11 @@ public class DataAccessTask {
 				}
 				if (addOds) {
 					DataTableDto dataTableDto = new DataTableDto();
-					dataTableDto.setLayer(DataHouseLayer.ODS.name());
-					dataTableDto.setIfMaster(0);
+				//	dataTableDto.setLayer(DataHouseLayer.ODS.name());
+					//dataTableDto.setIfMaster(0);
 					dataTableDto.setDataAccessId(dataAccessTaskDto.getDataAccessId());
-					dataTableDto.setTableName(tableResult.getTargetTableName());
-					dataTableDto.setCreator(dataAccessDto.getCreator());
+					dataTableDto.setDatatableName(tableResult.getTargetTableName());
+				//	dataTableDto.setCreator(dataAccessDto.getCreator());
 					dataTableDto.setProjectId(dataAccessDto.getProjectId());
 					dataTableDto.setRemarks(tableResult.getTableRemarks());
 					dataTableDto.setRecentlySyncTime(tableResult.getSyncTime());

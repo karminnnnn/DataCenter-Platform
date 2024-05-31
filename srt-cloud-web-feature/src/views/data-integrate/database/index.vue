@@ -106,11 +106,11 @@
 						</el-form-item>
 						<el-form-item>
 							<!-- v-auth="'data-integrate:database:save'" -->
-							<el-button type="primary" @click="addOrUpdateHandle_database()">新增</el-button>
+							<el-button type="primary" @click="addOrUpdateHandle_database()" disabled>新增</el-button>
 						</el-form-item>
 						<el-form-item>
 							<!-- v-auth="'data-integrate:database:delete'" -->
-							<el-button type="danger" @click="database_useCrud.deleteBatchHandle()">删除</el-button>
+							<el-button type="danger" @click="database_useCrud.deleteBatchHandle()" disabled>删除</el-button>
 						</el-form-item>
 					</el-form>
 					<el-table

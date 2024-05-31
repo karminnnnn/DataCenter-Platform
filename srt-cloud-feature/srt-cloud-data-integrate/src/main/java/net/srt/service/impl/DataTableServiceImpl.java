@@ -13,6 +13,7 @@ import net.srt.framework.common.utils.BeanUtil;
 import net.srt.framework.common.utils.SqlUtils;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.query.DataTableQuery;
+import net.srt.query.TableDataQuery;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
@@ -50,7 +51,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
 		List<TableDescription> tableList = metaDataService.queryTableList(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema())
 				.stream().filter(item -> item.getTableName().startsWith(DataHouseLayer.ODS.getTablePrefix()))
-				.filter(item -> !StringUtil.isNotBlank(query.getTableName()) || item.getTableName().contains(query.getTableName()))
+				.filter(item -> !StringUtil.isNotBlank(query.getDatatableName()) || item.getTableName().contains(query.getDatatableName()))
 				.filter(item -> !StringUtil.isNotBlank(query.getRemarks()) || item.getRemarks().contains(query.getRemarks()))
 				.collect(Collectors.toList());
 
@@ -60,12 +61,12 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		List<DataTableVO> dataTableVOS = new ArrayList<>(10);
 		for (TableDescription tableDescription : pageList) {
 			DataTableVO dataTableVO = new DataTableVO();
-			dataTableVO.setTableName(tableDescription.getTableName());
+			dataTableVO.setDatatableName(tableDescription.getTableName());
 			dataTableVO.setRemarks(tableDescription.getRemarks());
 			dataTableVO.setProjectId(project.getId());
 			//查询data_ods,补充数据
 			LambdaQueryWrapper<DataTableEntity> wrapper = Wrappers.lambdaQuery();
-			wrapper.eq(DataTableEntity::getTableName, dataTableVO.getTableName()).eq(DataTableEntity::getProjectId, dataTableVO.getProjectId()).last("LIMIT 1");
+			wrapper.eq(DataTableEntity::getTableName, dataTableVO.getDatatableName()).eq(DataTableEntity::getProjectId, dataTableVO.getProjectId()).last("LIMIT 1");
 			DataTableEntity dataTableEntity = baseMapper.selectOne(wrapper);
 			if (dataTableEntity != null) {
 				//说明是通过数据接入接入的
@@ -134,4 +135,16 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		SchemaTableData schemaTableData = service.queryTableData(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName, 50);
 		return SchemaTableDataVo.builder().columns(SqlUtils.convertColumns(schemaTableData.getColumns())).rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows())).build();
 	}
+
+	@Override
+	public void saveTableData(TableDataQuery request) {
+		// 假设数据是保存到某个数据表中，可以根据业务逻辑实现具体保存逻辑
+		//Long datatableId = request.getDatatableId();
+		//List<Map<String, Object>> rows = request.getRows();
+
+		// 实现数据保存逻辑，根据具体业务需求
+		//for (Map<String, Object> row : rows) {
+			// 保存每行数据的具体逻辑
+			// 例如，将 row 中的数据保存到数据库中
+		}
 }

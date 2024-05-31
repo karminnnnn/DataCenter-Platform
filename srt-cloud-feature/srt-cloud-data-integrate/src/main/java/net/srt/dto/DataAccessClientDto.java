@@ -69,7 +69,8 @@ public class DataAccessClientDto {
 	private List<PatternMapper> tableNameMapper;
 	@Schema(description = "字段名名映射")
 	private List<PatternMapper> columnNameMapper;
-	private Long orgId;
+	@Schema(description = "平台id")
+    private Long platformId;
 	@Schema(description = "源端类型 1-数据库 2-sql")
 	private Integer sourceType;
 	@Schema(description = "自定义采集语句（sql时有此值）")

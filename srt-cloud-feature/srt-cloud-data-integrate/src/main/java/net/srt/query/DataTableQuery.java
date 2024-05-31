@@ -18,7 +18,7 @@ import java.util.Date;
 @Schema(description = "数据集成-贴源数据查询")
 public class DataTableQuery extends Query {
     @Schema(description = "表名")
-    private String tableName;
+    private String datatableName;
 
     @Schema(description = "注释")
     private String remarks;
