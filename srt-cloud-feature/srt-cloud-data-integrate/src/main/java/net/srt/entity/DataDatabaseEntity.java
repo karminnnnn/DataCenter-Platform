@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import com.baomidou.mybatisplus.annotation.*;
 import net.srt.framework.mybatis.entity.BaseEntity;
 
-import java.util.Date;
 
 /**
  * 数据集成-数据库管理
@@ -37,7 +36,5 @@ public class DataDatabaseEntity extends BaseEntity {
 	 * 数据源ID
 	 */
 	private Integer datasourceId;
-
-;
 
 }
