@@ -289,12 +289,12 @@ const datasource_state: IHooksOptions = reactive({
 	queryForm: {
 
 		name: '', 
-		databaseType: 1, 
+		databaseType: '', 
 		databaseName: '', 
 		databaseSchema: '', // 空
-		status: 1, // 空
-		isRtApprove: 1, 
-		projectId: 1
+		status: '', // 空
+		isRtApprove: '', 
+		projectId: ''
 
 	},
 
@@ -419,7 +419,7 @@ const addOrUpdateHandle_database = (id?: number) => {
 
 // 测试连接
 // database是空
-const test_datasource = row => {
+const test_datasource = (row) => {
 	// console.log(row)
 	// row['aaaaa'] = 'aaaaa'
 	// console.log(row['aaaaa'])
@@ -433,7 +433,7 @@ const test_datasource = row => {
 		})
 	})
 }
-const test_database = row => {
+const test_database = (row) => {
 	const test_form = {
 		datasource_id: datatable_state.datasource_id,
 		database_name: row['databaseName']
@@ -450,7 +450,7 @@ const test_database = row => {
 	})
 }
 
-const database_tables = id => {
+const database_tables = (id) => {
 	database_state.database_drawer = true
 	database_state.databaseId = id
 
@@ -467,7 +467,7 @@ const database_tables = id => {
 	database_useCrud.getDataList()
 }
 
-const datatable_tables = id => {
+const datatable_tables = (id) => {
 	datatable_state.datatable_drawer = true
 	datatable_state.databaseId = id
 
