@@ -2,6 +2,7 @@ package net.srt.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import net.srt.framework.common.exception.ServerException;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.framework.security.user.SecurityUser;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -25,29 +27,20 @@ import java.util.stream.Collectors;
 public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysUserRoleEntity> implements SysUserRoleService {
 
 	@Override
-	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
+	public void saveOrUpdate(Long userId, Long roleId) {
 		// 数据库角色ID列表
-		List<Long> dbRoleIdList = getRoleIdList(userId);
+		Long dbRoleId = getRoleId(userId);
 
-		// 需要新增的角色ID
-		Collection<Long> insertRoleIdList = CollUtil.subtract(roleIdList, dbRoleIdList);
-		if (CollUtil.isNotEmpty(insertRoleIdList)) {
-			List<SysUserRoleEntity> roleList = insertRoleIdList.stream().map(roleId -> {
-				SysUserRoleEntity entity = new SysUserRoleEntity();
-				entity.setUserId(userId);
-				entity.setRoleId(roleId);
-				return entity;
-			}).collect(Collectors.toList());
+		if(!Objects.equals(roleId, dbRoleId)){
+			// 需要新增的角色ID
+			SysUserRoleEntity entity = new SysUserRoleEntity();
+			entity.setUserId(userId);
+			entity.setRoleId(roleId);
+			save(entity);
 
-			// 批量新增
-			saveBatch(roleList);
-		}
-
-		// 需要删除的角色ID
-		Collection<Long> deleteRoleIdList = CollUtil.subtract(dbRoleIdList, roleIdList);
-		if (CollUtil.isNotEmpty(deleteRoleIdList)) {
+			// 需要删除的角色ID
 			LambdaQueryWrapper<SysUserRoleEntity> queryWrapper = new LambdaQueryWrapper<>();
-			remove(queryWrapper.eq(SysUserRoleEntity::getUserId, userId).in(SysUserRoleEntity::getRoleId, deleteRoleIdList));
+			remove(queryWrapper.eq(SysUserRoleEntity::getUserId, userId).eq(SysUserRoleEntity::getRoleId, dbRoleId));
 		}
 	}
 
@@ -88,8 +81,8 @@ public class SysUserRoleServiceImpl extends BaseServiceImpl<SysUserRoleDao, SysU
 	}
 
 	@Override
-	public List<Long> getRoleIdList(Long userId) {
-		return baseMapper.getRoleIdList(userId);
+	public Long getRoleId(Long userId) {
+		return baseMapper.getRoleId(userId);
 	}
 
 }

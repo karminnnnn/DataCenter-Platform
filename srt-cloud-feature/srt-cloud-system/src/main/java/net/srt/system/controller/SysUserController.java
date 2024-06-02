@@ -57,8 +57,8 @@ public class SysUserController {
 		SysUserVO vo = SysUserConvert.INSTANCE.convert(entity);
 
 		// 用户角色列表
-		List<Long> roleIdList = sysUserRoleService.getRoleIdList(id);
-		vo.setRoleId(roleIdList);
+		Long roleId = sysUserRoleService.getRoleId(id);
+		vo.setRoleId(roleId);
 
 		// 用户岗位列表
 		List<Long> postIdList = sysUserPostService.getPostIdList(id);

@@ -3,7 +3,7 @@
 
 <mapper namespace="net.srt.system.dao.SysUserRoleDao">
 
-    <select id="getRoleIdList" resultType="long">
+    <select id="getRoleId" resultType="java.lang.Long">
         select role_id from sys_user_role where user_id = #{userId} and deleted = 0
     </select>
 

@@ -6,18 +6,19 @@ import net.srt.system.entity.SysUserRoleEntity;
 import java.util.List;
 
 /**
- * 用户角色关系
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 用户角色
+* @author PatrickLi 373595331@qq.com
+* @date 2024/6/2
+*/
 public interface SysUserRoleService extends BaseService<SysUserRoleEntity> {
 
     /**
      * 保存或修改
-     * @param userId      用户ID
-     * @param roleIdList  角色ID列表
+     *
+     * @param userId 用户ID
+     * @param roleId 角色ID
      */
-    void saveOrUpdate(Long userId, List<Long> roleIdList);
+    void saveOrUpdate(Long userId, Long roleId);
 
     /**
      * 分配角色给用户列表
@@ -46,8 +47,9 @@ public interface SysUserRoleService extends BaseService<SysUserRoleEntity> {
     void deleteByUserIdList(Long roleId, List<Long> userIdList);
 
     /**
-     * 角色ID列表
-     * @param userId  用户ID
+     * 角色ID
+     *
+     * @param userId 用户ID
      */
-    List<Long> getRoleIdList(Long userId);
+    Long getRoleId(Long userId);
 }

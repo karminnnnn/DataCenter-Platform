@@ -8,7 +8,6 @@ import net.srt.framework.security.utils.TokenUtils;
 import net.srt.system.service.SysAuthService;
 import net.srt.system.service.SysCaptchaService;
 import net.srt.system.vo.SysAccountLoginVO;
-import net.srt.system.vo.SysAccountRegisterVo;
 import net.srt.system.vo.SysCaptchaVO;
 import net.srt.system.vo.SysTokenVO;
 import org.springframework.web.bind.annotation.*;
@@ -42,15 +41,6 @@ public class SysAuthController {
         SysTokenVO token = sysAuthService.loginByAccount(login);
         return Result.ok(token);
     }
-
-
-    @PostMapping("register")
-    @Operation(summary = "用户注册")
-    public Result<SysTokenVO> register(@RequestBody SysAccountRegisterVo register){
-        SysTokenVO token = sysAuthService.registerAccount(register);
-        return Result.ok();
-    }
-
 
     @PostMapping("logout")
     @Operation(summary = "退出")
