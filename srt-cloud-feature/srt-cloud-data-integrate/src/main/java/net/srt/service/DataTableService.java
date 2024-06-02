@@ -4,6 +4,7 @@ import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.BaseService;
 import net.srt.query.DataTableQuery;
+import net.srt.query.TableDataQuery;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
 import net.srt.vo.SchemaTableDataVo;
@@ -31,4 +32,6 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 	List<ColumnDescriptionVo> getColumnInfo(String tableName);
 
 	SchemaTableDataVo getTableData(String tableName);
+
+	void saveTableData(TableDataQuery request);
 }

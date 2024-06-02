@@ -37,6 +37,12 @@ public class DataTableEntity extends BaseEntity {
 	private String remarks;
 
 	/**
+	 * 数据库id
+	 */
+	private Long databaseId;
+
+
+	/**
 	* 项目id
 	*/
 	private Long projectId;

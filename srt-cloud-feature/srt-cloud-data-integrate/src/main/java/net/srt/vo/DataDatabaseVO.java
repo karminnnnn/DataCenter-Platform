@@ -58,6 +58,4 @@ public class DataDatabaseVO implements Serializable {
     @Schema(description = "更新者名字")
     private String updaterName;
 
-    @Schema(description = "jdbc连接串")
-    private String jdbcUrl;
 }

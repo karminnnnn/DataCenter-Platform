@@ -32,7 +32,9 @@ public class DataAccessDto implements Serializable {
 
 	@Schema(description = "项目id")
 	private Long projectId;
-	private Long orgId;
+
+    @Schema(description = "平台id")
+	private Long platformId;
 
 	private Integer sourceType;
 
