@@ -1,7 +1,6 @@
 package net.srt.system.service;
 
 import net.srt.system.vo.SysAccountLoginVO;
-import net.srt.system.vo.SysAccountRegisterVo;
 import net.srt.system.vo.SysTokenVO;
 
 /**
@@ -12,9 +11,6 @@ import net.srt.system.vo.SysTokenVO;
 public interface SysAuthService {
 
     SysTokenVO loginByAccount(SysAccountLoginVO login);
-
-    SysTokenVO registerAccount(SysAccountRegisterVo register);
-
     /**
      * 退出登录
      *

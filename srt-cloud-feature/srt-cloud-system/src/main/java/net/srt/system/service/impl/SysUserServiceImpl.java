@@ -88,7 +88,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 		baseMapper.insert(entity);
 
 		// 保存用户角色关系
-		sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());
+		sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleId());
 
 		// 更新用户岗位关系
 		sysUserPostService.saveOrUpdate(entity.getId(), vo.getPostIdList());
@@ -118,7 +118,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
 		updateById(entity);
 
 		// 更新用户角色关系
-		sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleIdList());
+		sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleId());
 
 		// 更新用户岗位关系
 		sysUserPostService.saveOrUpdate(entity.getId(), vo.getPostIdList());
