@@ -89,16 +89,16 @@ const submitHandle = () => {
 		console.log("角色管理提交的表单")
 		console.log(dataForm)
 
-		// useRoleSubmitApi(dataForm).then(() => {
-		// 	ElMessage.success({
-		// 		message: '操作成功',
-		// 		duration: 500,
-		// 		onClose: () => {
-		// 			visible.value = false
-		// 			emit('refreshDataList')
-		// 		}
-		// 	})
-		// })
+		useRoleSubmitApi(dataForm).then(() => {
+			ElMessage.success({
+				message: '操作成功',
+				duration: 500,
+				onClose: () => {
+					visible.value = false
+					emit('refreshDataList')
+				}
+			})
+		})
 	})
 }
 

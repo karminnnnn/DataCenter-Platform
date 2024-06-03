@@ -14,21 +14,13 @@ public enum DataScopeEnum {
      */
     ALL(0),
     /**
-     * 本部门及子部门数据
-     */
-    DEPT_AND_CHILD(1),
-    /**
      * 本部门数据
      */
-    DEPT_ONLY(2),
-    /**
-     * 本人数据
-     */
-    SELF(3),
+    DEPT_ONLY(1),
     /**
      * 自定义数据
      */
-    CUSTOM(4);
+    CUSTOM(2);
 
     private final Integer value;
 
