@@ -56,6 +56,9 @@ public class SysUserVO implements Serializable {
     @Schema(description = "角色ID")
     private Long roleId;
 
+    @Schema(description = "角色名称")
+    private String roleName;
+
     @Schema(description = "超级管理员   0：否   1：是")
     private Integer superAdmin;
 

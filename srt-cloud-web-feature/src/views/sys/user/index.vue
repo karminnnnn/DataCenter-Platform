@@ -5,9 +5,6 @@
 				<el-input v-model="state.queryForm.username" placeholder="用户名" clearable></el-input>
 			</el-form-item>
 			<el-form-item>
-				<el-input v-model="state.queryForm.orgName" placeholder="所属机构" clearable></el-input>
-			</el-form-item>
-			<el-form-item>
 				<fast-select v-model="state.queryForm.gender" dict-type="user_gender" clearable placeholder="性别"></fast-select>
 			</el-form-item>
 			<el-form-item>
@@ -25,9 +22,9 @@
 			<el-table-column prop="username" label="用户名" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="realName" label="姓名" header-align="center" align="center"></el-table-column>
 			<fast-table-column prop="gender" label="性别" dict-type="user_gender"></fast-table-column>
-			<el-table-column prop="orgName" label="所属机构(平台)" header-align="center" align="center"></el-table-column>
-            <el-table-column prop="roleName" label="所属角色" header-align="center" align="center"></el-table-column>
-            <!-- <fast-table-column prop="superAdmin" label="是否超级管理员" :formatter="superAdminFormatter"></fast-table-column> -->
+			<el-table-column prop="orgName" label="所属平台" header-align="center" align="center"></el-table-column>
+			<el-table-column prop="roleName" label="所属角色" header-align="center" align="center"></el-table-column>
+			<!-- <fast-table-column prop="superAdmin" label="是否超级管理员" :formatter="superAdminFormatter"></fast-table-column> -->
 			<el-table-column prop="superAdmin" label="是否超级管理员">
 				<template #default="{ row, column, $index }">
 					{{ superAdminFormatter(row, column, row.superAdmin) }}
@@ -76,8 +73,8 @@ const state: IHooksOptions = reactive({
 })
 
 const userSuperAdminDict: { [key: number]: string } = {
-  0: '否',
-  1: '是',
+	0: '否',
+	1: '是'
 }
 
 const superAdminFormatter = (row: any, column: any, cellValue: any) => {
