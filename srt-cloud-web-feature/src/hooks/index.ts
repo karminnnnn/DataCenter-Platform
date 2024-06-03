@@ -80,7 +80,7 @@ export const useCrud = (options: IHooksOptions) => {
 	}
 
 	// 定义了一个获取数据列表的函数，用于重置页码并重新查询数据列表。
-	const getDataList = (preFun) => {
+	const getDataList = preFun => {
 		state.page = 1
 		query(preFun)
 	}

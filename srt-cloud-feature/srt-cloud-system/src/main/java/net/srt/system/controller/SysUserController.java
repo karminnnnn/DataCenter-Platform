@@ -11,11 +11,13 @@ import net.srt.framework.security.user.UserDetail;
 import net.srt.system.convert.SysUserConvert;
 import net.srt.system.entity.SysUserEntity;
 import net.srt.system.query.SysUserQuery;
-import net.srt.system.service.SysUserPostService;
+import net.srt.system.service.SysRoleService;
 import net.srt.system.service.SysUserRoleService;
 import net.srt.system.service.SysUserService;
 import net.srt.system.vo.SysUserPasswordVO;
 import net.srt.system.vo.SysUserVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -34,17 +36,24 @@ import java.util.List;
 @AllArgsConstructor
 @Tag(name = "用户管理")
 public class SysUserController {
+	private static final Logger log = LoggerFactory.getLogger(SysUserController.class);
 	private final SysUserService sysUserService;
 	private final SysUserRoleService sysUserRoleService;
-	private final SysUserPostService sysUserPostService;
 	private final PasswordEncoder passwordEncoder;
+	private final SysRoleService sysRoleService;
 
 	@GetMapping("page")
 	@Operation(summary = "分页")
 	@PreAuthorize("hasAuthority('sys:user:page')")
 	public Result<PageResult<SysUserVO>> page(@Valid SysUserQuery query) {
 		PageResult<SysUserVO> page = sysUserService.page(query);
-
+		// fill the roleName and roleID in page
+		page.getList().forEach(item -> {
+			Long roleId = sysUserRoleService.getRoleId(item.getId());
+			String roleName = sysRoleService.getById(roleId).getName();
+			item.setRoleId(roleId);
+			item.setRoleName(roleName);
+		});
 		return Result.ok(page);
 	}
 
@@ -53,17 +62,16 @@ public class SysUserController {
 	@PreAuthorize("hasAuthority('sys:user:info')")
 	public Result<SysUserVO> get(@PathVariable("id") Long id) {
 		SysUserEntity entity = sysUserService.getById(id);
-
+		Logger logger = LoggerFactory.getLogger(SysUserController.class);
+		logger.info("用户信息entity：{}", entity);
 		SysUserVO vo = SysUserConvert.INSTANCE.convert(entity);
-
+		logger.info("用户信息vo：{}", vo);
 		// 用户角色列表
 		Long roleId = sysUserRoleService.getRoleId(id);
+		String roleName = sysRoleService.getById(roleId).getName();
 		vo.setRoleId(roleId);
-
-		// 用户岗位列表
-		List<Long> postIdList = sysUserPostService.getPostIdList(id);
-		vo.setPostIdList(postIdList);
-
+		vo.setRoleName(roleName);
+		logger.info("用户信息Result：{}", Result.ok(vo));
 		return Result.ok(vo);
 	}
 

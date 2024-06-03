@@ -9,9 +9,6 @@
         <if test="username != null and username.trim() != ''">
             and t1.username = #{username}
         </if>
-        <if test="mobile != null and mobile.trim() != ''">
-            and t1.mobile = #{mobile}
-        </if>
         <if test="gender != null">
             and t1.gender = #{gender}
         </if>
