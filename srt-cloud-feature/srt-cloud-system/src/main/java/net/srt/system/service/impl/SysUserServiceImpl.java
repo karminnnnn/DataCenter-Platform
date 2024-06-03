@@ -16,7 +16,6 @@ import net.srt.system.entity.SysUserEntity;
 import net.srt.system.enums.SuperAdminEnum;
 import net.srt.system.query.SysRoleUserQuery;
 import net.srt.system.query.SysUserQuery;
-import net.srt.system.service.SysUserPostService;
 import net.srt.system.service.SysUserRoleService;
 import net.srt.system.service.SysUserService;
 import net.srt.system.vo.SysUserVO;
@@ -35,198 +34,189 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
-	private final SysUserRoleService sysUserRoleService;
-	private final SysUserPostService sysUserPostService;
-	private final DataProjectApi dataProjectApi;
+    private final SysUserRoleService sysUserRoleService;
+    private final DataProjectApi dataProjectApi;
 
-	@Override
-	public PageResult<SysUserVO> page(SysUserQuery query) {
-		// 查询参数
-		Map<String, Object> params = getParams(query);
-		// 分页查询
-		IPage<SysUserEntity> page = getPage(query);
-		params.put(Constant.PAGE, page);
+    @Override
+    public PageResult<SysUserVO> page(SysUserQuery query) {
+        // 查询参数
+        Map<String, Object> params = getParams(query);
+        // 分页查询
+        IPage<SysUserEntity> page = getPage(query);
+        params.put(Constant.PAGE, page);
 
-		// 数据列表
-		List<SysUserEntity> list = baseMapper.getList(params);
+        // 数据列表
+        List<SysUserEntity> list = baseMapper.getList(params);
 
-		return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
-	}
+        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
+    }
 
-	private Map<String, Object> getParams(SysUserQuery query) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("username", query.getUsername());
-		params.put("mobile", query.getMobile());
-		params.put("gender", query.getGender());
-		params.put("projectId", query.getProjectId() == null ? getProjectId() : query.getProjectId());
-		// 数据权限
-		params.put(Constant.DATA_SCOPE, getDataScope("t3", "t1", null, "data_project_id", true, query.isFilterProject()));
+    private Map<String, Object> getParams(SysUserQuery query) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", query.getUsername());
+        params.put("gender", query.getGender());
+        params.put("projectId", query.getProjectId() == null ? getProjectId() : query.getProjectId());
+        // 数据权限
+        params.put(Constant.DATA_SCOPE, getDataScope("t3", "t1", null, "data_project_id", true, query.isFilterProject()));
 
-		return params;
-	}
+        return params;
+    }
 
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void save(SysUserVO vo) {
-		SysUserEntity entity = SysUserConvert.INSTANCE.convert(vo);
-		entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void save(SysUserVO vo) {
+        SysUserEntity entity = SysUserConvert.INSTANCE.convert(vo);
+        entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
 
-		// 判断用户名是否存在
-		SysUserEntity user = baseMapper.getByUsername(entity.getUsername());
-		if (user != null) {
-			throw new ServerException("用户名已经存在或被其他项目租户占用");
-		}
+        // 判断用户名是否存在
+        SysUserEntity user = baseMapper.getByUsername(entity.getUsername());
+        if (user != null) {
+            throw new ServerException("用户名已经存在或被其他项目租户占用");
+        }
 
-		// 判断手机号是否存在
+        // 判断手机号是否存在
 		/*user = baseMapper.getByMobile(entity.getMobile());
 		if (user != null) {
 			throw new ServerException("手机号已经存在或被其他项目租户占用");
 		}*/
 
-		// 保存用户
-		baseMapper.insert(entity);
+        // 保存用户
+        baseMapper.insert(entity);
 
-		// 保存用户角色关系
-		sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleId());
+        // 保存用户角色关系
+        sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleId());
 
-		// 更新用户岗位关系
-		sysUserPostService.saveOrUpdate(entity.getId(), vo.getPostIdList());
+        dataProjectApi.addProjectRel(getProjectId(), entity.getId());
+    }
 
-		dataProjectApi.addProjectRel(getProjectId(), entity.getId());
-	}
+    @Override
+    public void update(SysUserVO vo) {
+        passOperator(vo.getId());
 
-	@Override
-	public void update(SysUserVO vo) {
-		passOperator(vo.getId());
+        SysUserEntity entity = SysUserConvert.INSTANCE.convert(vo);
 
-		SysUserEntity entity = SysUserConvert.INSTANCE.convert(vo);
+        // 判断用户名是否存在
+        SysUserEntity user = baseMapper.getByUsername(entity.getUsername());
+        if (user != null && !user.getId().equals(entity.getId())) {
+            throw new ServerException("用户名已经存在或被其他项目租户占用");
+        }
 
-		// 判断用户名是否存在
-		SysUserEntity user = baseMapper.getByUsername(entity.getUsername());
-		if (user != null && !user.getId().equals(entity.getId())) {
-			throw new ServerException("用户名已经存在或被其他项目租户占用");
-		}
-
-		// 判断手机号是否存在
+        // 判断手机号是否存在
 		/*user = baseMapper.getByMobile(entity.getMobile());
 		if (user != null && !user.getId().equals(entity.getId())) {
 			throw new ServerException("手机号已经存在或被其他项目租户占用");
 		}*/
 
-		// 更新用户
-		updateById(entity);
+        // 更新用户
+        updateById(entity);
 
-		// 更新用户角色关系
-		sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleId());
+        // 更新用户角色关系
+        sysUserRoleService.saveOrUpdate(entity.getId(), vo.getRoleId());
 
-		// 更新用户岗位关系
-		sysUserPostService.saveOrUpdate(entity.getId(), vo.getPostIdList());
-	}
+    }
 
-	private void passOperator(Long id) {
-		SysUserEntity userEntity = baseMapper.selectById(id);
-		UserDetail userDetail = SecurityUser.getUser();
-		if (!SuperAdminEnum.YES.getValue().equals(userDetail.getSuperAdmin()) && !userDetail.getId().equals(userEntity.getCreator())) {
-			throw new ServerException("您无权操作非自己创建的用户，请联系创建者或超管解决！");
-		}
-	}
+    private void passOperator(Long id) {
+        SysUserEntity userEntity = baseMapper.selectById(id);
+        UserDetail userDetail = SecurityUser.getUser();
+        if (!SuperAdminEnum.YES.getValue().equals(userDetail.getSuperAdmin()) && !userDetail.getId().equals(userEntity.getCreator())) {
+            throw new ServerException("您无权操作非自己创建的用户，请联系创建者或超管解决！");
+        }
+    }
 
-	@Override
-	public void delete(List<Long> idList) {
-		for (Long id : idList) {
-			passOperator(id);
-		}
-		// 删除用户
-		removeByIds(idList);
+    @Override
+    public void delete(List<Long> idList) {
+        for (Long id : idList) {
+            passOperator(id);
+        }
+        // 删除用户
+        removeByIds(idList);
 
-		// 删除用户角色关系
-		sysUserRoleService.deleteByUserIdList(idList);
+        // 删除用户角色关系
+        sysUserRoleService.deleteByUserIdList(idList);
 
-		// 删除用户岗位关系
-		sysUserPostService.deleteByUserIdList(idList);
-	}
+    }
 
-	@Override
-	public void updatePassword(Long id, String newPassword) {
-		// 修改密码
-		SysUserEntity user = getById(id);
-		user.setPassword(newPassword);
+    @Override
+    public void updatePassword(Long id, String newPassword) {
+        // 修改密码
+        SysUserEntity user = getById(id);
+        user.setPassword(newPassword);
 
-		updateById(user);
-	}
+        updateById(user);
+    }
 
-	@Override
-	public PageResult<SysUserVO> roleUserPage(SysRoleUserQuery query) {
-		// 查询参数
-		Map<String, Object> params = getParams(query);
-		params.remove(Constant.DATA_SCOPE);
-		params.put("roleId", query.getRoleId());
+    @Override
+    public PageResult<SysUserVO> roleUserPage(SysRoleUserQuery query) {
+        // 查询参数
+        Map<String, Object> params = getParams(query);
+        params.remove(Constant.DATA_SCOPE);
+        params.put("roleId", query.getRoleId());
 
-		// 分页查询
-		IPage<SysUserEntity> page = getPage(query);
-		params.put(Constant.PAGE, page);
+        // 分页查询
+        IPage<SysUserEntity> page = getPage(query);
+        params.put(Constant.PAGE, page);
 
-		// 数据列表
-		List<SysUserEntity> list = baseMapper.getRoleUserList(params);
+        // 数据列表
+        List<SysUserEntity> list = baseMapper.getRoleUserList(params);
 
-		return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
-	}
+        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
+    }
 
-	@Override
-	public PageResult<SysUserVO> pageProject(SysUserQuery query) {
-		// 查询参数
-		Map<String, Object> params = getParams(query);
+    @Override
+    public PageResult<SysUserVO> pageProject(SysUserQuery query) {
+        // 查询参数
+        Map<String, Object> params = getParams(query);
 
-		// 分页查询
-		IPage<SysUserEntity> page = getPage(query);
-		params.put(Constant.PAGE, page);
+        // 分页查询
+        IPage<SysUserEntity> page = getPage(query);
+        params.put(Constant.PAGE, page);
 
-		// 数据列表
-		List<SysUserEntity> list = baseMapper.getProjectList(params);
+        // 数据列表
+        List<SysUserEntity> list = baseMapper.getProjectList(params);
 
-		return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
-	}
+        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
+    }
 
-	@Override
-	public void deleteProject(Long projectId, List<Long> idList) {
-		UserDetail user = SecurityUser.getUser();
-		for (Long userId : idList) {
-			if (!SuperAdminEnum.YES.getValue().equals(user.getSuperAdmin()) && !user.getId().equals(baseMapper.getByProjectIdAndUserId(projectId, userId))) {
-				throw new ServerException("要删除的数据中存在非自己添加的用户授权，您无权处理，请联系创建者或超管");
-			}
-			baseMapper.deleteProject(projectId, userId);
-		}
-	}
+    @Override
+    public void deleteProject(Long projectId, List<Long> idList) {
+        UserDetail user = SecurityUser.getUser();
+        for (Long userId : idList) {
+            if (!SuperAdminEnum.YES.getValue().equals(user.getSuperAdmin()) && !user.getId().equals(baseMapper.getByProjectIdAndUserId(projectId, userId))) {
+                throw new ServerException("要删除的数据中存在非自己添加的用户授权，您无权处理，请联系创建者或超管");
+            }
+            baseMapper.deleteProject(projectId, userId);
+        }
+    }
 
-	@Override
-	public List<Long> getProjectIds(UserDetail userDetail) {
-		// 超级管理员不参与项目
-		if (SuperAdminEnum.YES.getValue().equals(userDetail.getSuperAdmin())) {
-			return null;
-		}
-		// 通过user id获取项目id
-		return baseMapper.getProjectIds(userDetail.getId());
-	}
+    @Override
+    public List<Long> getProjectIds(UserDetail userDetail) {
+        // 超级管理员不参与项目
+        if (SuperAdminEnum.YES.getValue().equals(userDetail.getSuperAdmin())) {
+            return null;
+        }
+        // 通过user id获取项目id
+        return baseMapper.getProjectIds(userDetail.getId());
+    }
 
-	@Override
-	public List<SysUserVO> listAll() {
-		List<SysUserVO> voList = SysUserConvert.INSTANCE.convertList(baseMapper.selectList(new LambdaQueryWrapper<>()));
-		voList.forEach(sysUserVO -> {
-			sysUserVO.setPassword(null);
-		});
-		return voList;
-	}
+    @Override
+    public List<SysUserVO> listAll() {
+        List<SysUserVO> voList = SysUserConvert.INSTANCE.convertList(baseMapper.selectList(new LambdaQueryWrapper<>()));
+        voList.forEach(sysUserVO -> {
+            sysUserVO.setPassword(null);
+        });
+        return voList;
+    }
 
-	@Override
-	public List<SysUserVO> listUsers() {
-		// 查询参数
-		SysUserQuery query = new SysUserQuery();
-		query.setFilterProject(true);
-		Map<String, Object> params = getParams(query);
-		// 数据列表
-		List<SysUserEntity> list = baseMapper.getList(params);
-		return SysUserConvert.INSTANCE.convertList(list);
-	}
+    @Override
+    public List<SysUserVO> listUsers() {
+        // 查询参数
+        SysUserQuery query = new SysUserQuery();
+        query.setFilterProject(true);
+        Map<String, Object> params = getParams(query);
+        // 数据列表
+        List<SysUserEntity> list = baseMapper.getList(params);
+        return SysUserConvert.INSTANCE.convertList(list);
+    }
 
 }

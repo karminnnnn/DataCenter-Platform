@@ -11,7 +11,6 @@ import net.srt.framework.security.user.UserDetail;
 import net.srt.system.convert.SysUserConvert;
 import net.srt.system.entity.SysUserEntity;
 import net.srt.system.query.SysUserQuery;
-import net.srt.system.service.SysUserPostService;
 import net.srt.system.service.SysUserRoleService;
 import net.srt.system.service.SysUserService;
 import net.srt.system.vo.SysUserPasswordVO;
@@ -36,7 +35,6 @@ import java.util.List;
 public class SysUserController {
 	private final SysUserService sysUserService;
 	private final SysUserRoleService sysUserRoleService;
-	private final SysUserPostService sysUserPostService;
 	private final PasswordEncoder passwordEncoder;
 
 	@GetMapping("page")
@@ -59,10 +57,6 @@ public class SysUserController {
 		// 用户角色列表
 		Long roleId = sysUserRoleService.getRoleId(id);
 		vo.setRoleId(roleId);
-
-		// 用户岗位列表
-		List<Long> postIdList = sysUserPostService.getPostIdList(id);
-		vo.setPostIdList(postIdList);
 
 		return Result.ok(vo);
 	}
