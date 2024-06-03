@@ -36,7 +36,6 @@ import java.util.List;
 @AllArgsConstructor
 @Tag(name = "用户管理")
 public class SysUserController {
-	private static final Logger log = LoggerFactory.getLogger(SysUserController.class);
 	private final SysUserService sysUserService;
 	private final SysUserRoleService sysUserRoleService;
 	private final PasswordEncoder passwordEncoder;
@@ -50,10 +49,20 @@ public class SysUserController {
 		// fill the roleName and roleID in page
 		page.getList().forEach(item -> {
 			Long roleId = sysUserRoleService.getRoleId(item.getId());
-			String roleName = sysRoleService.getById(roleId).getName();
-			item.setRoleId(roleId);
-			item.setRoleName(roleName);
+			if(roleId != null){
+				String roleName = sysRoleService.getById(roleId).getName();
+				item.setRoleId(roleId);
+				item.setRoleName(roleName);
+			}
 		});
+		return Result.ok(page);
+	}
+
+	@GetMapping("no-align/page")
+	@Operation(summary = "分页")
+	@PreAuthorize("hasAuthority('sys:user:page')")
+	public Result<PageResult<SysUserVO>> noAlignPage(@Valid SysUserQuery query) {
+		PageResult<SysUserVO> page = sysUserService.noAlignPage(query);
 		return Result.ok(page);
 	}
 
@@ -62,16 +71,14 @@ public class SysUserController {
 	@PreAuthorize("hasAuthority('sys:user:info')")
 	public Result<SysUserVO> get(@PathVariable("id") Long id) {
 		SysUserEntity entity = sysUserService.getById(id);
-		Logger logger = LoggerFactory.getLogger(SysUserController.class);
-		logger.info("用户信息entity：{}", entity);
 		SysUserVO vo = SysUserConvert.INSTANCE.convert(entity);
-		logger.info("用户信息vo：{}", vo);
 		// 用户角色列表
 		Long roleId = sysUserRoleService.getRoleId(id);
-		String roleName = sysRoleService.getById(roleId).getName();
-		vo.setRoleId(roleId);
-		vo.setRoleName(roleName);
-		logger.info("用户信息Result：{}", Result.ok(vo));
+		if (roleId!=null){
+			String roleName = sysRoleService.getById(roleId).getName();
+			vo.setRoleId(roleId);
+			vo.setRoleName(roleName);
+		}
 		return Result.ok(vo);
 	}
 

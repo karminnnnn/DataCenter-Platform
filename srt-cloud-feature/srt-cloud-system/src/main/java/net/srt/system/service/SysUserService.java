@@ -19,6 +19,8 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 
     PageResult<SysUserVO> page(SysUserQuery query);
 
+    PageResult<SysUserVO> noAlignPage(SysUserQuery query);
+
     void save(SysUserVO vo);
 
     void update(SysUserVO vo);

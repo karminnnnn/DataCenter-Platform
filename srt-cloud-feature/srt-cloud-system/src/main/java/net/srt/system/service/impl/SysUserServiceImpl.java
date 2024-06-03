@@ -51,6 +51,20 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
     }
 
+    @Override
+    public PageResult<SysUserVO> noAlignPage(SysUserQuery query) {
+        // 查询参数
+        Map<String, Object> params = getParams(query);
+        // 分页查询
+        IPage<SysUserEntity> page = getPage(query);
+        params.put(Constant.PAGE, page);
+
+        // 数据列表
+        List<SysUserEntity> list = baseMapper.getNoAlignList(params);
+
+        return new PageResult<>(SysUserConvert.INSTANCE.convertList(list), page.getTotal());
+    }
+
     private Map<String, Object> getParams(SysUserQuery query) {
         Map<String, Object> params = new HashMap<>();
         params.put("username", query.getUsername());
