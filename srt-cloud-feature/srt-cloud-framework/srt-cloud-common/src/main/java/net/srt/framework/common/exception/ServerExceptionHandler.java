@@ -42,10 +42,13 @@ public class ServerExceptionHandler {
 		return Result.error(ErrorCode.FORBIDDEN);
 	}
 
+	/**
+	 * 处理其他所有未被特定异常处理器捕获的异常
+	 */
 	@ExceptionHandler(Exception.class)
 	public Result<String> handleException(Exception ex) {
 		log.error(ex.getMessage(), ex);
-		return Result.error("出错了！异常信息：" + ex.getMessage());
+		return Result.error("服务器出错了！异常信息：" + ex.getMessage());
 	}
 
 }

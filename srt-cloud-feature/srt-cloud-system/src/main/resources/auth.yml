@@ -2,6 +2,3 @@ auth:
   ignore_urls:
     - /auth/captcha
     - /auth/login
-    - /auth/register
-    - /auth/mobile
-    - /upload/**

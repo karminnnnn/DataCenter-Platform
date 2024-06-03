@@ -31,7 +31,6 @@ public class SysAuthController {
     @Operation(summary = "验证码")
     public Result<SysCaptchaVO> captcha() {
         SysCaptchaVO captchaVO = sysCaptchaService.generate();
-
         return Result.ok(captchaVO);
     }
 
@@ -46,7 +45,6 @@ public class SysAuthController {
     @Operation(summary = "退出")
     public Result<String> logout(HttpServletRequest request) {
         sysAuthService.logout(TokenUtils.getAccessToken(request));
-
         return Result.ok();
     }
 }
