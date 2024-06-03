@@ -34,4 +34,6 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 	SchemaTableDataVo getTableData(String tableName);
 
 	void saveTableData(TableDataQuery request);
+
+	PageResult<SchemaTableDataVo> pageTableData(TableDataQuery query);
 }
