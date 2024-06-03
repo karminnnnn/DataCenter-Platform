@@ -5,16 +5,9 @@
 				<el-input v-model="dataForm.name" disabled></el-input>
 			</el-form-item>
 			<el-form-item prop="dataScope" label="数据范围">
-				<el-select v-model="dataForm.dataScope" placeholder="请选择数据范围">
-					<el-option
-					v-for="item in options"
-					:key="item.value"
-					:label="item.label"
-					:value="item.value">
-					</el-option>
-				</el-select>
+				<fast-select v-model="dataForm.dataScope" dict-type="role_data_scope" placeholder="数据范围" style="width: 100%"></fast-select>
 			</el-form-item>
-			<el-form-item v-show="dataForm.dataScope == 2" label="数据权限">
+			<el-form-item v-show="dataForm.dataScope == 4" label="数据权限">
 				<el-tree ref="orgListTree" :data="orgList" :props="{ label: 'name', children: 'children' }" node-key="id" accordion show-checkbox> </el-tree>
 			</el-form-item>
 		</el-form>
@@ -43,14 +36,6 @@ const dataForm = reactive({
 	dataScope: 0,
 	remark: ''
 })
-
-// 定义选项
-const options = ref([
-  { label: '全部数据', value: 0 },
-  { label: '本平台数据', value: 1 },
-  { label: '自定义数据', value: 2 }
-])
-
 
 const init = (id?: number) => {
 	visible.value = true
