@@ -4,6 +4,19 @@
 			<el-form-item prop="name" label="名称">
 				<el-input v-model="dataForm.name" placeholder="名称"></el-input>
 			</el-form-item>
+            <el-form-item prop="orgId" label="所属平台">
+                <el-select
+                v-model="dataForm.orgId"
+                placeholder="所属平台"
+                style="width: 100%">
+					<el-option
+                     v-for="org in orgList"
+                     :key="org.id" 
+                     :label="org.name" 
+                     :value="org.id">
+                    </el-option>
+				</el-select>
+			</el-form-item>
 			<el-form-item prop="remark" label="备注">
 				<el-input v-model="dataForm.remark" placeholder="备注"></el-input>
 			</el-form-item>
@@ -22,6 +35,7 @@
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
 import { useRoleApi, useRoleMenuApi, useRoleSubmitApi } from '@/api/sys/role'
+import { useOrgListApi } from '@/api/sys/orgs'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -29,10 +43,12 @@ const visible = ref(false)
 const menuList = ref([])
 const menuListTree = ref()
 const dataFormRef = ref()
+const orgList = ref([])
 
 const dataForm = reactive({
 	id: '',
 	name: '',
+    orgId: '',
 	menuIdList: [] as any[],
 	orgIdList: [],
 	remark: ''
@@ -52,6 +68,7 @@ const init = (id?: number) => {
 
 	// 菜单列表
 	getMenuList(id)
+    getOrgList()
 }
 
 // 获取菜单列表
@@ -62,6 +79,13 @@ const getMenuList = (id: number) => {
 		if (id) {
 			getRole(id)
 		}
+	})
+}
+
+// 获取平台列表
+const getOrgList = () => {
+	return useOrgListApi().then(res => {
+		orgList.value = res.data
 	})
 }
 
@@ -86,19 +110,16 @@ const submitHandle = () => {
 		}
 		dataForm.menuIdList = [...menuListTree.value.getHalfCheckedKeys(), ...menuListTree.value.getCheckedKeys()]
 
-		console.log("角色管理提交的表单")
-		console.log(dataForm)
-
-		// useRoleSubmitApi(dataForm).then(() => {
-		// 	ElMessage.success({
-		// 		message: '操作成功',
-		// 		duration: 500,
-		// 		onClose: () => {
-		// 			visible.value = false
-		// 			emit('refreshDataList')
-		// 		}
-		// 	})
-		// })
+		useRoleSubmitApi(dataForm).then(() => {
+			ElMessage.success({
+				message: '操作成功',
+				duration: 500,
+				onClose: () => {
+					visible.value = false
+					emit('refreshDataList')
+				}
+			})
+		})
 	})
 }
 
