@@ -435,8 +435,8 @@ const test_datasource = (row) => {
 }
 const test_database = (row) => {
 	const test_form = {
-		datasource_id: datatable_state.datasource_id,
-		database_name: row['databaseName']
+		datasourceId: database_state.datasource_id,
+		name: row['databaseName']
 	}
 	console.log(test_form)
 	testOnline_database(test_form).then(() => {

@@ -75,7 +75,7 @@ public class DataDatabaseController {
     @PostMapping("/test-online")
     @Operation(summary = "测试连接")
     public Result<String> testOnline(@RequestBody @Valid DatabaseTestOnlineVO vo) {
-        DataDatabaseService.testOnline(vo.getDatasourceId(), vo.getDatabaseName());
+        DataDatabaseService.testOnline(vo.getDatasourceId(), vo.getName());
         return Result.ok();
     }
 }
