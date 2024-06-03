@@ -15,10 +15,11 @@
     </select>
 
     <select id="getNoAlignList" resultType="net.srt.system.entity.SysUserEntity">
-        select t1.*, (select t2.name from sys_org t2
-        where t2.id = t1.org_id) orgName
-        and t1.id not in (select user_id from sys_user_role)
-        from sys_user t1 left join data_project_user_rel t3 ON t1.id=t3.user_id where t1.super_admin = 0 and t1.deleted = 0
+        select t1.*, (select t2.name from sys_org t2 where t2.id = t1.org_id) orgName
+        from sys_user t1 left join data_project_user_rel t3 ON t1.id=t3.user_id
+        where t1.super_admin = 0 and t1.deleted = 0
+        and t1.id not in (select user_id from sys_user_role where deleted != 1)
+        and t3.data_project_id=#{projectId}
         <if test="username != null and username.trim() != ''">
             and t1.username = #{username}
         </if>

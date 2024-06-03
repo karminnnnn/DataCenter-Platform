@@ -57,7 +57,7 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
      * 根据用户详情获取数据权限范围。
      */
     private List<Long> getDataScope(UserDetail userDetail) {
-        // 通过用户ID获取数据权限范围(0,1,2,3,4)(min所对应的所有role的dataScope)
+        // 通过用户ID获取数据权限范围
         Integer dataScope = sysRoleDao.getDataScopeByUserId(userDetail.getId());
 		userDetail.setDataScope(dataScope); // 设置用户的数据权限范围
 
@@ -70,20 +70,10 @@ public class SysUserDetailsServiceImpl implements SysUserDetailsService {
         if (dataScope.equals(DataScopeEnum.ALL.getValue())) {
             // 全部数据权限，则返回null
             return null;
-        } else if (dataScope.equals(DataScopeEnum.DEPT_AND_CHILD.getValue())) {
-            // 本部门及子部门数据
-            List<Long> dataScopeList = sysOrgService.getSubOrgIdList(userDetail.getOrgId()); // 获取本部门及子部门ID列表
-            // 自定义数据权限范围
-            dataScopeList.addAll(sysRoleDataScopeDao.getDataScopeList(userDetail.getId()));
-
-            return dataScopeList;
-        } else if (dataScope.equals(DataScopeEnum.DEPT_ONLY.getValue())) {
+        }else if (dataScope.equals(DataScopeEnum.DEPT_ONLY.getValue())) {
             // 本部门数据
             List<Long> dataScopeList = new ArrayList<>();
             dataScopeList.add(userDetail.getOrgId()); // 添加本部门ID
-            // 自定义数据权限范围
-            dataScopeList.addAll(sysRoleDataScopeDao.getDataScopeList(userDetail.getId()));
-
             return dataScopeList;
         } else if (dataScope.equals(DataScopeEnum.CUSTOM.getValue())) {
             // 自定义数据权限范围
