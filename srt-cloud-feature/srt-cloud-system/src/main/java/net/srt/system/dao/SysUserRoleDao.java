@@ -5,8 +5,6 @@ import net.srt.system.entity.SysUserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
  * 用户角色关系
  *
@@ -16,12 +14,12 @@ import java.util.List;
 public interface SysUserRoleDao extends BaseDao<SysUserRoleEntity> {
 
 	/**
-	 * 角色ID列表
+	 * 角色ID
 	 *
 	 * @param userId 用户ID
-	 * @return 返回角色ID列表
+	 * @return 返回角色ID
 	 */
-	List<Long> getRoleIdList(@Param("userId") Long userId);
+	Long getRoleId(@Param("userId") Long userId);
 
 	Long getByRoleIdAndUserId(@Param("roleId") Long roleId, @Param("userId") Long userId);
 }

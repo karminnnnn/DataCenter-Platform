@@ -19,10 +19,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 认证过滤器
- *
- * @author 阿沐 babamu@126.com
- */
+* @description: 认证过滤器,在每个请求中验证用户是否已登录
+* @author PatrickLi 373595331@qq.com
+* @date 2024/6/3
+*/
 @Component
 @AllArgsConstructor
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
