@@ -67,7 +67,6 @@ const state: IHooksOptions = reactive({
 	queryForm: {
 		filterProject: true,
 		username: '',
-		orgName: '',
 		gender: ''
 	}
 })
