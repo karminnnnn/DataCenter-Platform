@@ -9,5 +9,5 @@ import java.io.Serializable;
 public class DatabaseTestOnlineVO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer datasourceId;
-    private String databaseName;
+    private String  name;
 }
