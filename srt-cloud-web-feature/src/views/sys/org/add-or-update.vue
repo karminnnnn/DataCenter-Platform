@@ -4,9 +4,9 @@
 			<el-form-item prop="name" label="名称">
 				<el-input v-model="dataForm.name" placeholder="名称"></el-input>
 			</el-form-item>
-			<el-form-item prop="superAdminName" label="平台超级管理员用户名">
+			<!-- <el-form-item prop="superAdminName" label="平台超级管理员用户名">
 				<el-input v-model="dataForm.superAdminName" placeholder="超级管理员用户名"></el-input>
-			</el-form-item>
+			</el-form-item> -->
 			<el-form-item prop="remark" label="备注">
 				<el-input v-model="dataForm.remark" placeholder="备注"></el-input>
 			</el-form-item>
@@ -61,7 +61,7 @@ const dataFormRef = ref()
 const dataForm = reactive({
 	id: '',
 	name: '',
-	superAdminName: '',
+	// superAdminName: '',
 	remark: '',
 	// createTime: '',
 	pid: 0,
@@ -123,7 +123,7 @@ const getOrg = (id: number) => {
 
 const dataRules = ref({
 	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	superAdminName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+	// superAdminName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -136,16 +136,16 @@ const submitHandle = () => {
 		console.log("平台管理提交的表单")
 		console.log(dataForm)
 
-		// useOrgSubmitApi(dataForm).then(() => {
-		// 	ElMessage.success({
-		// 		message: '操作成功',
-		// 		duration: 500,
-		// 		onClose: () => {
-		// 			visible.value = false
-		// 			emit('refreshDataList')
-		// 		}
-		// 	})
-		// })
+		useOrgSubmitApi(dataForm).then(() => {
+			ElMessage.success({
+				message: '操作成功',
+				duration: 500,
+				onClose: () => {
+					visible.value = false
+					emit('refreshDataList')
+				}
+			})
+		})
 	})
 }
 

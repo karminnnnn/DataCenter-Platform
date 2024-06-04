@@ -62,6 +62,9 @@ public class SysUserVO implements Serializable {
     @Schema(description = "超级管理员   0：否   1：是")
     private Integer superAdmin;
 
+    @Schema(description = "管理员   0：否   1：是")
+    private Integer admin;
+
     @Schema(description = "机构名称")
     private String orgName;
 

@@ -27,4 +27,5 @@ public interface SysRoleService extends BaseService<SysRoleEntity> {
 	void dataScope(SysRoleDataScopeVO vo);
 
 	void delete(List<Long> idList);
+
 }

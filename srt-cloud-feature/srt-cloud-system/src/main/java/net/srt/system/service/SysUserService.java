@@ -52,4 +52,6 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 	List<SysUserVO> listAll();
 
 	List<SysUserVO> listUsers();
+
+    Boolean hasAdmin(Long orgID);
 }

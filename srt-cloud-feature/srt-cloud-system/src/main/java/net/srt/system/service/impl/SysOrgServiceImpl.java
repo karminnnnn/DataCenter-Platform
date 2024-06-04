@@ -2,6 +2,7 @@ package net.srt.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.srt.framework.common.constant.Constant;
 import net.srt.framework.common.exception.ServerException;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
@@ -12,6 +13,7 @@ import net.srt.system.dao.SysUserDao;
 import net.srt.system.entity.SysOrgEntity;
 import net.srt.system.entity.SysUserEntity;
 import net.srt.system.service.SysOrgService;
+import net.srt.system.service.SysUserService;
 import net.srt.system.vo.SysOrgVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +28,12 @@ import java.util.Map;
  *
  * @author 阿沐 babamu@126.com
  */
+@Slf4j
 @Service
 @AllArgsConstructor
 public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> implements SysOrgService {
 	private final SysUserDao sysUserDao;
+	private final SysUserService sysUserService;
 
 	@Override
 	public List<SysOrgVO> getList(Long parentId) {
@@ -41,8 +45,22 @@ public class SysOrgServiceImpl extends BaseServiceImpl<SysOrgDao, SysOrgEntity> 
 
 		// 机构列表
 		List<SysOrgEntity> entityList = baseMapper.getList(params);
-
-		return TreeUtils.build(SysOrgConvert.INSTANCE.convertList(entityList));
+		List<SysOrgVO> nodes = TreeUtils.build(SysOrgConvert.INSTANCE.convertList(entityList));
+		nodes.forEach(node->{
+			node.setChildren(null);
+			// 获取超级管理员用户名
+			Long orgID = node.getId();
+			if (sysUserService.hasAdmin(orgID)){
+				QueryWrapper qw = new QueryWrapper<SysOrgEntity>()
+						.eq("org_id", orgID)
+						.eq("deleted", 0)
+						.eq("admin", 1);
+				node.setAdmin(sysUserService.getOne(qw).getUsername());
+			}else{
+				node.setAdmin("该机构尚未分配管理员");
+			}
+		});
+		return nodes;
 	}
 
 	@Override
