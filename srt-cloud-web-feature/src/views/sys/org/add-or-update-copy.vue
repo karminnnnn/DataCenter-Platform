@@ -1,16 +1,10 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" draggable>
-		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="170px" @keyup.enter="submitHandle()">
+		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
 			<el-form-item prop="name" label="名称">
 				<el-input v-model="dataForm.name" placeholder="名称"></el-input>
 			</el-form-item>
-			<el-form-item prop="superAdminName" label="平台超级管理员用户名">
-				<el-input v-model="dataForm.superAdminName" placeholder="超级管理员用户名"></el-input>
-			</el-form-item>
-			<el-form-item prop="remark" label="备注">
-				<el-input v-model="dataForm.remark" placeholder="备注"></el-input>
-			</el-form-item>
-			<!-- <el-form-item prop="parentName" label="上级机构" class="org-list">
+			<el-form-item prop="parentName" label="上级机构" class="org-list">
 				<el-popover ref="orgListPopover" placement="bottom-start" trigger="click" :width="400" popper-class="popover-pop">
 					<template #reference>
 						<el-input v-model="dataForm.parentName" :readonly="true" placeholder="上级机构">
@@ -33,10 +27,10 @@
 						</el-tree>
 					</div>
 				</el-popover>
-			</el-form-item> -->
-			<!-- <el-form-item prop="sort" label="排序">
+			</el-form-item>
+			<el-form-item prop="sort" label="排序">
 				<el-input-number v-model="dataForm.sort" controls-position="right" :min="0" label="排序"></el-input-number>
-			</el-form-item> -->
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
@@ -53,19 +47,16 @@ import { useOrgApi, useOrgListApi, useOrgSubmitApi } from '@/api/sys/orgs'
 const emit = defineEmits(['refreshDataList'])
 
 const visible = ref(false)
-// const orgList = ref([])
-// const orgListTree = ref()
+const orgList = ref([])
+const orgListTree = ref()
 const dataFormRef = ref()
-// const orgListPopover = ref()
+const orgListPopover = ref()
 
 const dataForm = reactive({
 	id: '',
 	name: '',
-	superAdminName: '',
-	remark: '',
-	// createTime: '',
-	pid: 0,
-	parentName: null,
+	pid: '',
+	parentName: '',
 	sort: 0
 })
 
@@ -81,49 +72,49 @@ const init = (id?: number) => {
 	// id 存在则为修改
 	if (id) {
 		getOrg(id)
-	} 
-	// else {
-	// 	treeSetDefaultHandle()
-	// }
+	} else {
+		treeSetDefaultHandle()
+	}
 
 	// 机构列表
-	// getOrgList()
+	getOrgList()
 }
 
 // 获取机构列表
-// const getOrgList = () => {
-// 	return useOrgListApi().then(res => {
-// 		orgList.value = res.data
-// 	})
-// }
+const getOrgList = () => {
+	return useOrgListApi().then(res => {
+		orgList.value = res.data
+	})
+}
 
 // 获取信息
 const getOrg = (id: number) => {
 	useOrgApi(id).then(res => {
 		Object.assign(dataForm, res.data)
 
-		// if (dataForm.pid == '0') {
-		// 	return treeSetDefaultHandle()
-		// }
-		// orgListTree.value.setCurrentKey(dataForm.pid)
+		if (dataForm.pid == '0') {
+			return treeSetDefaultHandle()
+		}
+
+		orgListTree.value.setCurrentKey(dataForm.pid)
 	})
 }
 
 // 上级机构树, 设置默认值
-// const treeSetDefaultHandle = () => {
-// 	dataForm.pid = '0'
-// 	dataForm.parentName = '一级机构'
-// }
+const treeSetDefaultHandle = () => {
+	dataForm.pid = '0'
+	dataForm.parentName = '一级机构'
+}
 
-// const treeCurrentChange = (data: any) => {
-// 	dataForm.pid = data.id
-// 	dataForm.parentName = data.name
-// 	orgListPopover.value.hide()
-// }
+const treeCurrentChange = (data: any) => {
+	dataForm.pid = data.id
+	dataForm.parentName = data.name
+	orgListPopover.value.hide()
+}
 
 const dataRules = ref({
 	name: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	superAdminName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+	parentName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -133,19 +124,16 @@ const submitHandle = () => {
 			return false
 		}
 
-		console.log("平台管理提交的表单")
-		console.log(dataForm)
-
-		// useOrgSubmitApi(dataForm).then(() => {
-		// 	ElMessage.success({
-		// 		message: '操作成功',
-		// 		duration: 500,
-		// 		onClose: () => {
-		// 			visible.value = false
-		// 			emit('refreshDataList')
-		// 		}
-		// 	})
-		// })
+		useOrgSubmitApi(dataForm).then(() => {
+			ElMessage.success({
+				message: '操作成功',
+				duration: 500,
+				onClose: () => {
+					visible.value = false
+					emit('refreshDataList')
+				}
+			})
+		})
 	})
 }
 
