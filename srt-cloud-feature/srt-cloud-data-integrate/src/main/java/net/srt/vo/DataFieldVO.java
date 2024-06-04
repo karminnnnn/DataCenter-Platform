@@ -15,7 +15,7 @@ public class DataFieldVO implements Serializable{
     private Long fieldId;
 
     @Schema(description = "字段名")
-    private Long fieldName;
+    private String fieldName;
 
     @Schema(description = "注释")
     private String remarks;
@@ -42,7 +42,7 @@ public class DataFieldVO implements Serializable{
     private Boolean autoIncrement;
 
     @Schema(description = "所属数据表id")
-    private String datatableId;
+    private Long datatableId;
 
     @Schema(description = "所属数据表名")
     private String datatableName;

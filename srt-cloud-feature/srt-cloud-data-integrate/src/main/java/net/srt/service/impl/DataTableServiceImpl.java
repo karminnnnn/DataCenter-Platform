@@ -147,4 +147,8 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			// 保存每行数据的具体逻辑
 			// 例如，将 row 中的数据保存到数据库中
 		}
+
+	public PageResult<SchemaTableDataVo> pageTableData(TableDataQuery query){
+		return new PageResult<SchemaTableDataVo>(new ArrayList<>(), 0);
+	}
 }

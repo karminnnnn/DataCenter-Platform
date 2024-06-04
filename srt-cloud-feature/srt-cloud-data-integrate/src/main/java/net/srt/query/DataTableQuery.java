@@ -23,7 +23,7 @@ public class DataTableQuery extends Query {
     @Schema(description = "注释")
     private String remarks;
 
-    @Schema(description = "项目id")
-    private Long projectId;
+    @Schema(description = "数据库id")
+    private Long databaseId;
 
 }
