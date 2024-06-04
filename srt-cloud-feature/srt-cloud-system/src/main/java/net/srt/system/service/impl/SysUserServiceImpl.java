@@ -1,6 +1,7 @@
 package net.srt.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
 import net.srt.api.module.data.integrate.DataProjectApi;
@@ -16,6 +17,7 @@ import net.srt.system.entity.SysUserEntity;
 import net.srt.system.enums.SuperAdminEnum;
 import net.srt.system.query.SysRoleUserQuery;
 import net.srt.system.query.SysUserQuery;
+import net.srt.system.service.SysRoleService;
 import net.srt.system.service.SysUserRoleService;
 import net.srt.system.service.SysUserService;
 import net.srt.system.vo.SysUserVO;
@@ -36,6 +38,7 @@ import java.util.Map;
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
     private final SysUserRoleService sysUserRoleService;
     private final DataProjectApi dataProjectApi;
+    private final SysRoleService sysRoleService;
 
     @Override
     public PageResult<SysUserVO> page(SysUserQuery query) {
@@ -81,7 +84,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     @Transactional(rollbackFor = Exception.class)
     public void save(SysUserVO vo) {
         SysUserEntity entity = SysUserConvert.INSTANCE.convert(vo);
-        entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
 
         // 判断用户名是否存在
         SysUserEntity user = baseMapper.getByUsername(entity.getUsername());
@@ -89,11 +91,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             throw new ServerException("用户名已经存在或被其他项目租户占用");
         }
 
-        // 判断手机号是否存在
-		/*user = baseMapper.getByMobile(entity.getMobile());
-		if (user != null) {
-			throw new ServerException("手机号已经存在或被其他项目租户占用");
-		}*/
+        // 平台超级管理员是否已存在
+        if (entity.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())
+                && hasAdmin(entity.getOrgId())) {
+            throw new ServerException("该平台管理员已存在");
+        }
 
         // 保存用户
         baseMapper.insert(entity);
@@ -115,12 +117,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         if (user != null && !user.getId().equals(entity.getId())) {
             throw new ServerException("用户名已经存在或被其他项目租户占用");
         }
-
-        // 判断手机号是否存在
-		/*user = baseMapper.getByMobile(entity.getMobile());
-		if (user != null && !user.getId().equals(entity.getId())) {
-			throw new ServerException("手机号已经存在或被其他项目租户占用");
-		}*/
 
         // 更新用户
         updateById(entity);
@@ -231,6 +227,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         // 数据列表
         List<SysUserEntity> list = baseMapper.getList(params);
         return SysUserConvert.INSTANCE.convertList(list);
+    }
+
+    @Override
+    public Boolean hasAdmin(Long orgID) {
+        QueryWrapper<SysUserEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("org_id", orgID)
+                .eq("admin", 1)
+                .eq("deleted",0);
+        boolean exists = baseMapper.exists(queryWrapper);
+        return exists;
     }
 
 }
