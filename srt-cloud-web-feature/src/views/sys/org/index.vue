@@ -7,7 +7,7 @@
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" row-key="id" border style="width: 100%">
 			<el-table-column prop="name" label="名称" header-align="center"></el-table-column>
-			<el-table-column prop="superAdminName" label="平台超级管理员" header-align="center" align="center"></el-table-column>
+			<el-table-column prop="admin" label="平台管理员" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="remark" label="备注" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="createTime" label="创建时间" header-align="center" align="center"></el-table-column>
 			<!-- <el-table-column prop="parentName" label="上级" header-align="center" align="center"></el-table-column> -->

@@ -25,6 +25,9 @@ public class SysOrgVO extends TreeNode<SysOrgVO> {
 	@NotBlank(message = "机构名称不能为空")
 	private String name;
 
+	@Schema(description = "机构备注")
+	private String remark;
+
 	@Schema(description = "创建时间")
 	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
 	private Date createTime;

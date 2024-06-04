@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import net.srt.api.module.data.integrate.DataProjectApi;
 import net.srt.framework.common.constant.Constant;
 import net.srt.framework.common.exception.ServerException;
@@ -33,6 +35,7 @@ import java.util.Map;
  *
  * @author 阿沐 babamu@126.com
  */
+@Slf4j
 @Service
 @AllArgsConstructor
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
@@ -91,11 +94,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             throw new ServerException("用户名已经存在或被其他项目租户占用");
         }
 
-        // 平台超级管理员是否已存在
-        if (entity.getSuperAdmin().equals(SuperAdminEnum.YES.getValue())
+        // 平台管理员是否已存在
+        if (entity.getAdmin().equals(1)
                 && hasAdmin(entity.getOrgId())) {
             throw new ServerException("该平台管理员已存在");
         }
+        entity.setSuperAdmin(SuperAdminEnum.NO.getValue());
 
         // 保存用户
         baseMapper.insert(entity);

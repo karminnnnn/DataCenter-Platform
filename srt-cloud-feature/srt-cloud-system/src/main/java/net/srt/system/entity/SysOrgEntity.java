@@ -24,6 +24,10 @@ public class SysOrgEntity extends BaseEntity {
 	 */
 	private String name;
 	/**
+	 * 机构备注
+	 */
+	private String remark;
+	/**
 	 * 排序
 	 */
 	private Integer sort;
