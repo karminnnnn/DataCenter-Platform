@@ -25,9 +25,9 @@
 			<el-table-column prop="orgName" label="所属平台" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="roleName" label="所属角色" header-align="center" align="center"></el-table-column>
 			<!-- <fast-table-column prop="superAdmin" label="是否超级管理员" :formatter="superAdminFormatter"></fast-table-column> -->
-			<el-table-column prop="superAdmin" label="是否超级管理员">
+			<el-table-column prop="admin" label="是否超级管理员">
 				<template #default="{ row, column, $index }">
-					{{ superAdminFormatter(row, column, row.superAdmin) }}
+					{{ superAdminFormatter(row, column, row.admin) }}
 				</template>
 			</el-table-column>
 			<fast-table-column prop="status" label="状态" dict-type="user_status"></fast-table-column>

@@ -7,10 +7,8 @@
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" row-key="id" border style="width: 100%">
 			<el-table-column prop="name" label="名称" header-align="center"></el-table-column>
-			<el-table-column prop="superAdminName" label="超级管理员" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="createTime" label="创建时间" header-align="center" align="center"></el-table-column>
-			<!-- <el-table-column prop="parentName" label="上级" header-align="center" align="center"></el-table-column> -->
-			<!-- <el-table-column prop="sort" label="排序" header-align="center" align="center"></el-table-column> -->
+			<el-table-column prop="parentName" label="上级" header-align="center" align="center"></el-table-column>
+			<el-table-column prop="sort" label="排序" header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
 				<template #default="scope">
 					<el-button v-auth="'sys:org:update'" type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
@@ -41,3 +39,4 @@ const addOrUpdateHandle = (id?: Number) => {
 
 const { getDataList, deleteHandle } = useCrud(state)
 </script>
+./add-or-update copy.vue

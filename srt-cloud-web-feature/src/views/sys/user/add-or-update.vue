@@ -23,9 +23,9 @@
 			<el-form-item prop="gender" label="性别">
 				<fast-radio-group v-model="dataForm.gender" dict-type="user_gender"></fast-radio-group>
 			</el-form-item>
-			<el-form-item prop="superAdmin" label="是否超级管理员">
-				<el-radio v-model="dataForm.superAdmin" :label="0">否</el-radio>
-				<el-radio v-model="dataForm.superAdmin" :label="1">是</el-radio>
+			<el-form-item prop="admin" label="是否超级管理员">
+				<el-radio v-model="dataForm.admin" :label="0">否</el-radio>
+				<el-radio v-model="dataForm.admin" :label="1">是</el-radio>
 			</el-form-item>
 			<el-form-item prop="status" label="状态">
 				<fast-radio-group v-model="dataForm.status" dict-type="user_status"></fast-radio-group>
@@ -63,7 +63,7 @@ const dataForm = reactive({
 	roleId: '',
 	avatar: null,
 	gender: 0,
-	superAdmin: 0,
+	admin: 0,
 	status: 1
 })
 
@@ -113,7 +113,7 @@ const dataRules = ref({
 	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	roleId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	gender: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	superAdmin: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	admin: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	status: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
