@@ -66,7 +66,7 @@ const dataForm = reactive({
 	// createTime: '',
 	pid: 0,
 	parentName: null,
-	sort: 0
+	// sort: 0
 })
 
 const init = (id?: number) => {

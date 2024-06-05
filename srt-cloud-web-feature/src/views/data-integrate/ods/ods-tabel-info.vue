@@ -22,7 +22,7 @@
 			<el-button type="primary" @click="addOrUpdateColumn(null)">新增</el-button>
 		</el-form-item>
 	</el-form>
-	<el-table v-loading="state.dataListLoading" :data="state.tableColumns" height="355" style="width: 100%" @selection-change="selectionChangeHandle">
+	<el-table v-loading="state.dataListLoading" :data="state.dataList" height="355" style="width: 100%" @selection-change="selectionChangeHandle">
 		<el-table-column prop="fieldName" label="名称" header-align="center" align="center" />
 		<el-table-column prop="remarks" label="注释" header-align="center" align="center" />
 		<el-table-column prop="fieldTypeName" label="类型" header-align="center" align="center" />
@@ -73,8 +73,8 @@ import { ro } from 'element-plus/es/locale'
 
 const state: IHooksOptions = reactive({
 	createdIsNeed: false,
-	dataListUrl: '/data-integrate/ods/tableinfo/page',
-	deleteUrl: '',
+	dataListUrl: '/data-integrate/ods/column-info/page',
+	deleteUrl: '/data-integrate/ods/column-info',
 	queryForm: {
 		datatableId: '',
 		fieldName: ''

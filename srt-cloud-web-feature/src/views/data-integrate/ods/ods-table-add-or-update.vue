@@ -1,8 +1,8 @@
 <template>
-	<el-dialog v-model="visible" :title="!dataForm.tableName ? '新增' : '修改'" :close-on-click-modal="false">
+	<el-dialog v-model="visible" :title="!dataForm.datatableId ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
-			<el-form-item label="表名" prop="tableName">
-				<el-input v-model="dataForm.tableName" placeholder="字段名称"></el-input>
+			<el-form-item label="表名" prop="datatableName">
+				<el-input v-model="dataForm.datatableName" placeholder="字段名称"></el-input>
 			</el-form-item>
 			<el-form-item label="注释" prop="remarks">
 				<el-input type="textarea" :rows="2" v-model="dataForm.remarks" placeholder="注释"></el-input>
@@ -18,6 +18,7 @@
 <script setup lang="ts">
 import { STATEMENT_OR_BLOCK_KEYS } from '@babel/types'
 import { reactive, ref } from 'vue'
+import { useOdsSubmitApi, useOdsApi } from '@/api/data-integrate/ods'
 
 const visible = ref(false)
 const dataFormRef = ref()
@@ -26,7 +27,7 @@ const dataForm = reactive({
 	datatableId: null,
 	dataAccessId: null,
 	projectId: null,
-	tableName: '',
+	datatableName: '',
 	remarks: '',
 	recentlySyncTime: '',
 	databaseId: null
@@ -46,32 +47,32 @@ const init = (row?: any) => {
 		datatableId: null,
 		dataAccessId: null,
 		projectId: null,
-		tableName: '',
+		datatableName: '',
 		remarks: '',
 		recentlySyncTime: '',
 		databaseId: null
 	})
 
 	if (row) {
-		getProperty(row)
-		// getProperty(row.fieldId)
+		// getProperty(row)
+		getTableInfo(row.datatableId)
 	}
 }
 
-const getProperty = (row: any) => {
-	// console.log("aaaaaaaaaaaaaaa")
-	// console.log(row)
-	dataForm.tableName = row.tableName
-	dataForm.remarks = row.remarks
-	// console.log("aaaaaaaaaaaaaaa")
-	// console.log(dataForm)
-}
-
-// const getProperty = (id: number) => {
-// 	usePropertyApi(id).then(res => {
-// 		Object.assign(dataForm, res.data)
-// 	})
+// const getProperty = (row: any) => {
+// 	// console.log("aaaaaaaaaaaaaaa")
+// 	// console.log(row)
+// 	dataForm.datatableName = row.datatableName
+// 	dataForm.remarks = row.remarks
+// 	// console.log("aaaaaaaaaaaaaaa")
+// 	// console.log(dataForm)
 // }
+
+const getTableInfo = (id: number) => {
+	useOdsApi(id).then(res => {
+		Object.assign(dataForm, res.data)
+	})
+}
 
 const formatDate = (date: Date): string => {
 	const year = date.getFullYear()
@@ -86,7 +87,7 @@ const formatDate = (date: Date): string => {
 
 // 表单验证
 const dataRules = ref({
-	tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+	datatableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -103,7 +104,7 @@ const submitHandle = () => {
 		console.log('提交的表单')
 		console.log(dataForm)
 
-		// usePropertySubmitApi(dataForm).then(() => {
+		// useOdsSubmitApi(dataForm).then(() => {
 		// 	ElMessage.success({
 		// 		message: '操作成功',
 		// 		duration: 500,

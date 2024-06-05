@@ -50,6 +50,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
+import { useOdsColumnInfoApi, useOdsColumnInfoSubmitApi } from '@/api/data-integrate/ods'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -110,33 +111,33 @@ const init = (row?: any) => {
 	})
 
 	if (row) {
-		getProperty(row)
-		// getProperty(row.fieldId)
+		// getProperty(row)
+		getTableColumnInfo(row.fieldId)
 	}
 }
 
-const getProperty = (row: any) => {
-	// console.log("aaaaaaaaaaaaaaa")
-	// console.log(row)
-	dataForm.fieldId = row.fieldId
-	dataForm.fieldName = row.fieldName
-	dataForm.remarks = row.remarks
-	dataForm.fieldTypeName = row.fieldTypeName
-	dataForm.displaySize = row.displaySize
-	dataForm.scaleSize = row.scaleSize
-	dataForm.defaultValue = row.defaultValue
-	dataForm.pk = row.pk
-	dataForm.autoIncrement = row.autoIncrement
-	dataForm.nullable = row.nullable
-	// console.log("aaaaaaaaaaaaaaa")
-	// console.log(dataForm)
-}
-
-// const getProperty = (id: number) => {
-// 	usePropertyApi(id).then(res => {
-// 		Object.assign(dataForm, res.data)
-// 	})
+// const getProperty = (row: any) => {
+// 	// console.log("aaaaaaaaaaaaaaa")
+// 	// console.log(row)
+// 	dataForm.fieldId = row.fieldId
+// 	dataForm.fieldName = row.fieldName
+// 	dataForm.remarks = row.remarks
+// 	dataForm.fieldTypeName = row.fieldTypeName
+// 	dataForm.displaySize = row.displaySize
+// 	dataForm.scaleSize = row.scaleSize
+// 	dataForm.defaultValue = row.defaultValue
+// 	dataForm.pk = row.pk
+// 	dataForm.autoIncrement = row.autoIncrement
+// 	dataForm.nullable = row.nullable
+// 	// console.log("aaaaaaaaaaaaaaa")
+// 	// console.log(dataForm)
 // }
+
+const getTableColumnInfo = (id: number) => {
+	useOdsColumnInfoApi(id).then(res => {
+		Object.assign(dataForm, res.data)
+	})
+}
 
 const dataRules = ref({
 	fieldName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
@@ -158,7 +159,7 @@ const submitHandle = () => {
 		console.log('提交的表单')
 		console.log(dataForm)
 
-		// usePropertySubmitApi(dataForm).then(() => {
+		// useOdsColumnInfoSubmitApi(dataForm).then(() => {
 		// 	ElMessage.success({
 		// 		message: '操作成功',
 		// 		duration: 500,

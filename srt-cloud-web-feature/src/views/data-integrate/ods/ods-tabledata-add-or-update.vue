@@ -16,6 +16,7 @@
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
 import { IHooksOptions } from '@/hooks/interface'
+import { useOdsTableDataSubmitApi } from '@/api/data-integrate/ods'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -75,7 +76,7 @@ const submitHandle = () => {
 		console.log('动态表单提交的form')
 		console.log(dataForm)
 
-		// usePropertySubmitApi(dataForm).then(() => {
+		// useOdsTableDataSubmitApi(dataForm).then(() => {
 		// 	ElMessage.success({
 		// 		message: '操作成功',
 		// 		duration: 500,
