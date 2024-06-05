@@ -99,13 +99,13 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 			return null;
 		}
 		UserDetail user = SecurityUser.getUser();
-		if (!SuperAdminEnum.YES.getValue().equals(user.getSuperAdmin()) && !CollectionUtils.isEmpty(user.getDataScopeList()) && !user.getDataScopeList().contains(dataAccessEntity.getPlatformId())) {
+		if (!SuperAdminEnum.YES.getValue().equals(user.getSuperAdmin()) && !CollectionUtils.isEmpty(user.getDataScopeList()) && !user.getDataScopeList().contains(dataAccessEntity.getOrgId())) {
 			throw new ServerException("对不起，您无权查看该数据接入信息！");
 		}
 		DbswichProperties dataAccessJson = dataAccessEntity.getDataAccessJson();
 		SourceDataSourceProperties source = dataAccessJson.getSource().get(0);
 		TargetDataSourceProperties target = dataAccessJson.getTarget();
-		return DataAccessClientDto.builder().id(dataAccessEntity.getId()).platformId(dataAccessEntity.getPlatformId()).accessMode(dataAccessEntity.getAccessMode()).taskName(dataAccessEntity.getTaskName())
+		return DataAccessClientDto.builder().id(dataAccessEntity.getId()).orgId(dataAccessEntity.getOrgId()).accessMode(dataAccessEntity.getAccessMode()).taskName(dataAccessEntity.getTaskName())
 				.cron(dataAccessEntity.getCron()).description(dataAccessEntity.getDescription()).projectId(dataAccessEntity.getProjectId())
 				.sourceDatabaseId(dataAccessEntity.getSourceDatabaseId()).targetDatabaseId(dataAccessEntity.getTargetDatabaseId())
 				.sourceType(source.getSourceType()).sourceSql(source.getSourceSql()).targetTable(target.getTargetTable()).sourcePrimaryKeys(source.getSourcePrimaryKeys())
@@ -136,7 +136,7 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 	public void save(DataAccessClientDto dto) {
 		dto.setProjectId(getProjectId());
 		DataAccessEntity dataAccessEntity = buildDataAccessEntity(dto);
-		dataAccessEntity.setPlatformId(dto.getPlatformId());
+		dataAccessEntity.setOrgId(dto.getOrgId());
 		dataAccessEntity.setProjectId(dto.getProjectId());
 		baseMapper.insert(dataAccessEntity);
 
@@ -146,7 +146,7 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 	public void update(DataAccessClientDto dto) {
 		dto.setProjectId(getProjectId());
 		DataAccessEntity entity = buildDataAccessEntity(dto);
-			entity.setPlatformId(dto.getPlatformId());
+			entity.setOrgId(dto.getOrgId());
 		entity.setProjectId(dto.getProjectId());
 		updateById(entity);
 	}

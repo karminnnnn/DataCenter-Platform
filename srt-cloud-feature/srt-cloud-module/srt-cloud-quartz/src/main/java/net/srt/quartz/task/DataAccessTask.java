@@ -131,7 +131,7 @@ public class DataAccessTask {
 		dataAccessTaskDto.setRunType(accessRunDto.getRunType());
 		dataAccessTaskDto.setExecuteNo(accessRunDto.getExecuteNo());
 		dataAccessTaskDto.setCreator(dataAccessDto.getCreator());
-		dataAccessTaskDto.setOrgId(dataAccessDto.getPlatformId());
+		dataAccessTaskDto.setOrgId(dataAccessDto.getOrgId());
 		dataAccessTaskDto.setProjectId(dataAccessDto.getProjectId());
 		dataAccessTaskDto.setDataAccessId(accessRunDto.getDataAccessId());
 		dataAccessTaskDto.setRunStatus(CommonRunStatus.RUNNING.getCode());
