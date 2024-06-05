@@ -78,19 +78,19 @@ const dataForm = reactive({
 	// projectId: ''
 
 	// Mine
-	id: '1',
-	databaseName: '1',
-	datasourceId: '1',
-	datasourceName: '1',
-	synStatus: '1',
-	status: '1',
-	version: '1',
-	deleted: '1',
-	creatorName: '1',
-	createTime: '1',
-	updater: '1',
-	updaterName: '1',
-	updateTime: '1'
+	id: '',
+	databaseName: '',
+	datasourceId: '',
+	datasourceName: '',
+	synStatus: '',
+	status: '',
+	version: '',
+	deleted: '',
+	creatorName: '',
+	createTime: '',
+	updater: '',
+	updaterName: '',
+	updateTime: ''
 })
 
 const init = (id?: number) => {
