@@ -6,7 +6,7 @@
 				<el-card body-style="height: calc(100vh - 170px )">
 					<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
 						<el-form-item size="small">
-							<el-input v-model="state.queryForm.tableName" placeholder="表名"></el-input>
+							<el-input v-model="state.queryForm.datatableName" placeholder="表名"></el-input>
 						</el-form-item>
 						<el-form-item size="small">
 							<el-input v-model="state.queryForm.remarks" placeholder="注释"></el-input>
@@ -30,8 +30,9 @@
 						highlight-current-row
 						@current-change="handleCurrentChange"
 					>
-						<fast-table-project-column prop="projectId" label="所属项目" header-align="center" align="center"></fast-table-project-column>
-						<el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
+						<!-- <fast-table-project-column prop="projectId" label="所属项目" header-align="center" align="center"></fast-table-project-column> -->
+						<el-table-column prop="databaseId" label="所属数据库" header-align="center" align="center"></el-table-column>
+						<el-table-column prop="datatableName" label="表名" header-align="center" align="center"></el-table-column>
 						<el-table-column prop="remarks" label="注释" header-align="center" align="center"></el-table-column>
 					</el-table>
 					<el-pagination
@@ -128,9 +129,9 @@ import odsTableAddOrUpdate from './ods-table-add-or-update.vue'
 
 const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/ods/page',
-	deleteUrl: '',
+	deleteUrl: '/data-integrate/ods',
 	queryForm: {
-		tableName: '',
+		datatableName: '',
 		remarks: '',
 		projectId: ''
 	},
@@ -216,7 +217,7 @@ const state: IHooksOptions = reactive({
 // 左侧
 const activeName = ref('')
 const tabBeforeLeave = () => {
-	if (!state.currentRow.tableName) {
+	if (!state.currentRow.datatableName) {
 		ElMessage({
 			message: '请在左侧选择要查看的表',
 			type: 'warning'
@@ -238,7 +239,7 @@ const odsTableDataInfoRef = ref()
 /* tab切换 */
 const handleClick = (name: TabPaneName) => {
 	if (name == 'tableData') {
-		odsTableDataInfoRef.value.init(state.currentRow.tableName)
+		odsTableDataInfoRef.value.init(state.currentRow.datatableName)
 		//查询选中的表数据
 		// getTableDataApi(state.currentRow.tableName).then(res => {
 		// 	state.tableDataHeader = res.data.columns
@@ -246,7 +247,7 @@ const handleClick = (name: TabPaneName) => {
 		// 	odsTableDataInfoRef.value.init(state.tableDataHeader, state.tableData)
 		// })
 	} else if (name == 'tableLog') {
-		odsTaskDetailRef.value.init(state.currentRow.projectId, state.currentRow.tableName)
+		odsTaskDetailRef.value.init(state.currentRow.projectId, state.currentRow.datatableName)
 	} else if (name == 'tableSql') {
 		odsSqlRef.value.init(state.currentRow.projectId)
 	}
@@ -264,7 +265,7 @@ const handleCurrentChange = row => {
 	state.tableDataHeader = {}
 	// console.log("查看分页返回的信息")
 	// console.log(row)
-	getColumnInfoApi(row.tableName).then(res => {
+	getColumnInfoApi(row.datatableName).then(res => {
 		state.tableColumns = res.data
 		odsTableInfoRef.value.init(state.currentRow, state.tableColumns)
 	})

@@ -7,7 +7,6 @@ import lombok.Data;
 import net.srt.framework.common.utils.DateUtils;
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -46,14 +45,6 @@ public class SysUserVO implements Serializable {
     @Range(min = 0, max = 2, message = "性别不正确")
     private Integer gender;
 
-    @Schema(description = "邮箱")
-    @Email(message = "邮箱格式不正确")
-    private String email;
-
-    @Schema(description = "手机号", required = true)
-    @NotBlank(message = "手机号不能为空")
-    private String mobile;
-
     @Schema(description = "机构ID", required = true)
     @NotNull(message = "机构ID不能为空")
     private Long orgId;
@@ -62,14 +53,17 @@ public class SysUserVO implements Serializable {
     @Range(min = 0, max = 1, message = "用户状态不正确")
     private Integer status;
 
-    @Schema(description = "角色ID列表")
-    private List<Long> roleIdList;
+    @Schema(description = "角色ID")
+    private Long roleId;
 
-    @Schema(description = "岗位ID列表")
-    private List<Long> postIdList;
+    @Schema(description = "角色名称")
+    private String roleName;
 
     @Schema(description = "超级管理员   0：否   1：是")
     private Integer superAdmin;
+
+    @Schema(description = "管理员   0：否   1：是")
+    private Integer admin;
 
     @Schema(description = "机构名称")
     private String orgName;

@@ -86,6 +86,9 @@ const submitHandle = () => {
 		}
 		dataForm.menuIdList = [...menuListTree.value.getHalfCheckedKeys(), ...menuListTree.value.getCheckedKeys()]
 
+		console.log("角色管理提交的表单")
+		console.log(dataForm)
+
 		useRoleSubmitApi(dataForm).then(() => {
 			ElMessage.success({
 				message: '操作成功',

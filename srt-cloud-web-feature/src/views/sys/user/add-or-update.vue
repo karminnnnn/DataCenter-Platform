@@ -7,37 +7,25 @@
 			<el-form-item prop="realName" label="姓名">
 				<el-input v-model="dataForm.realName" placeholder="姓名"></el-input>
 			</el-form-item>
-			<el-form-item prop="orgId" label="所属机构">
-				<el-tree-select
-					v-model="dataForm.orgId"
-					:data="orgList"
-					check-strictly
-					value-key="id"
-					:props="{ label: 'name', children: 'children' }"
-					style="width: 100%"
-				/>
+			<el-form-item prop="password" label="新密码">
+				<el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
+			</el-form-item>
+			<el-form-item prop="orgId" label="所属平台">
+				<el-select v-model="dataForm.orgId" placeholder="所属平台" style="width: 100%">
+					<el-option v-for="org in orgList" :key="org.id" :label="org.name" :value="org.id"> </el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item prop="roleId" label="所属角色">
+				<el-select v-model="dataForm.roleId" placeholder="所属角色" style="width: 100%">
+					<el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id"> </el-option>
+				</el-select>
 			</el-form-item>
 			<el-form-item prop="gender" label="性别">
 				<fast-radio-group v-model="dataForm.gender" dict-type="user_gender"></fast-radio-group>
 			</el-form-item>
-			<el-form-item prop="mobile" label="手机号">
-				<el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
-			</el-form-item>
-			<el-form-item prop="email" label="邮箱">
-				<el-input v-model="dataForm.email" placeholder="邮箱"></el-input>
-			</el-form-item>
-			<el-form-item prop="password" label="密码">
-				<el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
-			</el-form-item>
-			<el-form-item prop="roleIdList" label="所属角色">
-				<el-select v-model="dataForm.roleIdList" multiple placeholder="所属角色" style="width: 100%">
-					<el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id"></el-option>
-				</el-select>
-			</el-form-item>
-			<el-form-item prop="postIdList" label="所属岗位">
-				<el-select v-model="dataForm.postIdList" multiple placeholder="所属岗位" style="width: 100%">
-					<el-option v-for="post in postList" :key="post.id" :label="post.postName" :value="post.id"></el-option>
-				</el-select>
+			<el-form-item prop="admin" label="是否超级管理员">
+				<el-radio v-model="dataForm.admin" :label="0">否</el-radio>
+				<el-radio v-model="dataForm.admin" :label="1">是</el-radio>
 			</el-form-item>
 			<el-form-item prop="status" label="状态">
 				<fast-radio-group v-model="dataForm.status" dict-type="user_status"></fast-radio-group>
@@ -55,29 +43,27 @@ import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
 import { useOrgListApi } from '@/api/sys/orgs'
 import { useUserApi, useUserSubmitApi } from '@/api/sys/user'
-import { usePostListApi } from '@/api/sys/post'
 import { useRoleListApi } from '@/api/sys/role'
 
 const emit = defineEmits(['refreshDataList'])
 
 const visible = ref(false)
-const postList = ref<any[]>([])
-const roleList = ref<any[]>([])
 const orgList = ref([])
+// const orgList = ref<any[]>([])
+const roleList = ref<any[]>([])
 const dataFormRef = ref()
 
 const dataForm = reactive({
 	id: '',
 	username: '',
 	realName: '',
+	password: '',
 	orgId: '',
 	orgName: '',
-	password: '',
+	roleId: '',
+	avatar: null,
 	gender: 0,
-	email: '',
-	mobile: '',
-	roleIdList: [] as any[],
-	postIdList: [] as any[],
+	admin: 0,
 	status: 1
 })
 
@@ -96,14 +82,13 @@ const init = (id?: number) => {
 	}
 
 	getOrgList()
-	getPostList()
 	getRoleList()
 }
 
-// 获取岗位列表
-const getPostList = () => {
-	return usePostListApi().then(res => {
-		postList.value = res.data
+// 获取平台列表
+const getOrgList = () => {
+	return useOrgListApi().then(res => {
+		orgList.value = res.data
 	})
 }
 
@@ -111,13 +96,6 @@ const getPostList = () => {
 const getRoleList = () => {
 	return useRoleListApi().then(res => {
 		roleList.value = res.data
-	})
-}
-
-// 获取机构列表
-const getOrgList = () => {
-	return useOrgListApi().then(res => {
-		orgList.value = res.data
 	})
 }
 
@@ -131,8 +109,12 @@ const getUser = (id: number) => {
 const dataRules = ref({
 	username: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	realName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	mobile: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+	password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	roleId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	gender: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	admin: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	status: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交
@@ -141,6 +123,9 @@ const submitHandle = () => {
 		if (!valid) {
 			return false
 		}
+
+		console.log('用户管理提交的表单')
+		console.log(dataForm)
 
 		useUserSubmitApi(dataForm).then(() => {
 			ElMessage.success({

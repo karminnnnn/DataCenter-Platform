@@ -8,7 +8,10 @@ import net.srt.framework.common.query.Query;
 import java.util.List;
 import java.util.Map;
 
-public class TableDataQuery {
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Schema(description = "数据集成-贴源数据查询")
+public class TableDataQuery extends Query{
     @Schema(description = "数据表主键ID")
     private Long datatableId;
 

@@ -40,6 +40,10 @@ public class SysUserEntity extends BaseEntity {
      */
     private Integer superAdmin;
     /**
+     * 管理员   0：否   1：是
+     */
+    private Integer admin;
+    /**
      * 状态  {@link UserStatusEnum}
      */
     private Integer status;

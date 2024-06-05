@@ -11,11 +11,13 @@ import net.srt.framework.security.user.UserDetail;
 import net.srt.system.convert.SysUserConvert;
 import net.srt.system.entity.SysUserEntity;
 import net.srt.system.query.SysUserQuery;
-import net.srt.system.service.SysUserPostService;
+import net.srt.system.service.SysRoleService;
 import net.srt.system.service.SysUserRoleService;
 import net.srt.system.service.SysUserService;
 import net.srt.system.vo.SysUserPasswordVO;
 import net.srt.system.vo.SysUserVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -36,15 +38,31 @@ import java.util.List;
 public class SysUserController {
 	private final SysUserService sysUserService;
 	private final SysUserRoleService sysUserRoleService;
-	private final SysUserPostService sysUserPostService;
 	private final PasswordEncoder passwordEncoder;
+	private final SysRoleService sysRoleService;
 
 	@GetMapping("page")
 	@Operation(summary = "分页")
 	@PreAuthorize("hasAuthority('sys:user:page')")
 	public Result<PageResult<SysUserVO>> page(@Valid SysUserQuery query) {
 		PageResult<SysUserVO> page = sysUserService.page(query);
+		// fill the roleName and roleID in page
+		page.getList().forEach(item -> {
+			Long roleId = sysUserRoleService.getRoleId(item.getId());
+			if(roleId != null){
+				String roleName = sysRoleService.getById(roleId).getName();
+				item.setRoleId(roleId);
+				item.setRoleName(roleName);
+			}
+		});
+		return Result.ok(page);
+	}
 
+	@GetMapping("no-align/page")
+	@Operation(summary = "分页")
+	@PreAuthorize("hasAuthority('sys:user:page')")
+	public Result<PageResult<SysUserVO>> noAlignPage(@Valid SysUserQuery query) {
+		PageResult<SysUserVO> page = sysUserService.noAlignPage(query);
 		return Result.ok(page);
 	}
 
@@ -53,17 +71,14 @@ public class SysUserController {
 	@PreAuthorize("hasAuthority('sys:user:info')")
 	public Result<SysUserVO> get(@PathVariable("id") Long id) {
 		SysUserEntity entity = sysUserService.getById(id);
-
 		SysUserVO vo = SysUserConvert.INSTANCE.convert(entity);
-
 		// 用户角色列表
-		List<Long> roleIdList = sysUserRoleService.getRoleIdList(id);
-		vo.setRoleIdList(roleIdList);
-
-		// 用户岗位列表
-		List<Long> postIdList = sysUserPostService.getPostIdList(id);
-		vo.setPostIdList(postIdList);
-
+		Long roleId = sysUserRoleService.getRoleId(id);
+		if (roleId!=null){
+			String roleName = sysRoleService.getById(roleId).getName();
+			vo.setRoleId(roleId);
+			vo.setRoleName(roleName);
+		}
 		return Result.ok(vo);
 	}
 

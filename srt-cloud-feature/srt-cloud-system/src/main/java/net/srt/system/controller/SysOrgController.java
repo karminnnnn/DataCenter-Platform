@@ -42,12 +42,6 @@ public class SysOrgController {
 		SysOrgEntity entity = sysOrgService.getById(id);
 		SysOrgVO vo = SysOrgConvert.INSTANCE.convert(entity);
 
-		// 获取上级机构名称
-		if (!Constant.ROOT.equals(entity.getPid())) {
-			SysOrgEntity parentEntity = sysOrgService.getById(entity.getPid());
-			vo.setParentName(parentEntity.getName());
-		}
-
 		return Result.ok(vo);
 	}
 

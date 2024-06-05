@@ -16,6 +16,8 @@ import net.srt.system.vo.SysMenuVO;
 import net.srt.system.vo.SysRoleDataScopeVO;
 import net.srt.system.vo.SysRoleVO;
 import net.srt.system.vo.SysUserVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,6 +82,8 @@ public class SysRoleController {
 	@Operation(summary = "保存", hidden = true)
 	@PreAuthorize("hasAuthority('sys:role:save')")
 	public Result<String> save(@RequestBody @Valid SysRoleVO vo){
+		Logger logger = LoggerFactory.getLogger(SysRoleController.class);
+		logger.info("角色保存{}",vo);
 		sysRoleService.save(vo);
 
 		return Result.ok();

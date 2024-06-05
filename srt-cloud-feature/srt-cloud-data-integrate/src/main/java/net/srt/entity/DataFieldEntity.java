@@ -22,7 +22,7 @@ public class DataFieldEntity extends BaseEntity{
     /**
      * 所属数据表id
      */
-    private String datatableId;
+    private Long datatableId;
     /**
      * 所属数据表名字
      */

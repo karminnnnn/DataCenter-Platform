@@ -19,6 +19,8 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 
     PageResult<SysUserVO> page(SysUserQuery query);
 
+    PageResult<SysUserVO> noAlignPage(SysUserQuery query);
+
     void save(SysUserVO vo);
 
     void update(SysUserVO vo);
@@ -50,4 +52,6 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 	List<SysUserVO> listAll();
 
 	List<SysUserVO> listUsers();
+
+    Boolean hasAdmin(Long orgID);
 }

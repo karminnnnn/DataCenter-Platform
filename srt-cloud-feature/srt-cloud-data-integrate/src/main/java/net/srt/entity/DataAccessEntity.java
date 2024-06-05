@@ -44,7 +44,7 @@ public class DataAccessEntity extends BaseEntity {
 	 */
 	private Long projectId;
 
-	private Long platformId;
+	private Long orgId;
 
 	private Integer sourceType;
 
