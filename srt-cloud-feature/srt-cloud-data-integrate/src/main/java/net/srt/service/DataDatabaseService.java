@@ -27,4 +27,8 @@ public interface DataDatabaseService extends BaseService<DataDatabaseEntity> {
 
     public Integer getDatasourceIdByDatabaseId(Long databaseId);
 
+    public String getDatabasenameByID(Long databaseId);
+
+
+
 }

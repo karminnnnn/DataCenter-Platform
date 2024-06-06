@@ -3,6 +3,7 @@ package net.srt.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import net.srt.convert.DataSourceConvert;
 import net.srt.dto.SqlConsole;
 import net.srt.dto.TableInfo;
@@ -94,9 +95,19 @@ public class DataSourceController {
 	@Operation(summary = "根据数据库id获取表相关信息")
 	public Result<List<TableVo>> getTablesById(@PathVariable Long id) {
 		Long ID=Long.valueOf(DataSourceService.getDatasourceIdByDatabaseId(id));
-		List<TableVo> tableVos = DataSourceService.getTablesById(ID);
+		String tablebasename= DataSourceService.getDatabasenameByID(id);
+		List<TableVo> tableVos = DataSourceService.getTablesById(ID,tablebasename);
 		return Result.ok(tableVos);
 	}
+
+	//@GetMapping("/tables/test/{id}")
+	//@Operation(summary = "测试")
+	//public Result<String> testgetDatabasename(@PathVariable Long id) {
+		//Long ID=Long.valueOf(DataSourceService.getDatasourceIdByDatabaseId(id));
+	//	String tablebasename= DataSourceService.getDatabasenameByID(id);
+		//List<TableVo> tableVos = DataSourceService.getTablesById(ID,tablebasename);
+	//	return Result.ok(tablebasename);
+	//}
 
 	@PostMapping("/table-data/{id}")
 	@Operation(summary = "根据sql获取数据")
@@ -139,7 +150,9 @@ public class DataSourceController {
 	@GetMapping("/{id}/{tableName}/columns")
 	@Operation(summary = "获取字段信息")
 	public Result<List<ColumnDescriptionVo>> columnInfo(@PathVariable Long id, @PathVariable String tableName) {
-		return Result.ok(DataSourceService.getColumnInfo(id, tableName));
+		Long ID= Long.valueOf(DataSourceService.getDatasourceIdByDatabaseId(id));
+		String tablebasename= DataSourceService.getDatabasenameByID(id);
+		return Result.ok(DataSourceService.getColumnInfo(ID, tableName,tablebasename));
 	}
 
 	@GetMapping("/middle-db/{tableName}/columns")

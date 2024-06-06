@@ -164,6 +164,17 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         return dataDatabaseEntity.getDatasourceId();
     }
 
+    public String getDatabasenameByID(Long databaseId){
+        DataDatabaseEntity dataDatabaseEntity=baseMapper.selectById(databaseId);
+        if (dataDatabaseEntity == null) {
+            // 处理未找到的情况
+            throw new IllegalArgumentException("Database not found for id: " + databaseId);
+        }
+        return dataDatabaseEntity.getDatabaseName();
+    }
+
+
+
 }
 
 

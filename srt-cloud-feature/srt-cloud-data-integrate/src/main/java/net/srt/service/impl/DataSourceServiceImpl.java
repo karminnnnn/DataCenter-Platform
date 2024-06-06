@@ -137,6 +137,14 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 				.replace("{database}", "") : entity.getJdbcUrl());
 	}
 
+	private void setJdbcUrlByEntity(DataSourceEntity entity,String datatablename) {
+		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(entity.getDatabaseType());
+		entity.setJdbcUrl(StringUtil.isBlank(entity.getJdbcUrl()) ? productTypeEnum.getUrl()
+				.replace("{host}", entity.getDatabaseIp())
+				.replace("{port}", entity.getDatabasePort())
+				.replace("{database}", datatablename) : entity.getJdbcUrl());
+	}
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(List<Long> idList) {
@@ -188,14 +196,29 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	}
 
 	@Override
-	public List<TableVo> getTablesById(Long id) {
+	public List<TableVo> getTablesById(Long id,String databasename) {
 		DataSourceEntity DataSourceEntity;
 		if (id == 0) {
 			DataSourceEntity = buildMiddleEntity();
 		} else {
 			DataSourceEntity = baseMapper.selectById(id);
 		}
-		return getTables(DataSourceEntity);
+		return getTables(DataSourceEntity,databasename);
+	}
+
+	private List<TableVo> getTables(DataSourceEntity DataSourceEntity,String databasename) {
+		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(DataSourceEntity.getDatabaseType());
+		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
+		List<TableDescription> tableDescriptions = metaDataService.queryTableList(StringUtil.isBlank(DataSourceEntity.getJdbcUrl()) ? productTypeEnum.getUrl()
+						.replace("{host}", DataSourceEntity.getDatabaseIp())
+						.replace("{port}", DataSourceEntity.getDatabasePort())
+						.replace("{database}", databasename) : DataSourceEntity.getJdbcUrl(), DataSourceEntity.getUserName(), DataSourceEntity.getPassword(),
+				databasename);
+		if (DataSourceEntity.getId() == null) {
+			//中台库返回ods层的表
+			return BeanUtil.copyListProperties(tableDescriptions, TableVo::new).stream().filter(item -> item.getTableName().startsWith(DataHouseLayer.ODS.getTablePrefix())).collect(Collectors.toList());
+		}
+		return BeanUtil.copyListProperties(tableDescriptions, TableVo::new);
 	}
 
 	private List<TableVo> getTables(DataSourceEntity DataSourceEntity) {
@@ -267,9 +290,9 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	}
 
 	@Override
-	public List<ColumnDescriptionVo> getColumnInfo(Long id, String tableName) {
+	public List<ColumnDescriptionVo> getColumnInfo(Long id, String tableName,String databasename) {
 		DataSourceEntity entity = baseMapper.selectById(id);
-		return getColumnDescriptionVos(tableName, entity);
+		return getColumnDescriptionVos(tableName, databasename,entity);
 	}
 
 	@Override
@@ -287,12 +310,27 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 
 	}
 
-	private List<ColumnDescriptionVo> getColumnDescriptionVos(String tableName, DataSourceEntity entity) {
+
+	private List<ColumnDescriptionVo> getColumnDescriptionVos(String tableName,  DataSourceEntity entity) {
 		setJdbcUrlByEntity(entity);
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(entity.getDatabaseType());
 		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(productTypeEnum);
 		List<ColumnDescription> columnDescriptions = service.queryTableColumnMeta(entity.getJdbcUrl(), entity.getUserName(), entity.getPassword(), entity.getDatabaseSchema(), tableName);
 		List<String> pks = service.queryTablePrimaryKeys(entity.getJdbcUrl(), entity.getUserName(), entity.getPassword(), entity.getDatabaseSchema(), tableName);
+		return BeanUtil.copyListProperties(columnDescriptions, ColumnDescriptionVo::new, (oldItem, newItem) -> {
+			newItem.setFieldName(StringUtil.isNotBlank(newItem.getFieldName()) ? newItem.getFieldName() : newItem.getLabelName());
+			if (pks.contains(newItem.getFieldName())) {
+				newItem.setPk(true);
+			}
+		});
+	}
+
+	private List<ColumnDescriptionVo> getColumnDescriptionVos(String tableName, String databasename, DataSourceEntity entity) {
+		setJdbcUrlByEntity(entity,databasename);
+		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(entity.getDatabaseType());
+		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(productTypeEnum);
+		List<ColumnDescription> columnDescriptions = service.queryTableColumnMeta(entity.getJdbcUrl(), entity.getUserName(), entity.getPassword(), databasename, tableName);
+		List<String> pks = service.queryTablePrimaryKeys(entity.getJdbcUrl(), entity.getUserName(), entity.getPassword(), databasename, tableName);
 		return BeanUtil.copyListProperties(columnDescriptions, ColumnDescriptionVo::new, (oldItem, newItem) -> {
 			newItem.setFieldName(StringUtil.isNotBlank(newItem.getFieldName()) ? newItem.getFieldName() : newItem.getLabelName());
 			if (pks.contains(newItem.getFieldName())) {
@@ -489,6 +527,10 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 
 	public Integer getDatasourceIdByDatabaseId(Long databaseId){
 		return dataDatabaseService.getDatasourceIdByDatabaseId(databaseId);
+	}
+
+	public String getDatabasenameByID(Long databaseId){
+		return dataDatabaseService.getDatabasenameByID(databaseId);
 	}
 
 }

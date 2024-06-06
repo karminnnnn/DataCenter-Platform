@@ -12,6 +12,7 @@ import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
 import net.srt.query.DataDatabaseQuery;
 import net.srt.service.DataDatabaseService;
+import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataDatabaseVO;
 import net.srt.vo.DataSourceVO;
 import net.srt.vo.DatabaseTestOnlineVO;
@@ -78,5 +79,6 @@ public class DataDatabaseController {
         DataDatabaseService.testOnline(vo.getDatasourceId(), vo.getName());
         return Result.ok();
     }
+
 
 }

@@ -31,7 +31,7 @@ public interface DataSourceService extends BaseService<DataSourceEntity> {
 
 	void testOnline(DataSourceVO vo);
 
-	List<TableVo> getTablesById(Long id);
+	List<TableVo> getTablesById(Long id,String databasename);
 
 	SchemaTableDataVo getTableDataBySql(Integer id, SqlConsole sqlConsole);
 
@@ -39,7 +39,7 @@ public interface DataSourceService extends BaseService<DataSourceEntity> {
 
 	List<TreeNodeVo> listTree(Long id);
 
-	List<ColumnDescriptionVo> getColumnInfo(Long id, String tableName);
+	List<ColumnDescriptionVo> getColumnInfo(Long id, String tableName,String databasename);
 
 	List<ColumnDescriptionVo> getColumnInfoBySql(Long id, SqlConsole sqlConsole);
 
@@ -61,4 +61,6 @@ public interface DataSourceService extends BaseService<DataSourceEntity> {
 	List<Map<String, Object>> getDatabaseInfoByDataSourceIds(List<Long> dataSourceIds);
 
 	public Integer getDatasourceIdByDatabaseId(Long databaseId);
+
+	public String getDatabasenameByID(Long databaseId);
 }
