@@ -11,6 +11,7 @@ import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
 import net.srt.framework.common.utils.TreeNodeVo;
 import net.srt.query.DataSourceQuery;
+import net.srt.service.DataDatabaseService;
 import net.srt.service.DataSourceService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataSourceVO;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 数据集成-数据库管理
@@ -90,7 +93,8 @@ public class DataSourceController {
 	@GetMapping("/tables/{id}")
 	@Operation(summary = "根据数据库id获取表相关信息")
 	public Result<List<TableVo>> getTablesById(@PathVariable Long id) {
-		List<TableVo> tableVos = DataSourceService.getTablesById(id);
+		Long ID=Long.valueOf(DataSourceService.getDatasourceIdByDatabaseId(id));
+		List<TableVo> tableVos = DataSourceService.getTablesById(ID);
 		return Result.ok(tableVos);
 	}
 
@@ -102,10 +106,14 @@ public class DataSourceController {
 	}
 
 	@GetMapping("/list-all")
-	@Operation(summary = "获取当前用户所能看到的的数据表")
-	public Result<List<DataSourceVO>> listAll() {
+	@Operation(summary = "获取当前用户所能看到的的数据库")
+	public Result<List<Map<String, Object>>> listAll() {
 		List<DataSourceVO> list = DataSourceService.listAll();
-		return Result.ok(list);
+		List<Long> dataSourceIds = list.stream()
+				.map(DataSourceVO::getId)
+				.collect(Collectors.toList());
+		List<Map<String, Object>> databaseInfoList = DataSourceService.getDatabaseInfoByDataSourceIds(dataSourceIds);
+		return Result.ok(databaseInfoList);
 	}
 
 	@GetMapping("/list-tree/{id}")

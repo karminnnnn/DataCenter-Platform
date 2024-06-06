@@ -10,6 +10,7 @@ import net.srt.framework.common.utils.Result;
 import net.srt.query.DataTableQuery;
 import net.srt.query.TableDataQuery;
 import net.srt.service.DataTableService;
+import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
 import net.srt.vo.SchemaTableDataVo;
 import org.springframework.web.bind.annotation.*;

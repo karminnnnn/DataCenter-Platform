@@ -113,7 +113,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		return baseMapper.selectOne(wrapper.eq(DataTableEntity::getTableName, tableName).eq(DataTableEntity::getProjectId, projectId));
 	}
 
-	@Override
+	/*@Override
 	public List<ColumnDescriptionVo> getColumnInfo(String tableName) {
 		//DataOdsEntity dataOdsEntity = baseMapper.selectById(id);
 		DataProjectCacheBean project = getProject();
@@ -126,7 +126,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 				newItem.setPk(true);
 			}
 		});
-	}
+	}*/
 
 	@Override
 	public SchemaTableDataVo getTableData(String tableName) {
