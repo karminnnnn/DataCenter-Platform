@@ -36,12 +36,14 @@ import net.srt.query.DataAccessTaskQuery;
 import net.srt.service.DataAccessService;
 import net.srt.service.DataAccessTaskDetailService;
 import net.srt.service.DataAccessTaskService;
+import net.srt.service.DataDatabaseService;
 import net.srt.vo.DataAccessTaskDetailVO;
 import net.srt.vo.DataAccessTaskVO;
 import net.srt.vo.DataAccessVO;
 import net.srt.vo.PreviewNameMapperVo;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronExpression;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -81,6 +83,8 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 	private final DataAccessTaskDetailService dataAccessTaskDetailService;
 	private final DataAccessIncreaseLogDao increaseLogDao;
 	private final Config config;
+	@Autowired
+	private DataDatabaseService dataDatabaseService;  // 注入 DataDatabaseService
 
 	private final static String STRING_EMPTY = "<!空>";
 	private final static String STRING_DELETE = "<!删除>";
@@ -161,7 +165,7 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 		sourceDataSourceProperties.setSourceType(dto.getSourceType());
 		sourceDataSourceProperties.setSourceSql(SourceType.SQL.getCode().equals(dto.getSourceType()) ? dto.getSourceSql() : null);
 		sourceDataSourceProperties.setSourcePrimaryKeys(dto.getSourcePrimaryKeys());
-		DataSourceEntity sourceDatabase = DataSourceDao.selectById(dto.getSourceDatabaseId());
+		DataSourceEntity sourceDatabase = DataSourceDao.selectById(getDatasourceIdByDatabaseId(dto.getSourceDatabaseId()));
 		//构建源端
 		ProductTypeEnum sourceProductType = ProductTypeEnum.getByIndex(sourceDatabase.getDatabaseType());
 		sourceDataSourceProperties.setSourceProductType(sourceProductType);
@@ -525,5 +529,9 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 						.replace("{database}", databaseEntity.getDatabaseName()) : databaseEntity.getJdbcUrl(), databaseEntity.getUserName(), databaseEntity.getPassword(),
 				databaseEntity.getDatabaseSchema()).stream().filter(td -> !td.isViewTable())
 				.collect(Collectors.toList());
+	}
+
+	public Integer getDatasourceIdByDatabaseId(Long databaseId){
+		return dataDatabaseService.getDatasourceIdByDatabaseId(databaseId);
 	}
 }
