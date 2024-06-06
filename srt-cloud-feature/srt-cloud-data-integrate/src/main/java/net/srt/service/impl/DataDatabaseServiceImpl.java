@@ -30,6 +30,12 @@ import srt.cloud.framework.dbswitch.common.util.StringUtil;
 import srt.cloud.framework.dbswitch.core.service.IMetaDataByJdbcService;
 import srt.cloud.framework.dbswitch.core.service.impl.MetaDataByJdbcServiceImpl;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, DataDatabaseEntity> implements DataDatabaseService {
@@ -124,6 +130,38 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
 
 
 
+    }
+
+    public List<Map<String, Object>> getDatabaseInfoByDataSourceIds(List<Long> dataSourceIds){
+        if (dataSourceIds == null || dataSourceIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 根据 datasource_id 列表查询 data_database 表
+        LambdaQueryWrapper<DataDatabaseEntity> dataDatabaseWrapper = Wrappers.lambdaQuery();
+        dataDatabaseWrapper.in(DataDatabaseEntity::getDatasourceId, dataSourceIds);
+
+        List<DataDatabaseEntity> dataDatabaseEntities = baseMapper.selectList(dataDatabaseWrapper);
+
+
+        // 转换为 Map<String, Object> 对象
+        return dataDatabaseEntities.stream()
+                .map(entity -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", entity.getId());
+                    map.put("name", entity.getDatabaseName());
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public Integer getDatasourceIdByDatabaseId(Long databaseId) {
+        DataDatabaseEntity dataDatabaseEntity=baseMapper.selectById(databaseId);
+        if (dataDatabaseEntity == null) {
+            // 处理未找到的情况
+            throw new IllegalArgumentException("Database not found for id: " + databaseId);
+        }
+        return dataDatabaseEntity.getDatasourceId();
     }
 
 }

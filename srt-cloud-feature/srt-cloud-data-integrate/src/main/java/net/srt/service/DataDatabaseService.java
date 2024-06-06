@@ -6,6 +6,9 @@ import net.srt.framework.mybatis.service.BaseService;
 import net.srt.query.DataDatabaseQuery;
 import net.srt.vo.DataDatabaseVO;
 
+import java.util.List;
+import java.util.Map;
+
 
 public interface DataDatabaseService extends BaseService<DataDatabaseEntity> {
     PageResult<DataDatabaseVO> page(DataDatabaseQuery query);
@@ -19,4 +22,9 @@ public interface DataDatabaseService extends BaseService<DataDatabaseEntity> {
     DataDatabaseVO get(Long id);
 
     void testOnline(Integer databaseId,String databaseName);
+
+    public List<Map<String, Object>> getDatabaseInfoByDataSourceIds(List<Long> dataSourceIds);
+
+    public Integer getDatasourceIdByDatabaseId(Long databaseId);
+
 }

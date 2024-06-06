@@ -11,6 +11,7 @@ import net.srt.query.DataSourceQuery;
 import net.srt.entity.DataSourceEntity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据集成-数据库管理
@@ -57,4 +58,7 @@ public interface DataSourceService extends BaseService<DataSourceEntity> {
 	void deleteTableInfo(String tableName);
 
 
+	List<Map<String, Object>> getDatabaseInfoByDataSourceIds(List<Long> dataSourceIds);
+
+	public Integer getDatasourceIdByDatabaseId(Long databaseId);
 }

@@ -29,7 +29,7 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 
 	DataTableEntity getByTableName(Long projectId, String tableName);
 
-	List<ColumnDescriptionVo> getColumnInfo(String tableName);
+	//List<ColumnDescriptionVo> getColumnInfo(String tableName);
 
 	SchemaTableDataVo getTableData(String tableName);
 

@@ -78,4 +78,5 @@ public class DataDatabaseController {
         DataDatabaseService.testOnline(vo.getDatasourceId(), vo.getName());
         return Result.ok();
     }
+
 }

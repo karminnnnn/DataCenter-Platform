@@ -25,6 +25,7 @@ import net.srt.dto.ColumnInfo;
 import net.srt.dto.SqlConsole;
 import net.srt.dto.TableInfo;
 import net.srt.entity.DataAccessEntity;
+import net.srt.entity.DataDatabaseEntity;
 import net.srt.entity.DataSourceEntity;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.exception.ServerException;
@@ -35,12 +36,14 @@ import net.srt.framework.common.utils.TreeNodeVo;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.query.DataSourceQuery;
 import net.srt.service.DataAccessService;
+import net.srt.service.DataDatabaseService;
 import net.srt.service.DataSourceService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataSourceVO;
 import net.srt.vo.SchemaTableDataVo;
 import net.srt.vo.SqlGenerationVo;
 import net.srt.vo.TableVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srt.cloud.framework.dbswitch.common.type.ProductTypeEnum;
@@ -55,8 +58,7 @@ import srt.cloud.framework.dbswitch.data.entity.TargetDataSourceProperties;
 import srt.cloud.framework.dbswitch.data.util.DataSourceUtils;
 import srt.cloud.framework.dbswitch.dbcommon.database.DatabaseOperatorFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -73,6 +75,8 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	private final DataAccessService dataAccessService;
 	private final DataProductionTaskApi productionTaskApi;
 	private final DataMetadataCollectApi dataMetadataCollectApi;
+	@Autowired
+	private DataDatabaseService dataDatabaseService;  // 注入 DataDatabaseService
 
 	@Override
 	public PageResult<DataSourceVO> page(DataSourceQuery query) {
@@ -476,6 +480,15 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		entity.setUserName(project.getDbUsername());
 		entity.setPassword(project.getDbPassword());
 		return entity;
+	}
+
+	public List<Map<String, Object>> getDatabaseInfoByDataSourceIds(List<Long> dataSourceIds) {
+		// 调用 DataDatabaseService 中的方法
+		return dataDatabaseService.getDatabaseInfoByDataSourceIds(dataSourceIds);
+	}
+
+	public Integer getDatasourceIdByDatabaseId(Long databaseId){
+		return dataDatabaseService.getDatasourceIdByDatabaseId(databaseId);
 	}
 
 }
