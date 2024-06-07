@@ -41,6 +41,9 @@ public class DataTableVO implements Serializable {
 	@Schema(description = "数据库ID")
 	private Long databaseId;
 
+	@Schema(description = "数据库名称")
+	private String databaseName;
+
 	@Schema(description = "数据接入ID")
 	private Long dataAccessId;
 

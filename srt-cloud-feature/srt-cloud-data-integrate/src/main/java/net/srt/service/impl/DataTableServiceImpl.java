@@ -3,6 +3,9 @@ package net.srt.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
+import net.srt.api.DataAccessApiImpl;
+import net.srt.api.DataDatabaseApiImpl;
+import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.constants.DataHouseLayer;
 import net.srt.convert.DataOdsConvert;
 import net.srt.dao.DataTableDao;
@@ -41,6 +44,8 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTableEntity> implements DataTableService {
+	private DataAccessApiImpl dataAccessApi;
+	private DataDatabaseApiImpl dataDatabaseApi;
 
 	@Override
 	public PageResult<DataTableVO> page(DataTableQuery query) {
@@ -54,12 +59,11 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 				.filter(item -> !StringUtil.isNotBlank(query.getDatatableName()) || item.getTableName().contains(query.getDatatableName()))
 				.filter(item -> !StringUtil.isNotBlank(query.getRemarks()) || item.getRemarks().contains(query.getRemarks()))
 				.collect(Collectors.toList());
-
 		int startIndex = (query.getPage() - 1) * query.getLimit();
 		int endIndex = Math.min(query.getPage() * query.getLimit(), tableList.size());
-		List<TableDescription> pageList = tableList.subList(startIndex, endIndex);
-		List<DataTableVO> dataTableVOS = new ArrayList<>(10);
-		for (TableDescription tableDescription : pageList) {
+		List<TableDescription> pageList = tableList.subList(startIndex, endIndex);//截取片段tabledescription
+		List<DataTableVO> dataTableVOS = new ArrayList<>(10);//创建了datatbleVO
+		for (TableDescription tableDescription : pageList) {//遍历pagelist转化为datatablevo
 			DataTableVO dataTableVO = new DataTableVO();
 			dataTableVO.setDatatableName(tableDescription.getTableName());
 			dataTableVO.setRemarks(tableDescription.getRemarks());
@@ -71,11 +75,21 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			if (dataTableEntity != null) {
 				//说明是通过数据接入接入的
 				dataTableVO.setDataAccessId(dataTableEntity.getDataAccessId());
+				dataTableVO.setDatatableId(dataTableEntity.getId());
+				DataAccessDto dataAccessDto=dataAccessApi.getById(dataTableEntity.getDataAccessId()).getData();
+				Long databaseid=dataAccessDto.getSourceDatabaseId();
+				dataTableVO.setDatabaseId(databaseid);
+				dataTableVO.setDatabaseName(dataDatabaseApi.getDataBaseBamebyId(databaseid).getData());
 				dataTableVO.setRecentlySyncTime(dataTableEntity.getRecentlySyncTime());
 			}
 			dataTableVOS.add(dataTableVO);
 		}
-		return new PageResult<>(dataTableVOS, tableList.size());
+		// 进行额外的过滤操作，过滤出符合数据库 ID 的表
+		List<DataTableVO> filteredDataTableVOS = dataTableVOS.stream()
+				.filter(dataTableVO -> dataTableVO.getDatabaseId().equals(query.getDatabaseId()))
+				.collect(Collectors.toList());
+
+		return new PageResult<>(filteredDataTableVOS, filteredDataTableVOS.size());
 	}
 
 	/*private LambdaQueryWrapper<DataOdsEntity> getWrapper(DataOdsQuery query) {

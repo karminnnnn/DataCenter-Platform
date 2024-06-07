@@ -3,6 +3,9 @@ package net.srt.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import net.srt.api.DataAccessApiImpl;
+import net.srt.api.DataDatabaseApiImpl;
+import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.convert.DataOdsConvert;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.page.PageResult;
@@ -30,6 +33,8 @@ import java.util.List;
 @AllArgsConstructor
 public class DataTableController {
 	private final DataTableService dataTableService;
+	private DataAccessApiImpl dataAccessApi;
+	private DataDatabaseApiImpl dataDatabaseApi;
 
 	@GetMapping("page")
 	@Operation(summary = "数据表分页")
@@ -42,8 +47,12 @@ public class DataTableController {
 	@Operation(summary = "获取特定数据表信息")
 	public Result<DataTableVO> get(@PathVariable("id") Long id) {
 		DataTableEntity entity = dataTableService.getById(id);
-
-		return Result.ok(DataOdsConvert.INSTANCE.convert(entity));
+		DataTableVO dataTableVO=DataOdsConvert.INSTANCE.convert(entity);
+		DataAccessDto dataAccessDto=dataAccessApi.getById(entity.getDataAccessId()).getData();
+		Long databaseid=dataAccessDto.getSourceDatabaseId();
+		dataTableVO.setDatabaseId(databaseid);
+		dataTableVO.setDatabaseName(dataDatabaseApi.getDataBaseBamebyId(databaseid).getData());
+		return Result.ok(dataTableVO);
 	}
 
 	@DeleteMapping
