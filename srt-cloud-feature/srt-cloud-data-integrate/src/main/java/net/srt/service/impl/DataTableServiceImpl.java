@@ -122,79 +122,24 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 	@Override
 	public void update(DataTableVO vo) {
 		//DataTableEntity entity = DataOdsConvert.INSTANCE.convert(vo);
+		String Newtablename=vo.getDatatableName();
+		DataTableEntity entity=baseMapper.selectById(vo.getDatatableId());
+		String OldtableName=entity.getTableName();
 		modifyDataTable(vo);
 		quartzDataAccessApi.handRun(vo.getDataAccessId());
-		List<Long> id=new ArrayList<>();
-		id.add(vo.getDatatableId());
-		delete(id);
+		if(OldtableName!=Newtablename)
+			{deleteODSDatabaseTable(vo.getDatatableId());}
 	//	updateById(entity);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(List<Long> idList) {
-		DataProjectCacheBean project = getProject();
-		String databaseName=project.getDbName();
-		DataSourceDto dataSource = new DataSourceDto();
-		dataSource.setDatabaseName(project.getDbName());
-		dataSource.setJdbcUrl(project.getDbUrl());
-		dataSource.setUserName(project.getDbUsername());
-		dataSource.setPassword(project.getDbPassword());
 		for (Long id : idList) {
-			// 获取源端数据库信息
-			String tableName=baseMapper.selectById(id).getTableName();
-			Long accessid=baseMapper.selectById(id).getDataAccessId();
-			log.debug(accessid.toString());//获取accessid
-			Long sourcedatabaseid=dataAccessApi.getById(accessid).getData().getSourceDatabaseId();
-			log.debug(sourcedatabaseid.toString());//获取databaseid
-			Long datasourceid=dataDatabaseApi.getDatasourceIdbyDatabaseId(sourcedatabaseid).getData();
-			log.debug(datasourceid.toString());//获取sourcedatabaseid
-			DataSourceDto sourcedataSource = dataDatabaseApi.getById(datasourceid).getData();
-			sourcedataSource.setDatabaseName(dataDatabaseApi.getDataBaseBamebyId(sourcedatabaseid).getData());
-			if (sourcedataSource==null) {
-				throw new RuntimeException("Data Source not found");
-			}
-			deleteSourceDatabaseTable(sourcedataSource,tableName.replace("ods_",""));//删除源数据库
-			// 创建数据库连接
-			String jdbcUrl = dataSource.getJdbcUrl();
-			if (!jdbcUrl.contains(databaseName)) {
-				if (jdbcUrl.contains("?")) {
-					jdbcUrl = jdbcUrl.replace("?", "/" + databaseName + "?");
-				} else {
-					jdbcUrl += "/" + databaseName;
-				}
-			}
-
-			// 打印 JDBC URL 和连接参数
-			log.debug("JDBC URL: " + jdbcUrl);
-			log.debug("Database User: " + dataSource.getUserName());
-			log.debug("Database Name: " + databaseName);
-			log.debug("Table Name to be deleted: " + tableName);
-
-			try (Connection connection = DriverManager.getConnection(jdbcUrl, dataSource.getUserName(), dataSource.getPassword())) {
-				// 检查表是否存在
-				String checkTableSql = String.format("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '%s' AND table_name = '%s'", databaseName, tableName);
-				log.debug("Executing SQL: " + checkTableSql);
-				try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(checkTableSql)) {
-					if (rs.next() && rs.getInt(1) == 0) {
-						throw new SQLException("Table " + tableName + " does not exist in database " + databaseName);
-					}
-				}
-
-				// 删除表
-				String dropTableSql = String.format("DROP TABLE `%s`", tableName);
-				log.debug("Executing SQL: " + dropTableSql);
-				try (Statement stmt = connection.createStatement()) {
-					stmt.execute(dropTableSql);
-				}
-
-				log.debug("Table " + tableName + " has been successfully deleted.");
-			} catch (SQLException e) {
-				log.error("Failed to delete table " + tableName, e);
-				throw new RuntimeException("Failed to delete table " + tableName, e);
-			}
+			deleteSourceDatabaseTable(id);//删除源数据库
+			deleteODSDatabaseTable(id);
 		}
-		removeByIds(idList);
+
 	}
 
 	@Override
@@ -310,9 +255,72 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		}
 	}
 
-	public void deleteSourceDatabaseTable(DataSourceDto dataSource, String tableName) {
-		String databaseName = dataSource.getDatabaseName();
+	public void deleteODSDatabaseTable(Long id){
+		String tableName=baseMapper.selectById(id).getTableName();
+		DataProjectCacheBean project = getProject();
+		String databaseName=project.getDbName();
+		DataSourceDto dataSource = new DataSourceDto();
+		dataSource.setDatabaseName(project.getDbName());
+		dataSource.setJdbcUrl(project.getDbUrl());
+		dataSource.setUserName(project.getDbUsername());
+		dataSource.setPassword(project.getDbPassword());
+		// 创建数据库连接
+		String jdbcUrl = dataSource.getJdbcUrl();
+		if (!jdbcUrl.contains(databaseName)) {
+			if (jdbcUrl.contains("?")) {
+				jdbcUrl = jdbcUrl.replace("?", "/" + databaseName + "?");
+			} else {
+				jdbcUrl += "/" + databaseName;
+			}
+		}
+		// 打印 JDBC URL 和连接参数
+		log.debug("JDBC URL: " + jdbcUrl);
+		log.debug("Database User: " + dataSource.getUserName());
+		log.debug("Database Name: " + databaseName);
+		//log.debug("Table Name to be deleted: " + tableName);
+		try (Connection connection = DriverManager.getConnection(jdbcUrl, dataSource.getUserName(), dataSource.getPassword())) {
+			// 检查表是否存在
+			String checkTableSql = String.format("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '%s' AND table_name = '%s'", databaseName, tableName);
+			log.debug("Executing SQL: " + checkTableSql);
+			try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(checkTableSql)) {
+				if (rs.next() && rs.getInt(1) == 0) {
+					throw new SQLException("Table " + tableName + " does not exist in database " + databaseName);
+				}
+			}
 
+			// 删除表
+			String dropTableSql = String.format("DROP TABLE `%s`", tableName);
+			log.debug("Executing SQL: " + dropTableSql);
+			try (Statement stmt = connection.createStatement()) {
+				stmt.execute(dropTableSql);
+			}
+
+			log.debug("Table " + tableName + " has been successfully deleted.");
+		} catch (SQLException e) {
+			log.error("Failed to delete table " + tableName, e);
+			throw new RuntimeException("Failed to delete table " + tableName, e);
+		}
+		List<Long> ids=new ArrayList<>();
+		ids.add(id);
+		removeByIds(ids);
+
+	}
+	public void deleteSourceDatabaseTable(Long id) {
+		String tableName=baseMapper.selectById(id).getTableName();
+		tableName=tableName.replace("ods_","");
+		// 获取源端数据库信息
+		Long accessid=baseMapper.selectById(id).getDataAccessId();
+		log.debug(accessid.toString());//获取accessid
+		Long sourcedatabaseid=dataAccessApi.getById(accessid).getData().getSourceDatabaseId();
+		log.debug(sourcedatabaseid.toString());//获取databaseid
+		Long datasourceid=dataDatabaseApi.getDatasourceIdbyDatabaseId(sourcedatabaseid).getData();
+		log.debug(datasourceid.toString());//获取sourcedatabaseid
+		DataSourceDto dataSource = dataDatabaseApi.getById(datasourceid).getData();
+		dataSource.setDatabaseName(dataDatabaseApi.getDataBaseBamebyId(sourcedatabaseid).getData());
+		if (dataSource==null) {
+			throw new RuntimeException("Data Source not found");
+		}
+		String databaseName = dataSource.getDatabaseName();
 		// 构建 DROP TABLE SQL 语句
 		String dropTableSql = String.format("DROP TABLE `%s`.`%s`", databaseName, tableName);
 
