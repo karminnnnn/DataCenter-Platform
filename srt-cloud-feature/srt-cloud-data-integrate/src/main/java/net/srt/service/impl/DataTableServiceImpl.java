@@ -85,11 +85,11 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			dataTableVOS.add(dataTableVO);
 		}
 		// 进行额外的过滤操作，过滤出符合数据库 ID 的表
-		List<DataTableVO> filteredDataTableVOS = dataTableVOS.stream()
-				.filter(dataTableVO -> dataTableVO.getDatabaseId().equals(query.getDatabaseId()))
-				.collect(Collectors.toList());
+		//List<DataTableVO> filteredDataTableVOS = dataTableVOS.stream()
+	//			.filter(dataTableVO -> dataTableVO.getDatabaseId().equals(query.getDatabaseId()))
+	//			.collect(Collectors.toList());
 
-		return new PageResult<>(filteredDataTableVOS, filteredDataTableVOS.size());
+		return new PageResult<>(dataTableVOS, dataTableVOS.size());
 	}
 
 	/*private LambdaQueryWrapper<DataOdsEntity> getWrapper(DataOdsQuery query) {
