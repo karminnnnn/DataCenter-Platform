@@ -534,4 +534,18 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 	public Integer getDatasourceIdByDatabaseId(Long databaseId){
 		return dataDatabaseService.getDatasourceIdByDatabaseId(databaseId);
 	}
+
+	public Long getAccessIDbydatabaseID(Long databaseId) {
+		LambdaQueryWrapper<DataAccessEntity> wrapper = Wrappers.lambdaQuery();
+		wrapper.eq(DataAccessEntity::getSourceDatabaseId, databaseId)
+				.select(DataAccessEntity::getId) // 仅选择 id 字段
+				.last("LIMIT 1"); // 限制返回结果数量为 1
+
+         // 执行查询并获取结果
+		DataAccessEntity result = baseMapper.selectOne(wrapper);
+
+        // 如果没有结果返回 null，否则返回 id
+		return result != null ? result.getId() : null;
+	}
+
 }

@@ -65,5 +65,7 @@ public interface DataAccessService extends BaseService<DataAccessEntity> {
 
 	DataAccessTaskVO getTaskById(Long id);
 
+	Long getAccessIDbydatabaseID(Long databaseId);
+
 
 }

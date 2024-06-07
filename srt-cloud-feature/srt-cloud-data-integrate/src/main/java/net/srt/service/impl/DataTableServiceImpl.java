@@ -6,9 +6,14 @@ import lombok.AllArgsConstructor;
 import net.srt.api.DataAccessApiImpl;
 import net.srt.api.DataDatabaseApiImpl;
 import net.srt.api.module.data.integrate.dto.DataAccessDto;
+import net.srt.api.module.data.integrate.dto.DataSourceDto;
+import net.srt.api.module.data.integrate.dto.DataTableDto;
+import net.srt.api.module.quartz.QuartzDataAccessApi;
 import net.srt.constants.DataHouseLayer;
 import net.srt.convert.DataOdsConvert;
 import net.srt.dao.DataTableDao;
+import net.srt.entity.DataAccessEntity;
+import net.srt.entity.DataSourceEntity;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.page.PageResult;
@@ -31,6 +36,7 @@ import srt.cloud.framework.dbswitch.core.model.TableDescription;
 import srt.cloud.framework.dbswitch.core.service.IMetaDataByJdbcService;
 import srt.cloud.framework.dbswitch.core.service.impl.MetaDataByJdbcServiceImpl;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +52,7 @@ import java.util.stream.Collectors;
 public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTableEntity> implements DataTableService {
 	private DataAccessApiImpl dataAccessApi;
 	private DataDatabaseApiImpl dataDatabaseApi;
+	private final QuartzDataAccessApi quartzDataAccessApi;
 
 	@Override
 	public PageResult<DataTableVO> page(DataTableQuery query) {
@@ -74,6 +81,9 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			DataTableEntity dataTableEntity = baseMapper.selectOne(wrapper);
 			if (dataTableEntity != null) {
 				//说明是通过数据接入接入的
+				String datatablename=dataTableVO.getDatatableName();
+				datatablename=datatablename.replace("ods_","");
+				dataTableVO.setDatatableName(datatablename);
 				dataTableVO.setDataAccessId(dataTableEntity.getDataAccessId());
 				dataTableVO.setDatatableId(dataTableEntity.getId());
 				DataAccessDto dataAccessDto=dataAccessApi.getById(dataTableEntity.getDataAccessId()).getData();
@@ -89,7 +99,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 	//			.filter(dataTableVO -> dataTableVO.getDatabaseId().equals(query.getDatabaseId()))
 	//			.collect(Collectors.toList());
 
-		return new PageResult<>(dataTableVOS, dataTableVOS.size());
+		return new PageResult<>(dataTableVOS, tableList.size());
 	}
 
 	/*private LambdaQueryWrapper<DataOdsEntity> getWrapper(DataOdsQuery query) {
@@ -103,21 +113,87 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 
 	@Override
 	public void save(DataTableVO vo) {
-		DataTableEntity entity = DataOdsConvert.INSTANCE.convert(vo);
-
-		baseMapper.insert(entity);
+		//DataTableEntity entity = DataOdsConvert.INSTANCE.convert(vo);
+		//baseMapper.insert(entity);
+		newDataTable(vo);
+		quartzDataAccessApi.handRun(dataAccessApi.getAccessIDbydatabaseID(vo.getDatabaseId()));
 	}
 
 	@Override
 	public void update(DataTableVO vo) {
-		DataTableEntity entity = DataOdsConvert.INSTANCE.convert(vo);
-
-		updateById(entity);
+		//DataTableEntity entity = DataOdsConvert.INSTANCE.convert(vo);
+		modifyDataTable(vo);
+		quartzDataAccessApi.handRun(vo.getDataAccessId());
+		List<Long> id=new ArrayList<>();
+		id.add(vo.getDatatableId());
+		delete(id);
+	//	updateById(entity);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(List<Long> idList) {
+		DataProjectCacheBean project = getProject();
+		String databaseName=project.getDbName();
+		DataSourceDto dataSource = new DataSourceDto();
+		dataSource.setDatabaseName(project.getDbName());
+		dataSource.setJdbcUrl(project.getDbUrl());
+		dataSource.setUserName(project.getDbUsername());
+		dataSource.setPassword(project.getDbPassword());
+		for (Long id : idList) {
+			// 获取源端数据库信息
+			String tableName=baseMapper.selectById(id).getTableName();
+			Long accessid=baseMapper.selectById(id).getDataAccessId();
+			log.debug(accessid.toString());//获取accessid
+			Long sourcedatabaseid=dataAccessApi.getById(accessid).getData().getSourceDatabaseId();
+			log.debug(sourcedatabaseid.toString());//获取databaseid
+			Long datasourceid=dataDatabaseApi.getDatasourceIdbyDatabaseId(sourcedatabaseid).getData();
+			log.debug(datasourceid.toString());//获取sourcedatabaseid
+			DataSourceDto sourcedataSource = dataDatabaseApi.getById(datasourceid).getData();
+			sourcedataSource.setDatabaseName(dataDatabaseApi.getDataBaseBamebyId(sourcedatabaseid).getData());
+			if (sourcedataSource==null) {
+				throw new RuntimeException("Data Source not found");
+			}
+			deleteSourceDatabaseTable(sourcedataSource,tableName.replace("ods_",""));//删除源数据库
+			// 创建数据库连接
+			String jdbcUrl = dataSource.getJdbcUrl();
+			if (!jdbcUrl.contains(databaseName)) {
+				if (jdbcUrl.contains("?")) {
+					jdbcUrl = jdbcUrl.replace("?", "/" + databaseName + "?");
+				} else {
+					jdbcUrl += "/" + databaseName;
+				}
+			}
+
+			// 打印 JDBC URL 和连接参数
+			log.debug("JDBC URL: " + jdbcUrl);
+			log.debug("Database User: " + dataSource.getUserName());
+			log.debug("Database Name: " + databaseName);
+			log.debug("Table Name to be deleted: " + tableName);
+
+			try (Connection connection = DriverManager.getConnection(jdbcUrl, dataSource.getUserName(), dataSource.getPassword())) {
+				// 检查表是否存在
+				String checkTableSql = String.format("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '%s' AND table_name = '%s'", databaseName, tableName);
+				log.debug("Executing SQL: " + checkTableSql);
+				try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(checkTableSql)) {
+					if (rs.next() && rs.getInt(1) == 0) {
+						throw new SQLException("Table " + tableName + " does not exist in database " + databaseName);
+					}
+				}
+
+				// 删除表
+				String dropTableSql = String.format("DROP TABLE `%s`", tableName);
+				log.debug("Executing SQL: " + dropTableSql);
+				try (Statement stmt = connection.createStatement()) {
+					stmt.execute(dropTableSql);
+				}
+
+				log.debug("Table " + tableName + " has been successfully deleted.");
+			} catch (SQLException e) {
+				log.error("Failed to delete table " + tableName, e);
+				throw new RuntimeException("Failed to delete table " + tableName, e);
+			}
+		}
 		removeByIds(idList);
 	}
 
@@ -126,21 +202,6 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		LambdaQueryWrapper<DataTableEntity> wrapper = new LambdaQueryWrapper<>();
 		return baseMapper.selectOne(wrapper.eq(DataTableEntity::getTableName, tableName).eq(DataTableEntity::getProjectId, projectId));
 	}
-
-	/*@Override
-	public List<ColumnDescriptionVo> getColumnInfo(String tableName) {
-		//DataOdsEntity dataOdsEntity = baseMapper.selectById(id);
-		DataProjectCacheBean project = getProject();
-		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
-		List<ColumnDescription> columnDescriptions = service.queryTableColumnMeta(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName);
-		List<String> pks = service.queryTablePrimaryKeys(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName);
-		return BeanUtil.copyListProperties(columnDescriptions, ColumnDescriptionVo::new, (oldItem, newItem) -> {
-			newItem.setFieldName(StringUtil.isNotBlank(newItem.getFieldName()) ? newItem.getFieldName() : newItem.getLabelName());
-			if (pks.contains(newItem.getFieldName())) {
-				newItem.setPk(true);
-			}
-		});
-	}*/
 
 	@Override
 	public SchemaTableDataVo getTableData(String tableName) {
@@ -164,5 +225,105 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 
 	public PageResult<SchemaTableDataVo> pageTableData(TableDataQuery query){
 		return new PageResult<SchemaTableDataVo>(new ArrayList<>(), 0);
+	}
+
+
+	public void modifyDataTable(DataTableVO query) {
+		// 获取数据接入信息
+		DataAccessDto dataAccess = dataAccessApi.getById(query.getDataAccessId()).getData();
+		if (dataAccess==null) {
+			throw new RuntimeException("Data access not found");
+		}
+		// 获取源端数据库信息
+		Long datasourceid=dataDatabaseApi.getDatasourceIdbyDatabaseId(dataAccess.getSourceDatabaseId()).getData();
+		DataSourceDto dataSource = dataDatabaseApi.getById(datasourceid).getData();
+		if (dataSource==null) {
+			throw new RuntimeException("Data Source not found");
+		}
+		// 修改源端数据库中的表名称和注释
+		modifySourceDatabaseTable(dataSource, query);
+
+		// 同步修改到数据中台库
+		/*DataTableEntity dataTable = dataTableRepository.findById(request.getDatatableId())
+				.orElseThrow(() -> new RuntimeException("Data table not found"));
+		dataTable.setDatatableName(request.getDatatableName());
+		dataTable.setRemarks(request.getRemarks());
+		dataTable.setRecentlySyncTime(request.getRecentlySyncTime());
+		dataTableRepository.save(dataTable);*/
+	}
+
+	public void newDataTable(DataTableVO query){
+		// 获取数据接入信息
+		Long dataaccessid=dataAccessApi.getAccessIDbydatabaseID(query.getDatabaseId());
+		DataAccessDto dataAccess = dataAccessApi.getById(dataaccessid).getData();
+		if (dataAccess==null) {
+			throw new RuntimeException("Data access not found");
+		}
+		// 获取源端数据库信息
+		Long datasourceid=dataDatabaseApi.getDatasourceIdbyDatabaseId(dataAccess.getSourceDatabaseId()).getData();
+		DataSourceDto dataSource = dataDatabaseApi.getById(datasourceid).getData();
+		if (dataSource==null) {
+			throw new RuntimeException("Data Source not found");
+		}
+
+		createSourceDatabaseTable(dataSource,query);
+
+	}
+
+	private void modifySourceDatabaseTable(DataSourceDto dataSource, DataTableVO query) {
+		DataTableEntity entity=baseMapper.selectById(query.getDatatableId());
+		String databaseName=query.getDatabaseName();
+		// 创建数据库连接
+		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword())) {
+			// 修改表名称
+			String renameTableSql = String.format("ALTER TABLE `%s`.`%s` RENAME TO `%s`.`%s`", databaseName, entity.getTableName().replace("ods_",""), databaseName, query.getDatatableName());
+			try (Statement stmt = connection.createStatement()) {
+				stmt.execute(renameTableSql);
+			}
+
+			// 修改表注释
+			String commentTableSql = String.format("ALTER TABLE `%s`.`%s` COMMENT = '%s'", databaseName, query.getDatatableName(), query.getRemarks());
+			try (Statement stmt = connection.createStatement()) {
+				stmt.execute(commentTableSql);
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to modify source database table", e);
+		}
+	}
+
+	public void createSourceDatabaseTable(DataSourceDto dataSource, DataTableVO query) {
+		String databaseName = query.getDatabaseName();
+		String datatableName = query.getDatatableName();
+		String remarks = query.getRemarks();
+
+		// 构建 CREATE TABLE SQL 语句
+		String createTableSql = String.format("CREATE TABLE `%s`.`%s` (id BIGINT PRIMARY KEY) COMMENT='%s'",
+				databaseName, datatableName, remarks);
+
+		// 创建数据库连接并执行 SQL 语句
+		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword())) {
+			try (Statement stmt = connection.createStatement()) {
+				stmt.execute(createTableSql);
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to create source database table", e);
+		}
+	}
+
+	public void deleteSourceDatabaseTable(DataSourceDto dataSource, String tableName) {
+		String databaseName = dataSource.getDatabaseName();
+
+		// 构建 DROP TABLE SQL 语句
+		String dropTableSql = String.format("DROP TABLE `%s`.`%s`", databaseName, tableName);
+
+		// 创建数据库连接并执行 SQL 语句
+		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword())) {
+			try (Statement stmt = connection.createStatement()) {
+				stmt.execute(dropTableSql);
+				System.out.println("Table " + tableName + " has been successfully deleted.");
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to delete source database table", e);
+		}
 	}
 }

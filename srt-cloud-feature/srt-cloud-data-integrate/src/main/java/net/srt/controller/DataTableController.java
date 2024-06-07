@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static dm.jdbc.util.DriverUtil.log;
+
 /**
  * 数据集成-贴源数据
  *
@@ -48,6 +50,9 @@ public class DataTableController {
 	public Result<DataTableVO> get(@PathVariable("id") Long id) {
 		DataTableEntity entity = dataTableService.getById(id);
 		DataTableVO dataTableVO=DataOdsConvert.INSTANCE.convert(entity);
+		String datatablename=dataTableVO.getDatatableName();
+		datatablename=datatablename.replace("ods_","");
+		dataTableVO.setDatatableName(datatablename);
 		DataAccessDto dataAccessDto=dataAccessApi.getById(entity.getDataAccessId()).getData();
 		Long databaseid=dataAccessDto.getSourceDatabaseId();
 		dataTableVO.setDatabaseId(databaseid);
