@@ -292,7 +292,7 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 		DataAccessEntity dataAccessEntity = baseMapper.selectById(id);
 		DbswichProperties dbswichProperties = dataAccessEntity.getDataAccessJson();
 		PreviewMapDto previewMapDto = new PreviewMapDto();
-		previewMapDto.setSourceDatabaseId(dataAccessEntity.getSourceDatabaseId());
+		previewMapDto.setSourceDatabaseId(Long.valueOf(getDatasourceIdByDatabaseId(dataAccessEntity.getSourceDatabaseId())));
 		TargetDataSourceProperties targetDataSourceProperties = dbswichProperties.getTarget();
 		SourceDataSourceProperties sourceDataSourceProperties = dbswichProperties.getSource().get(0);
 		previewMapDto.setIncludeOrExclude(sourceDataSourceProperties.getIncludeOrExclude());

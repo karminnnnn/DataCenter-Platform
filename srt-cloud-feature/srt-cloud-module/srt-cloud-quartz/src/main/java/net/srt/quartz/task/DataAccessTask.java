@@ -43,6 +43,7 @@ import net.srt.lineage.repository.TableColumnRelationRepository;
 import net.srt.lineage.repository.TableRelationRepository;
 import net.srt.lineage.repository.TableRepository;
 import net.srt.quartz.utils.CronUtils;
+import org.bouncycastle.math.ec.custom.sec.SecT163R1Point;
 import org.springframework.stereotype.Component;
 import srt.cloud.framework.dbswitch.common.constant.ChangeDataSyncType;
 import srt.cloud.framework.dbswitch.common.constant.MapperType;
@@ -124,6 +125,8 @@ public class DataAccessTask {
 		DataAccessDto dataAccessDto = dataAccessApi.getById(accessRunDto.getDataAccessId()).getData();
 		DbswichProperties dbswichProperties = dataAccessDto.getDataAccessJson();
 		SourceDataSourceProperties sourceDataSourceProperties = dbswichProperties.getSource().get(0);
+		sourceDataSourceProperties.setSourceSchema(DataSourceApi.getDataBaseBamebyId(dataAccessDto.getSourceDatabaseId()).getData());
+		log.info("sourceDataSourceProperties.getSourceSchema():{}",sourceDataSourceProperties.getSourceSchema());
 		TargetDataSourceProperties targetDataSourceProperties = dbswichProperties.getTarget();
 		//如果是增量字段同步
 		Map<String, DataAccessIncreaseLogDto> increaseLogDtoMap = buildIncrease(dataAccessDto, sourceDataSourceProperties, targetDataSourceProperties);
@@ -309,7 +312,15 @@ public class DataAccessTask {
 	 */
 	private void buildLineage(DataAccessDto dataAccessDto) {
 		try {
-			DataSourceDto sourceDatabaseDto = DataSourceApi.getById(dataAccessDto.getSourceDatabaseId()).getData();
+			DataSourceDto sourceDatabaseDto = DataSourceApi.getById(DataSourceApi.getDatasourceIdbyDatabaseId(dataAccessDto.getSourceDatabaseId()).getData()).getData();
+			String schema=DataSourceApi.getDataBaseBamebyId(dataAccessDto.getSourceDatabaseId()).getData();
+			sourceDatabaseDto.setDatabaseName(schema);
+			sourceDatabaseDto.setDatabaseSchema(schema);
+			log.error("sourceDatabaseDto.getDatabaseIp(): {}",sourceDatabaseDto.getDatabaseIp());
+			log.error("dsourceDatabaseDto.getDatabasePort(): {}",sourceDatabaseDto.getDatabasePort());
+			log.error("sourceDatabaseDto.getDatabaseType(): {}",sourceDatabaseDto.getDatabaseType());
+			log.error("sourceDatabaseDto.getDatabaseSchema(): {}",sourceDatabaseDto.getDatabaseSchema());
+			log.error("sourceDatabaseDto.getDatabaseName(): {}",sourceDatabaseDto.getDatabaseName());
 			DataSourceDto targetDataSourceDto;
 			if (dataAccessDto.getTargetDatabaseId() == null) {
 				targetDataSourceDto = new DataSourceDto();
@@ -324,6 +335,7 @@ public class DataAccessTask {
 			} else {
 				targetDataSourceDto = DataSourceApi.getById(dataAccessDto.getTargetDatabaseId()).getData();
 			}
+
 			//数据库节点
 			Database sourceDatabase = addOrUpdateDatabase(sourceDatabaseDto);
 			Database targetDatabase = addOrUpdateDatabase(targetDataSourceDto);
@@ -331,6 +343,10 @@ public class DataAccessTask {
 			addOrUpdateDatabaseRelation(dataAccessDto, sourceDatabase, targetDatabase);
 			//构建表级血缘
 			List<PreviewNameMapperDto> tableMap = dataAccessApi.getTableMap(dataAccessDto.getId()).getData();
+			if (tableMap == null) {
+				log.error("Table map is null for data access ID: {}", dataAccessDto.getId());
+				return;
+			}
 			for (PreviewNameMapperDto tableMapper : tableMap) {
 				Table sourceTable = new Table(tableMapper.getRemarks(), tableMapper.getOriginalName(), sourceDatabaseDto.getId(), sourceDatabase.getId());
 				Table targetTable = new Table(tableMapper.getRemarks(), tableMapper.getTargetName(), targetDataSourceDto.getId(), targetDatabase.getId());

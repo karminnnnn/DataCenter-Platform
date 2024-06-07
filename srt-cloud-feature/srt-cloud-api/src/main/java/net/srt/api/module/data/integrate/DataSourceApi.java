@@ -20,4 +20,11 @@ public interface DataSourceApi {
 	 */
 	@GetMapping(value = "api/data/integrate/datasource/{id}")
 	Result<DataSourceDto> getById(@PathVariable Long id);
+
+
+	@GetMapping(value = "api/data/integrate/database/{id}")
+	Result<Long> getDatasourceIdbyDatabaseId(@PathVariable Long id);
+
+	@GetMapping(value = "api/data/integrate/databasename/{id}")
+	Result<String> getDataBaseBamebyId(@PathVariable Long id);
 }

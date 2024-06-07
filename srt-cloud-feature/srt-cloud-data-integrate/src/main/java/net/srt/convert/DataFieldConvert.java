@@ -24,11 +24,6 @@ public interface DataFieldConvert {
     @Mapping(source = "displaySize", target = "displaySize")
     @Mapping(source = "scaleSize", target = "scaleSize")
     @Mapping(source = "defaultValue", target = "defaultValue")
-    @Mapping(source = "nullable", target = "nullable")
-    @Mapping(source = "pk", target = "pk")
-    @Mapping(source = "autoIncrement", target = "autoIncrement")
-    @Mapping(source = "datatableId", target = "datatableId")
-    @Mapping(source = "datatableName", target = "datatableName")
     DataFieldEntity convert(DataFieldVO vo);
 
     @Mapping(source = "fieldId", target = "id")
@@ -38,11 +33,6 @@ public interface DataFieldConvert {
     @Mapping(source = "displaySize", target = "displaySize")
     @Mapping(source = "scaleSize", target = "scaleSize")
     @Mapping(source = "defaultValue", target = "defaultValue")
-    @Mapping(source = "nullable", target = "nullable")
-    @Mapping(source = "pk", target = "pk")
-    @Mapping(source = "autoIncrement", target = "autoIncrement")
-    @Mapping(source = "datatableId", target = "datatableId")
-    @Mapping(source = "datatableName", target = "datatableName")
     DataFieldEntity convertByDto(DataFieldDto dto);
 
     @Mapping(source = "id", target = "fieldId")
@@ -52,11 +42,6 @@ public interface DataFieldConvert {
     @Mapping(source = "displaySize", target = "displaySize")
     @Mapping(source = "scaleSize", target = "scaleSize")
     @Mapping(source = "defaultValue", target = "defaultValue")
-    @Mapping(source = "nullable", target = "nullable")
-    @Mapping(source = "pk", target = "pk")
-    @Mapping(source = "autoIncrement", target = "autoIncrement")
-    @Mapping(source = "datatableId", target = "datatableId")
-    @Mapping(source = "datatableName", target = "datatableName")
     DataFieldVO convert(DataFieldEntity entity);
 
     @Mapping(source = "id", target = "fieldId")
@@ -66,11 +51,6 @@ public interface DataFieldConvert {
     @Mapping(source = "displaySize", target = "displaySize")
     @Mapping(source = "scaleSize", target = "scaleSize")
     @Mapping(source = "defaultValue", target = "defaultValue")
-    @Mapping(source = "nullable", target = "nullable")
-    @Mapping(source = "pk", target = "pk")
-    @Mapping(source = "autoIncrement", target = "autoIncrement")
-    @Mapping(source = "datatableId", target = "datatableId")
-    @Mapping(source = "datatableName", target = "datatableName")
     DataFieldDto convertDto(DataFieldEntity entity);
 
     @Mapping(source = "id", target = "fieldId")
@@ -80,10 +60,5 @@ public interface DataFieldConvert {
     @Mapping(source = "displaySize", target = "displaySize")
     @Mapping(source = "scaleSize", target = "scaleSize")
     @Mapping(source = "defaultValue", target = "defaultValue")
-    @Mapping(source = "nullable", target = "nullable")
-    @Mapping(source = "pk", target = "pk")
-    @Mapping(source = "autoIncrement", target = "autoIncrement")
-    @Mapping(source = "datatableId", target = "datatableId")
-    @Mapping(source = "datatableName", target = "datatableName")
     List<DataFieldVO> convertList(List<DataFieldEntity> list);
 }
