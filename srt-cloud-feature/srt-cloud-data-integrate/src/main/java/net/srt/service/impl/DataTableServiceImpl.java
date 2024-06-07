@@ -124,11 +124,15 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		//DataTableEntity entity = DataOdsConvert.INSTANCE.convert(vo);
 		String Newtablename=vo.getDatatableName();
 		DataTableEntity entity=baseMapper.selectById(vo.getDatatableId());
-		String OldtableName=entity.getTableName();
+		String OldtableName=entity.getTableName().replace("ods_","");
 		modifyDataTable(vo);
+		log.error(Newtablename);
+		log.error(OldtableName);
+		if(!OldtableName.equals(Newtablename))
+		{  log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!f23g1");
+			deleteODSDatabaseTable(vo.getDatatableId());}
 		quartzDataAccessApi.handRun(vo.getDataAccessId());
-		if(OldtableName!=Newtablename)
-			{deleteODSDatabaseTable(vo.getDatatableId());}
+
 	//	updateById(entity);
 	}
 
