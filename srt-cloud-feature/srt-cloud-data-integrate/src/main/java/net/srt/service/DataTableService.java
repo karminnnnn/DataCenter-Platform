@@ -36,4 +36,6 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 	void saveTableData(TableDataQuery request);
 
 	PageResult<SchemaTableDataVo> pageTableData(TableDataQuery query);
+
+	public Long getaccessidbydatabaseid(Long id);
 }

@@ -338,4 +338,8 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			throw new RuntimeException("Failed to delete source database table", e);
 		}
 	}
+
+	public Long getaccessidbydatabaseid(Long id){
+		return baseMapper.selectById(id).getDataAccessId();
+	}
 }
