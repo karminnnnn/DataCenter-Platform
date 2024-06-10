@@ -15,12 +15,12 @@ import java.util.Optional;
 public interface DataFieldService extends BaseService<DataFieldEntity> {
     PageResult<ColumnDescriptionVo> page(DataFieldQuery query);
 
-    void save(DataFieldVO vo);
+    void save(ColumnDescriptionVo vo);
 
-    void update(DataFieldVO vo);
+    void update(ColumnDescriptionVo vo,String oldfieldname);
 
-    void delete(List<Long> idList);
+    void delete(String fieldname,Long databaseid);
 
-    Optional<ColumnDescriptionVo> getColumnInfo(String fieldName, Long tableId);
+    Optional<ColumnDescriptionVo> getColumnInfo(String fieldName, Long datatableId);
 
 }

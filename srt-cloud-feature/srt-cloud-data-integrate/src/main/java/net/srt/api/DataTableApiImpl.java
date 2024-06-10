@@ -31,4 +31,5 @@ public class DataTableApiImpl implements DataTableApi {
 		}
 		return Result.ok();
 	}
+
 }

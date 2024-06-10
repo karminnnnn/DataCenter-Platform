@@ -10,7 +10,7 @@ import java.util.Map;
 @Data
 @Builder
 public class SchemaTableDataVo {
-
 	private Map<String, String> columns;
 	private List<Map<String, Object>> rows;
+	private long total;
 }
