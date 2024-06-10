@@ -1,5 +1,6 @@
 package net.srt.service.impl;
 
+import cn.hutool.db.meta.Column;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ import net.srt.framework.common.utils.SqlUtils;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.query.DataTableQuery;
 import net.srt.query.TableDataQuery;
+import net.srt.query.UpdateDataQuery;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
@@ -37,8 +39,7 @@ import srt.cloud.framework.dbswitch.core.service.IMetaDataByJdbcService;
 import srt.cloud.framework.dbswitch.core.service.impl.MetaDataByJdbcServiceImpl;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -161,19 +162,151 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 	}
 
 	@Override
-	public void saveTableData(TableDataQuery request) {
-		// 假设数据是保存到某个数据表中，可以根据业务逻辑实现具体保存逻辑
-		//Long datatableId = request.getDatatableId();
-		//List<Map<String, Object>> rows = request.getRows();
-
-		// 实现数据保存逻辑，根据具体业务需求
-		//for (Map<String, Object> row : rows) {
-			// 保存每行数据的具体逻辑
-			// 例如，将 row 中的数据保存到数据库中
+	public boolean saveTableData(UpdateDataQuery query) {
+		// 获取数据接入信息
+		DataAccessDto dataAccess = dataAccessApi.getById(getaccessidbydatabaseid(query.getDatatableId())).getData();
+		if (dataAccess == null) {
+			throw new RuntimeException("Data access not found");
 		}
 
-	public PageResult<SchemaTableDataVo> pageTableData(TableDataQuery query){
-		return new PageResult<SchemaTableDataVo>(new ArrayList<>(), 0);
+		// 获取源端数据库信息
+		Long datasourceid = dataDatabaseApi.getDatasourceIdbyDatabaseId(dataAccess.getSourceDatabaseId()).getData();
+		DataSourceDto dataSource = dataDatabaseApi.getById(datasourceid).getData();
+		if (dataSource == null) {
+			throw new RuntimeException("Data Source not found");
+		}
+
+		// 修改源端数据库中的表数据
+		boolean ifsuccess=insertMultipleToSourceDatabaseTableData(dataSource, query);
+		if(ifsuccess) {
+			Long accessid=baseMapper.selectById(query.getDatatableId()).getDataAccessId();
+			quartzDataAccessApi.handRun(accessid);
+		}
+		return ifsuccess;
+	}
+
+	public boolean deleteTableData(List<Object> idList,String primaryKeyColumn,Long datatableId ){
+		// 获取数据接入信息
+		DataAccessDto dataAccess = dataAccessApi.getById(getaccessidbydatabaseid(datatableId)).getData();
+		if (dataAccess == null) {
+			throw new RuntimeException("Data access not found");
+		}
+
+		// 获取源端数据库信息
+		Long datasourceid = dataDatabaseApi.getDatasourceIdbyDatabaseId(dataAccess.getSourceDatabaseId()).getData();
+		DataSourceDto dataSource = dataDatabaseApi.getById(datasourceid).getData();
+		if (dataSource == null) {
+			throw new RuntimeException("Data Source not found");
+		}
+
+		// 删除源端数据库中的表数据
+		boolean ifsuccess=deleteMultipleFromSourceDatabaseTableData(dataSource,datatableId,idList,primaryKeyColumn);
+		if(ifsuccess) {
+			Long accessid=baseMapper.selectById(datatableId).getDataAccessId();
+			quartzDataAccessApi.handRun(accessid);
+		}
+		return ifsuccess;
+	}
+
+	/*public SchemaTableDataVo pageTableData(TableDataQuery query){
+		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName();
+		DataProjectCacheBean project = getProject();//获取项目编号
+		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
+		SchemaTableData schemaTableData = service.queryTableData(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName, 50);//初始化元数据服务,总之得到service对象
+		return SchemaTableDataVo.builder().columns(SqlUtils.convertColumns(schemaTableData.getColumns())).rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows())).build();//调用 queryTableData 方法查询指定表的数据。 参数包括数据库 URL、用户名、密码、模式、表名和查询限制（50 行）。查询结果存储在 schemaTableData 对象中。
+	}*/
+
+	@Override
+	public SchemaTableDataVo pageTableData(TableDataQuery query) {
+		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName();
+		DataProjectCacheBean project = getProject();
+		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
+
+		// 设置合理的最大行数限制
+		int maxRows = 50000000;
+		// 查询所有表数据
+		SchemaTableData schemaTableData = service.queryTableData(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName, maxRows);
+
+		// 获取列信息
+		List<String> columns = schemaTableData.getColumns();
+		int orderIndex = columns.indexOf(query.getOrder());
+
+		List<List<Object>> rows = schemaTableData.getRows();
+		// 对数据进行排序（如果有排序需求）
+		if (orderIndex != -1) {
+			final int index = orderIndex;
+			rows.sort((row1, row2) -> {
+				Comparable value1 = (Comparable) row1.get(index);
+				Comparable value2 = (Comparable) row2.get(index);
+				return query.isAsc() ? value1.compareTo(value2) : value2.compareTo(value1);
+			});
+		}
+
+		// 计算分页起始和结束索引
+		int startIndex = (query.getPage() - 1) * query.getLimit();
+		int endIndex = Math.min(startIndex + query.getLimit(), rows.size());
+
+		// 获取分页数据
+		List<List<Object>> paginatedRows = rows.subList(startIndex, endIndex);
+
+		// 构建 SchemaTableDataVo 对象
+		SchemaTableDataVo tableDataVo = SchemaTableDataVo.builder()
+				.columns(SqlUtils.convertColumns(schemaTableData.getColumns()))
+				.rows(SqlUtils.convertRows(schemaTableData.getColumns(), paginatedRows))
+				.total(rows.size()) // 设置总记录数
+				.build();
+
+		return tableDataVo;
+	}
+
+	private List<ColumnDescriptionVo> convertToColumnDescriptionVo(List<String> columns, List<List<Object>> rows, long datatableId, String tableName) {
+		List<ColumnDescriptionVo> columnDescriptionVos = new ArrayList<>();
+		for (List<Object> row : rows) {
+			ColumnDescriptionVo vo = new ColumnDescriptionVo();
+			for (int i = 0; i < columns.size(); i++) {
+				String columnName = columns.get(i);
+				Object value = row.get(i);
+				switch (columnName) {
+					case "fieldName":
+						vo.setFieldName((String) value);
+						break;
+					case "remarks":
+						vo.setRemarks((String) value);
+						break;
+					case "labelName":
+						vo.setLabelName((String) value);
+						break;
+					case "fieldTypeName":
+						vo.setFieldTypeName((String) value);
+						break;
+					case "displaySize":
+						vo.setDisplaySize((Integer) value);
+						break;
+					case "scaleSize":
+						vo.setScaleSize((Integer) value);
+						break;
+					case "defaultValue":
+						vo.setDefaultValue((String) value);
+						break;
+					case "isNullable":
+						vo.setNullable((Boolean) value);
+						break;
+					case "isPk":
+						vo.setPk((Boolean) value);
+						break;
+					case "isAutoIncrement":
+						vo.setAutoIncrement((Boolean) value);
+						break;
+					default:
+						// Handle other fields if necessary
+						break;
+				}
+			}
+			vo.setDatatableId(datatableId);
+			vo.setDatatableName(tableName);
+			columnDescriptionVos.add(vo);
+		}
+		return columnDescriptionVos;
 	}
 
 
@@ -336,6 +469,164 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Failed to delete source database table", e);
+		}
+	}
+
+	public boolean updateTableData(UpdateDataQuery query){
+		// 获取数据接入信息
+		DataAccessDto dataAccess = dataAccessApi.getById(getaccessidbydatabaseid(query.getDatatableId())).getData();
+		if (dataAccess == null) {
+			throw new RuntimeException("Data access not found");
+		}
+
+		// 获取源端数据库信息
+		Long datasourceid = dataDatabaseApi.getDatasourceIdbyDatabaseId(dataAccess.getSourceDatabaseId()).getData();
+		DataSourceDto dataSource = dataDatabaseApi.getById(datasourceid).getData();
+		if (dataSource == null) {
+			throw new RuntimeException("Data Source not found");
+		}
+
+		// 修改源端数据库中的表数据
+		boolean ifsuccess=modifySourceDatabaseTableData(dataSource, query);
+		if(ifsuccess) {
+			Long accessid=baseMapper.selectById(query.getDatatableId()).getDataAccessId();
+			quartzDataAccessApi.handRun(accessid);
+		}
+		return ifsuccess;
+
+	}
+
+	private boolean modifySourceDatabaseTableData(DataSourceDto dataSource, UpdateDataQuery query) {
+		// 构建更新 SQL 语句
+		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName().replace("ods_","");
+		Long databaseId=dataAccessApi.getById(getaccessidbydatabaseid(query.getDatatableId())).getData().getSourceDatabaseId();
+		String databasename=dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
+		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword());
+			 Statement useDbStmt = connection.createStatement()) {// 选择数据库
+			useDbStmt.execute("USE " + databasename);
+			for (Map<String, Object> data : query.getRows()) {// 为每个数据项构建更新 SQL 语句
+				StringBuilder sql = new StringBuilder("UPDATE ").append("`").append(databasename).append("`.`").append(tableName).append("` SET ");
+				List<Object> params = new ArrayList<>();
+				Object primaryKeyValue = data.get(query.getPrimaryKeyColumn());
+
+				data.forEach((column, value) -> {
+					if (!column.equals(query.getPrimaryKeyColumn())) {
+						sql.append("`").append(column).append("` = ?, ");
+						params.add(value);
+					}
+				});
+
+				// 删除最后一个逗号和空格
+				sql.setLength(sql.length() - 2);
+				sql.append(" WHERE `").append(query.getPrimaryKeyColumn()).append("` = ?");
+				params.add(primaryKeyValue);
+				// 打印 SQL 语句和参数
+				System.out.println("Executing SQL: " + sql);
+				System.out.println("With parameters: " + params);
+				// 执行更新
+				try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+					for (int i = 0; i < params.size(); i++) {
+						stmt.setObject(i + 1, params.get(i));
+					}
+					stmt.executeUpdate();
+				}
+			}
+			return true;
+		} catch (
+				SQLException e) {
+			// 打印异常信息
+			e.printStackTrace();
+			throw new RuntimeException("Failed to update table data in source database", e);
+		}
+
+
+	}
+
+	private boolean insertMultipleToSourceDatabaseTableData(DataSourceDto dataSource, UpdateDataQuery query) {
+
+		if (query.getRows().isEmpty()) {
+			return false;
+		}
+
+		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName().replace("ods_","");
+		Long databaseId=dataAccessApi.getById(getaccessidbydatabaseid(query.getDatatableId())).getData().getSourceDatabaseId();
+		String databasename=dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
+
+		// 获取第一条数据的列名
+		Map<String, Object> firstData = query.getRows().get(0);
+		StringBuilder sql = new StringBuilder("INSERT INTO ")
+				.append("`").append(databasename).append("`.`").append(tableName).append("` (");
+
+		// 构建列名部分
+		for (String column : firstData.keySet()) {
+			sql.append("`").append(column).append("`, ");
+		}
+		// 去掉末尾的逗号和空格
+		sql.setLength(sql.length() - 2);
+		sql.append(") VALUES (");
+
+		// 构建占位符部分
+		for (@SuppressWarnings("unused") String column : firstData.keySet()) {
+			sql.append("?, ");
+		}
+		// 去掉末尾的逗号和空格
+		sql.setLength(sql.length() - 2);
+		sql.append(")");
+
+		// 打印 SQL 语句
+		System.out.println("Executing SQL: " + sql);
+
+		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword());
+			 PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+
+			for (Map<String, Object> data : query.getRows()) {
+				int paramIndex = 1;
+				for (String column : firstData.keySet()) {
+					stmt.setObject(paramIndex++, data.get(column));
+				}
+				stmt.addBatch();
+			}
+
+			int[] rowsAffected = stmt.executeBatch();
+			return rowsAffected.length == query.getRows().size();
+		} catch (SQLException e) {
+			// 打印异常信息
+			e.printStackTrace();
+			throw new RuntimeException("Failed to insert multiple rows into table in source database", e);
+		}
+	}
+
+	public boolean deleteMultipleFromSourceDatabaseTableData(DataSourceDto dataSource, Long tableId, List<Object> primaryKeyValues, String primaryKeyColumn) {
+		String tableName=baseMapper.selectById(tableId).getTableName().replace("ods_","");
+		Long databaseId=dataAccessApi.getById(getaccessidbydatabaseid(tableId)).getData().getSourceDatabaseId();
+		String databasename=dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
+
+		// 如果主键值列表为空，则不需要删除
+		if (primaryKeyValues.isEmpty()) {
+			return false;
+		}
+
+		StringBuilder sql = new StringBuilder("DELETE FROM ")
+				.append("`").append(databasename).append("`.`").append(tableName).append("` WHERE `")
+				.append(primaryKeyColumn).append("` = ?");
+
+		// 打印 SQL 语句
+		System.out.println("Executing SQL: " + sql);
+
+		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword());
+			 PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+
+			for (Object primaryKeyValue : primaryKeyValues) {
+				stmt.setObject(1, primaryKeyValue);
+				stmt.addBatch();
+			}
+
+			int[] rowsAffected = stmt.executeBatch();
+			return rowsAffected.length == primaryKeyValues.size();
+		} catch (SQLException e) {
+			// 打印异常信息
+			e.printStackTrace();
+			throw new RuntimeException("Failed to delete multiple rows from table in source database", e);
 		}
 	}
 
