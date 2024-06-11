@@ -77,7 +77,10 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         获取到前端传来的数据直接插入，目前没有别的判断条件
          */
         DataDatabaseEntity entity = DataDatabaseConvert.INSTANCE.convert(vo);
+        Integer datasourceId = vo.getDatasourceId();
+        String databaseName = vo.getDatabaseName();
         baseMapper.insert(entity);
+        createDatabase(datasourceId,databaseName);
     }
 
     @Override
@@ -149,6 +152,27 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
                 dataSourceEntity.getUserName(),
                 dataSourceEntity.getPassword(),
                 dropStr
+        );
+
+    }
+
+    // 在主机上创建数据库
+    public void createDatabase(Integer datasourceId,String databaseName){
+        ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
+        IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
+        DataSourceEntity dataSourceEntity = dataSourceDao.selectById(datasourceId);
+
+        String jdbcUrl = productTypeEnum.getUrl();
+        jdbcUrl = jdbcUrl.replace("{host}",dataSourceEntity.getDatabaseIp())
+                .replace("{port}",dataSourceEntity.getDatabasePort())
+                .replace("{database}","");
+
+        String createStr = "create database "+databaseName;
+        metaDataService.sqlExecute(
+                jdbcUrl,
+                dataSourceEntity.getUserName(),
+                dataSourceEntity.getPassword(),
+                createStr
         );
 
     }
