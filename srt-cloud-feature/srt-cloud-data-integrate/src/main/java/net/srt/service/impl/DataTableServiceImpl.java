@@ -210,7 +210,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 	}*/
 
 	@Override
-	public PageResult<SchemaDataVo> pageTableData(TableDataQuery query) {
+	public PageResult<Map<String, Object>> pageTableData(TableDataQuery query) {
 		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName();
 		DataProjectCacheBean project = getProject();
 		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
@@ -242,16 +242,13 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		// 获取分页数据
 		List<List<Object>> paginatedRows = rows.subList(startIndex, endIndex);
 
-		// 将每行数据转换为 SchemaDataVo 对象并放入 List
-		List<SchemaDataVo> dataList = paginatedRows.stream().map(row -> {
-			Map<String, Object> rowData = SqlUtils.convertRow(columns, row);
-			return SchemaDataVo.builder()
-					.rows(rowData)
-					.build();
+		// 将每行数据转换为 Map<String, Object> 并放入 List
+		List<Map<String, Object>> dataList = paginatedRows.stream().map(row -> {
+			return SqlUtils.convertRow(columns, row);
 		}).collect(Collectors.toList());
 
 		// 构建 PageResult 对象
-		PageResult<SchemaDataVo> result = new PageResult<>(
+		PageResult<Map<String, Object>> result = new PageResult<>(
 				dataList,
 				rows.size()
 		);

@@ -10,6 +10,7 @@ import net.srt.vo.DataTableVO;
 import net.srt.vo.SchemaDataVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据集成-贴源数据
@@ -42,7 +43,7 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 
 	Long getaccessidbydatabaseid(Long id);
 
-	PageResult<SchemaDataVo> pageTableData(TableDataQuery query);
+	PageResult<Map<String, Object>> pageTableData(TableDataQuery query);
 
 	List<String> TableheaderGet(Long datatableid);
 }

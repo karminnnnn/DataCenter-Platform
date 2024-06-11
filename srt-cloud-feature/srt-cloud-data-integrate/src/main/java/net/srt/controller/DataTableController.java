@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 import static dm.jdbc.util.DriverUtil.log;
 
@@ -95,8 +96,8 @@ public class DataTableController {
 
 	@GetMapping("tabledata/page")
 	@Operation(summary = "数据表数据分页")
-	public Result<PageResult<SchemaDataVo>> pageTableData(@Valid TableDataQuery query) {
-		PageResult<SchemaDataVo> page = dataTableService.pageTableData(query);
+	public Result<PageResult<Map<String, Object>>> pageTableData(@Valid TableDataQuery query) {
+		PageResult<Map<String, Object>> page = dataTableService.pageTableData(query);
         return Result.ok(page);
     }
 
