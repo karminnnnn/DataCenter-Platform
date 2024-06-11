@@ -31,6 +31,7 @@ import srt.cloud.framework.dbswitch.core.util.GenerateSqlUtils;
 import srt.cloud.framework.dbswitch.core.util.SqlUtil;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -257,6 +258,16 @@ public class MetaDataByJdbcServiceImpl implements IMetaDataByJdbcService {
 	public void testQuerySQL(String jdbcUrl, String username, String password, String sql) {
 		try (Connection connection = ConnectionUtils.connect(jdbcUrl, username, password)) {
 			database.testQuerySQL(connection, sql);
+		} catch (SQLException se) {
+			throw new RuntimeException(se);
+		}
+	}
+
+	@Override
+	public ResultSet getDatabase(String jdbcUrl, String username, String password, String sql){
+		try (Connection connection = ConnectionUtils.connect(jdbcUrl, username, password)) {
+			ResultSet resultSet = database.getDatabase(connection, sql);
+			return resultSet;
 		} catch (SQLException se) {
 			throw new RuntimeException(se);
 		}

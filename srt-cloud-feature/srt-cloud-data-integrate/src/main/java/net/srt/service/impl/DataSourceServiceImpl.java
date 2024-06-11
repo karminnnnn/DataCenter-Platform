@@ -58,6 +58,8 @@ import srt.cloud.framework.dbswitch.data.entity.TargetDataSourceProperties;
 import srt.cloud.framework.dbswitch.data.util.DataSourceUtils;
 import srt.cloud.framework.dbswitch.dbcommon.database.DatabaseOperatorFactory;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,6 +77,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	private final DataAccessService dataAccessService;
 	private final DataProductionTaskApi productionTaskApi;
 	private final DataMetadataCollectApi dataMetadataCollectApi;
+	//private final DataDatabaseServiceImpl dataDatabaseServiceImpl;
 	@Autowired
 	private DataDatabaseService dataDatabaseService;  // 注入 DataDatabaseService
 
@@ -100,6 +103,15 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	@Override
 	public void save(DataSourceVO vo) {
 		DataSourceEntity entity = DataSourceConvert.INSTANCE.convert(vo);
+		/*
+		DataDatabaseEntity dbEntity = new DataDatabaseEntity();
+		if(dbEntity != null){
+			dbEntity.setStatus(0);
+			dbEntity.setSynStatus(1);
+			dbEntity.setDatasourceId(vo.getId().intValue());
+		}
+
+		 */
 		entity.setProjectId(getProjectId());
 		setJdbcUrlByEntity(entity);
 		baseMapper.insert(entity);
@@ -108,6 +120,41 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		} catch (Exception ignored) {
 		}
 
+		/*
+		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
+		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
+		if (StringUtil.isBlank(vo.getJdbcUrl())) {
+			vo.setJdbcUrl(productTypeEnum.getUrl()
+					.replace("{host}", vo.getDatabaseIp())
+					.replace("{port}", vo.getDatabasePort())
+					.replace("{database}", "")
+			);
+		}
+
+		 */
+		/*
+		String getDatabaseStr = "SHOW DATABASES";
+		ResultSet resultSet = metaDataService.getDatabase(
+				vo.getJdbcUrl(),
+				vo.getUserName(),
+				vo.getPassword(),
+				getDatabaseStr
+		);
+		 */
+		/*
+		System.out.println("running 1");
+		List<String>databases = new ArrayList<>();
+		try{
+			while (resultSet.next()){
+				String databaseName = resultSet.getString(0);
+				System.out.println("databaseName: "+databaseName);
+				dbEntity.setDatabaseName(databaseName);
+				dataDatabaseServiceImpl.getBaseMapper().insert(dbEntity);
+			}
+		} catch (SQLException e){
+			throw new RuntimeException(e);
+		}
+		*/
 	}
 
 	@Override

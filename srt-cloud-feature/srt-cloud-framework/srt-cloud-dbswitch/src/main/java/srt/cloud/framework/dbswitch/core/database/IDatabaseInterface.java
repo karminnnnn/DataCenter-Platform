@@ -16,6 +16,7 @@ import srt.cloud.framework.dbswitch.core.model.SchemaTableData;
 import srt.cloud.framework.dbswitch.core.model.TableDescription;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,12 @@ import java.util.Map;
  * @author jrl
  */
 public interface IDatabaseInterface {
+
+	/**
+	 * 获取数据源的数据库
+	 * @return 数据库名集合
+	 */
+	ResultSet getDatabase(Connection connection, String sql);
 
 	/**
 	 * 获取数据库类型

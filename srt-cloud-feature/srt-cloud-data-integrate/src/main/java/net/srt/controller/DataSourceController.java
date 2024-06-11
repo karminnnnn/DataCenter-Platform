@@ -60,10 +60,9 @@ public class DataSourceController {
 
 	@PostMapping
 	@Operation(summary = "保存")
-	@PreAuthorize("hasAuthority('data-integrate:database:save')")
+	//@PreAuthorize("hasAuthority('data-integrate:database:save')")
 	public Result<String> save(@RequestBody DataSourceVO vo) {
 		DataSourceService.save(vo);
-
 		return Result.ok();
 	}
 

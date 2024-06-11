@@ -66,6 +66,7 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         目前还没有看数据接入的部分，按道理来说一个数据库是要和一个接入任务相关联的，删除的时候要判断是否有接入任务
          */
         removeById(databaseId);
+        String databaseName = dataDatabaseDao.getDatabaseNameById(databaseId);
     }
 
     @Override
@@ -109,13 +110,11 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
         IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
         DataSourceEntity dataSourceEntity = dataSourceDao.selectById(datasourceId);
-
-
+        
         String jdbcUrl = productTypeEnum.getUrl();
         jdbcUrl = jdbcUrl.replace("{host}",dataSourceEntity.getDatabaseIp())
                 .replace("{port}",dataSourceEntity.getDatabasePort())
                 .replace("{database}",databaseName);
-        System.out.println(jdbcUrl);
 
         metaDataService.testQuerySQL(
                 jdbcUrl,

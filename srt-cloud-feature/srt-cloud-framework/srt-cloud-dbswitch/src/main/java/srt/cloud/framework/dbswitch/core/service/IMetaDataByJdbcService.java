@@ -17,6 +17,7 @@ import srt.cloud.framework.dbswitch.core.model.SchemaTableData;
 import srt.cloud.framework.dbswitch.core.model.SchemaTableMeta;
 import srt.cloud.framework.dbswitch.core.model.TableDescription;
 
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
@@ -154,6 +155,9 @@ public interface IMetaDataByJdbcService {
 	 * @param sql      待查询的SQL语句
 	 */
 	void testQuerySQL(String jdbcUrl, String username, String password, String sql);
+
+	// 获取数据源对应的数据库
+	ResultSet getDatabase(String jdbcUrl, String username, String password, String sql);
 
 	/**
 	 * 测试数据库SQL查询
