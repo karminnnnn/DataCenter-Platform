@@ -10,6 +10,5 @@ import java.util.Map;
 @Data
 @Builder
 public class SchemaDataVo {
-    private Map<String, String> columns;
     private Map<String, Object> rows;
 }

@@ -43,4 +43,6 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 	Long getaccessidbydatabaseid(Long id);
 
 	PageResult<SchemaDataVo> pageTableData(TableDataQuery query);
+
+	List<String> TableheaderGet(Long datatableid);
 }

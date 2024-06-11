@@ -1,6 +1,7 @@
 package net.srt.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -549,7 +550,11 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 	}
 
 	public boolean existsBySourceDatabaseId(Long sourceDatabaseId){
-		return false;
+		QueryWrapper<DataAccessEntity> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("source_database_id", sourceDatabaseId);
+
+		DataAccessEntity dataAccess = baseMapper.selectOne(queryWrapper);
+		return dataAccess != null;
 	}
 
 }

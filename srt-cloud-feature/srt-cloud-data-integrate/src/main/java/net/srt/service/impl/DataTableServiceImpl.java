@@ -246,7 +246,6 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		List<SchemaDataVo> dataList = paginatedRows.stream().map(row -> {
 			Map<String, Object> rowData = SqlUtils.convertRow(columns, row);
 			return SchemaDataVo.builder()
-					.columns(SqlUtils.convertColumns(columns))
 					.rows(rowData)
 					.build();
 		}).collect(Collectors.toList());
@@ -258,6 +257,21 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		);
 
 		return result;
+	}
+
+	public List<String> TableheaderGet(Long datatableid){
+		DataProjectCacheBean project = getProject();
+		String tableName=baseMapper.selectById(datatableid).getTableName();
+		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
+
+		// 设置合理的最大行数限制
+		int maxRows = 50000000;
+		// 查询所有表数据
+		SchemaTableData schemaTableData = service.queryTableData(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName, maxRows);
+
+		// 获取列信息
+		List<String> columns = schemaTableData.getColumns();
+		return columns;
 	}
 
 	private List<ColumnDescriptionVo> convertToColumnDescriptionVo(List<String> columns, List<List<Object>> rows, long datatableId, String tableName) {

@@ -122,4 +122,9 @@ public class DataTableController {
 		}
 	}
 
+	@GetMapping("tabledata/headers/{datatableId}")
+	@Operation(summary = "数据表表头获取")
+	public  Result<List<String>> getTableHeader(@PathVariable("datatableId") Long datatableId){
+		return Result.ok(dataTableService.TableheaderGet(datatableId));
+	}
 }
