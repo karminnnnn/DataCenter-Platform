@@ -38,6 +38,8 @@ public interface IDatabaseInterface {
 	 *
 	 * @return 数据库类型
 	 */
+
+	public void sqlExecute(Connection connection, String sql);
 	ProductTypeEnum getDatabaseType();
 
 	/**

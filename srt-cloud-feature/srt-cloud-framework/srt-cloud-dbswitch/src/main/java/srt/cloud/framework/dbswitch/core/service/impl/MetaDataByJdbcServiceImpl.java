@@ -264,6 +264,15 @@ public class MetaDataByJdbcServiceImpl implements IMetaDataByJdbcService {
 	}
 
 	@Override
+	public void sqlExecute(String jdbcUrl, String username, String password, String sql){
+		try (Connection connection = ConnectionUtils.connect(jdbcUrl, username, password)) {
+			database.sqlExecute(connection, sql);
+		} catch (SQLException se) {
+			throw new RuntimeException(se);
+		}
+	}
+
+	@Override
 	public ResultSet getDatabase(String jdbcUrl, String username, String password, String sql){
 		try (Connection connection = ConnectionUtils.connect(jdbcUrl, username, password)) {
 			ResultSet resultSet = database.getDatabase(connection, sql);

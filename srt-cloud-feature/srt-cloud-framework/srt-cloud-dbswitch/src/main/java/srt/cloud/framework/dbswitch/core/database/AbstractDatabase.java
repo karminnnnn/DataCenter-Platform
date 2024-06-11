@@ -358,6 +358,15 @@ public abstract class AbstractDatabase implements IDatabaseInterface {
 	}
 
 	@Override
+	public void sqlExecute(Connection connection, String sql){
+		try (Statement statement = connection.createStatement();) {
+			statement.execute(sql);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public ResultSet getDatabase(Connection connection, String sql){
 		String wrapperSql = this.getTestQuerySQL(sql);
 		try (Statement statement = connection.createStatement();) {

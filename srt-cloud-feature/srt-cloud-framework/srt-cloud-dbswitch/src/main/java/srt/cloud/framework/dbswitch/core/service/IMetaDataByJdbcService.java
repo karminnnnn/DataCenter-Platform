@@ -28,6 +28,7 @@ import java.util.Map;
  */
 public interface IMetaDataByJdbcService {
 
+
 	/**
 	 * 获取数据库类型
 	 *
@@ -156,6 +157,7 @@ public interface IMetaDataByJdbcService {
 	 */
 	void testQuerySQL(String jdbcUrl, String username, String password, String sql);
 
+	void sqlExecute(String jdbcUrl, String username, String password, String sql);
 	// 获取数据源对应的数据库
 	ResultSet getDatabase(String jdbcUrl, String username, String password, String sql);
 

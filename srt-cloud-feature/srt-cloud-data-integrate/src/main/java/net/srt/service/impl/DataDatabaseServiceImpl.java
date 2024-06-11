@@ -67,6 +67,8 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
          */
         removeById(databaseId);
         String databaseName = dataDatabaseDao.getDatabaseNameById(databaseId);
+        Integer datasourceId = dataDatabaseDao.getDatasourceIdById(databaseId);
+        dropDatabase(datasourceId,databaseName);
     }
 
     @Override
@@ -110,7 +112,7 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
         IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
         DataSourceEntity dataSourceEntity = dataSourceDao.selectById(datasourceId);
-        
+
         String jdbcUrl = productTypeEnum.getUrl();
         jdbcUrl = jdbcUrl.replace("{host}",dataSourceEntity.getDatabaseIp())
                 .replace("{port}",dataSourceEntity.getDatabasePort())
@@ -128,6 +130,26 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
         }
 
 
+    }
+
+    // 删除主机上的数据库
+    public void dropDatabase(Integer datasourceId,String databaseName){
+        ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
+        IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
+        DataSourceEntity dataSourceEntity = dataSourceDao.selectById(datasourceId);
+
+        String jdbcUrl = productTypeEnum.getUrl();
+        jdbcUrl = jdbcUrl.replace("{host}",dataSourceEntity.getDatabaseIp())
+                .replace("{port}",dataSourceEntity.getDatabasePort())
+                .replace("{database}",databaseName);
+
+        String dropStr = "drop database "+databaseName;
+        metaDataService.sqlExecute(
+                jdbcUrl,
+                dataSourceEntity.getUserName(),
+                dataSourceEntity.getPassword(),
+                dropStr
+        );
 
     }
 
