@@ -5,6 +5,7 @@ import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.BaseService;
 import net.srt.query.DataTableQuery;
 import net.srt.query.TableDataQuery;
+import net.srt.query.UpdateDataQuery;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
 import net.srt.vo.SchemaTableDataVo;
@@ -33,7 +34,14 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 
 	SchemaTableDataVo getTableData(String tableName);
 
-	void saveTableData(TableDataQuery request);
+	boolean saveTableData(UpdateDataQuery request);
 
-	PageResult<SchemaTableDataVo> pageTableData(TableDataQuery query);
+	boolean updateTableData(UpdateDataQuery query);
+
+	boolean deleteTableData(List<Object> idList,String primaryKeyColumn,Long datatableId );
+
+
+	Long getaccessidbydatabaseid(Long id);
+
+	SchemaTableDataVo pageTableData(TableDataQuery query);
 }

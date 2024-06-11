@@ -28,17 +28,17 @@ public class ColumnDescriptionVo {
 	private String remarks;
 	private String labelName;
 	private String fieldTypeName;
-	private int displaySize;
+	private Integer displaySize;
 //	private String filedTypeClassName;
 //  private int fieldType;
-    private int scaleSize;
+    private Integer scaleSize;
 	//默认值
     private String defaultValue;
 	private boolean isNullable;
 	//是否是主键
 	private boolean isPk;
 	private boolean isAutoIncrement;
-	private String datatableId;
+	private Long datatableId;
 	private String datatableName;
 	//private int precisionSize;
 

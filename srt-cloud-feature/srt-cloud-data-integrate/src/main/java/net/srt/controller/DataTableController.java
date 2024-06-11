@@ -11,7 +11,9 @@ import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
 import net.srt.query.DataTableQuery;
+import net.srt.query.DeleteDataQuery;
 import net.srt.query.TableDataQuery;
+import net.srt.query.UpdateDataQuery;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
@@ -84,31 +86,42 @@ public class DataTableController {
 
 	@PostMapping("tabledata")
 	@Operation(summary = "数据表数据保存")
-	public Result<String> saveTableData(@RequestBody TableDataQuery request) {
-		dataTableService.saveTableData(request);
-		return Result.ok("数据保存成功");
+	public Result<String> saveTableData(@RequestBody UpdateDataQuery request) {
+		boolean result =dataTableService.saveTableData(request);
+		if (result) {
+			return Result.ok("Save successful");
+		} else {
+			return Result.error("Save failed");
+		}
 	}
 
 	@GetMapping("tabledata/page")
 	@Operation(summary = "数据表数据分页")
-	public Result<PageResult<SchemaTableDataVo>> pageTableData(@Valid TableDataQuery query) {
-        PageResult<SchemaTableDataVo> page = dataTableService.pageTableData(query);
+	public Result<SchemaTableDataVo> pageTableData(@Valid TableDataQuery query) {
+        SchemaTableDataVo page = dataTableService.pageTableData(query);
         return Result.ok(page);
     }
 
 	@PutMapping("tabledata")
 	@Operation(summary = "数据表数据修改")
-    public Result<String> updateTableData(@RequestBody TableDataQuery request) {
-      //  dataTableService.updateTableData(request);
-        return Result.ok("数据修改成功");
+    public Result<String> updateTableData(@RequestBody UpdateDataQuery query) {
+		boolean result = dataTableService.updateTableData(query);
+		if (result) {
+			return Result.ok("Update successful");
+		} else {
+			return Result.error("Update failed");
+		}
     }
 
 	@DeleteMapping("tabledata")
 	@Operation(summary = "数据表数据删除")
-	public Result<String> deleteTableData(@RequestBody List<Long> idList) {
-		//  dataTableService.updateTableData(request);
-		return Result.ok("数据删除成功");
+	public Result<String> deleteTableData (@RequestBody DeleteDataQuery query){
+		boolean result = dataTableService.deleteTableData(query.getIdList(),query.getPrimaryKeyColumn(),query.getDatatableId());
+		if (result) {
+			return Result.ok("Delete successful");
+		} else {
+			return Result.error("Delete failed");
+		}
 	}
-
 
 }

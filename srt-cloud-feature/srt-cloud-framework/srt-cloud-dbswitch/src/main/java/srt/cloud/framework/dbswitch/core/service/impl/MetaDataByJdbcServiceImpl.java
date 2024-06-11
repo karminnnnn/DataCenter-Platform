@@ -187,6 +187,7 @@ public class MetaDataByJdbcServiceImpl implements IMetaDataByJdbcService {
 		}
 	}
 
+
 	@Override
 	public SchemaTableData queryTableDataBySql(String jdbcUrl, String username, String password,
 											   String sql, int rowCount) {

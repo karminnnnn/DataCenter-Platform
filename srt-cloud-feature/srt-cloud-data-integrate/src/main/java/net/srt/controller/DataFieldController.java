@@ -51,29 +51,29 @@ public class DataFieldController {
 
     @PostMapping("column-info")
     @Operation(summary = "字段信息保存")
-    public Result<String> save(@RequestBody @Valid DataFieldVO vo) {
+    public Result<String> save(@RequestBody @Valid ColumnDescriptionVo vo) {
         dataFieldService.save(vo);
         return Result.ok("Column info saved successfully");
     }
 
-    @PutMapping("column-info")
+    @PutMapping("/{oldfieldname}/column-info")
     @Operation(summary = "字段信息修改")
-    public Result<String> update(@RequestBody @Valid DataFieldVO vo) {
-        dataFieldService.update(vo);
+    public Result<String> update(@PathVariable("oldfieldname") String oldfieldName,@RequestBody @Valid ColumnDescriptionVo vo) {
+        dataFieldService.update(vo,oldfieldName);
         return Result.ok("Column info updated successfully");
     }
     
     
-    @DeleteMapping("column-info")
+    @DeleteMapping("column-info/{datatableId}/{fieldName}")
     @Operation(summary = "字段信息删除")
-    public Result<String> delete(@RequestBody @Valid List<Long> idList) {
-        dataFieldService.delete(idList);
+    public Result<String> delete(@PathVariable("fieldName") String fieldName, @PathVariable("datatableId") Long datatableId) {
+        dataFieldService.delete(fieldName,datatableId);
         return Result.ok("Column info deleted successfully");
     }
 
-    @GetMapping("/column-info/{fieldName}")
+    @GetMapping("/column-info/{datatableId}/{fieldName}")
     @Operation(summary = "获取特定字段信息")
-    public Result<ColumnDescriptionVo> columnInfo(@PathVariable("fieldName") String fieldName, @RequestParam Long datatableId) {
+    public Result<ColumnDescriptionVo> columnInfo(@PathVariable("fieldName") String fieldName, @PathVariable("datatableId") Long datatableId) {
       //  Map<String, String> params = new HashMap<>();
       //  params.put("fieldName", fieldName);
       //  params.put("tableId", tableId);
