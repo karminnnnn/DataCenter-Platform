@@ -10,4 +10,12 @@
     <update id="changeStatusByName">
         UPDATE data_database SET status=#{status} WHERE database_name=#{databaseName}
     </update>
+
+    <select id="getDatabaseNameById" resultType="java.lang.String">
+        SELECT t1.database_name FROM data_database t1 WHERE t1.id = #{id}
+    </select>
+
+    <select id="getDatasourceIdById" resultType="java.lang.Integer">
+        SELECT t1.datasource_id FROM data_database t1 WHERE t1.id = #{id}
+    </select>
 </mapper>

@@ -10,4 +10,8 @@ public interface DataDatabaseDao extends BaseDao<DataDatabaseEntity> {
     String getUsernameById(@Param("id") Long id);
 
     void changeStatusByName(@Param("databaseName")String databaseName,@Param("status") Integer status);
+
+    String getDatabaseNameById(@Param("id") Long id);
+
+    Integer getDatasourceIdById(@Param("id") Long id);
 }
