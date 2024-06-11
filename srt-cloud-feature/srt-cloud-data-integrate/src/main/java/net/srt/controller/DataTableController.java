@@ -10,13 +10,11 @@ import net.srt.convert.DataOdsConvert;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
-import net.srt.query.DataTableQuery;
-import net.srt.query.DeleteDataQuery;
-import net.srt.query.TableDataQuery;
-import net.srt.query.UpdateDataQuery;
+import net.srt.query.*;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
+import net.srt.vo.SchemaDataVo;
 import net.srt.vo.SchemaTableDataVo;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,8 +95,8 @@ public class DataTableController {
 
 	@GetMapping("tabledata/page")
 	@Operation(summary = "数据表数据分页")
-	public Result<SchemaTableDataVo> pageTableData(@Valid TableDataQuery query) {
-        SchemaTableDataVo page = dataTableService.pageTableData(query);
+	public Result<PageResult<SchemaDataVo>> pageTableData(@Valid TableDataQuery query) {
+		PageResult<SchemaDataVo> page = dataTableService.pageTableData(query);
         return Result.ok(page);
     }
 

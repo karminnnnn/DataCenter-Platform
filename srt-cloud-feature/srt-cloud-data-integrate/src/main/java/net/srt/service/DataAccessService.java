@@ -67,5 +67,7 @@ public interface DataAccessService extends BaseService<DataAccessEntity> {
 
 	Long getAccessIDbydatabaseID(Long databaseId);
 
+	boolean existsBySourceDatabaseId(Long sourceDatabaseId);
+
 
 }

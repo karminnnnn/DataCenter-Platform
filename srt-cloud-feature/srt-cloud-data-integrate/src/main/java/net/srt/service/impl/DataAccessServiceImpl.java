@@ -548,4 +548,8 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 		return result != null ? result.getId() : null;
 	}
 
+	public boolean existsBySourceDatabaseId(Long sourceDatabaseId){
+		return false;
+	}
+
 }

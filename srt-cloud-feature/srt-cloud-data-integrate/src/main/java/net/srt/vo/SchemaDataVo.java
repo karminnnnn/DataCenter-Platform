@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Data
 @Builder
-public class SchemaTableDataVo {
-	private Map<String, String> columns;
-	private List<Map<String, Object>> rows;
+public class SchemaDataVo {
+    private Map<String, String> columns;
+    private Map<String, Object> rows;
 }

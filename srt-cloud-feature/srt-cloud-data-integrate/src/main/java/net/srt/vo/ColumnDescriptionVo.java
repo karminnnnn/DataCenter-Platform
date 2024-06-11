@@ -33,7 +33,7 @@ public class ColumnDescriptionVo {
 //  private int fieldType;
     private Integer scaleSize;
 	//默认值
-    private String defaultValue;
+    private Object defaultValue;
 	private boolean isNullable;
 	//是否是主键
 	private boolean isPk;

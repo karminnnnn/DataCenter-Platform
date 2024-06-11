@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import net.srt.api.DataAccessApiImpl;
 import net.srt.api.DataDatabaseApiImpl;
+import net.srt.api.DataTableApiImpl;
 import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.api.module.data.integrate.dto.DataSourceDto;
 import net.srt.api.module.quartz.QuartzDataAccessApi;
@@ -54,6 +55,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     private DataTableService dataTableService;
     private DataAccessApiImpl dataAccessApi;
     private DataDatabaseApiImpl dataDatabaseApi;
+    private DataTableApiImpl dataTableApi;
     private final QuartzDataAccessApi quartzDataAccessApi;
 
     @Override
@@ -145,7 +147,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
                     ColumnDescriptionVo columnDescriptionVo = new ColumnDescriptionVo();
                     columnDescriptionVo.setFieldName(columnDescription.getFieldName());
                     columnDescriptionVo.setRemarks(columnDescription.getRemarks());
-                    columnDescriptionVo.setRemarks(columnDescription.getLabelName());
+                    columnDescriptionVo.setLabelName(columnDescription.getLabelName());
                     columnDescriptionVo.setFieldTypeName(columnDescription.getFieldTypeName());
                     columnDescriptionVo.setDisplaySize(columnDescription.getDisplaySize());
                     columnDescriptionVo.setScaleSize(columnDescription.getScaleSize());
@@ -187,12 +189,13 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     private void modifySourceDatabaseField(DataSourceDto dataSource, ColumnDescriptionVo query,String oldfieldname) {
         Long dataaccessid=dataTableService.getaccessidbydatabaseid(query.getDatatableId());
         String databasename=dataDatabaseApi.getDataBaseBamebyId(dataAccessApi.getById(dataaccessid).getData().getSourceDatabaseId()).getData();
+        String datatablename=dataTableApi.getdatatablenamebyID(query.getDatatableId()).getData().replace("ods_","");
         // 创建字段修改SQL
         StringBuilder alterSql = new StringBuilder();
         alterSql.append(String.format(
                 "ALTER TABLE `%s`.`%s` CHANGE `%s` `%s` %s",
                 databasename,
-                query.getDatatableName(),
+                datatablename,
                 oldfieldname,
                 query.getFieldName(),
                 query.getFieldTypeName()
@@ -233,10 +236,15 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
 
         // 创建数据库连接并执行SQL
         try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword())) {
+            System.out.println("Database connection established successfully.");
+
             try (Statement stmt = connection.createStatement()) {
+                System.out.println("Executing SQL: " + alterSql.toString());
                 stmt.execute(alterSql.toString());
+                System.out.println("SQL execution completed successfully.");
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to modify source database field", e);
         }
     }
@@ -262,12 +270,12 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     public void createSourceDatabaseField(DataSourceDto dataSource, ColumnDescriptionVo query) {
         Long dataaccessid=dataTableService.getaccessidbydatabaseid(query.getDatatableId());
         String databaseName=dataDatabaseApi.getDataBaseBamebyId(dataAccessApi.getById(dataaccessid).getData().getSourceDatabaseId()).getData();
-        String tableName = query.getDatatableName();
+        String tableName = dataTableApi.getdatatablenamebyID(query.getDatatableId()).getData().replace("ods_","");
         String fieldName = query.getFieldName();
         String fieldType = query.getFieldTypeName();
         Integer displaySize = query.getDisplaySize();
         Integer scaleSize = query.getScaleSize();
-        String defaultValue = query.getDefaultValue();
+        Object defaultValue = query.getDefaultValue();
         Boolean nullable =query.isNullable();
         String comment = query.getRemarks();
         Boolean autoIncrement = query.isAutoIncrement();
@@ -277,17 +285,37 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
         addFieldSql.append(String.format("ALTER TABLE `%s`.`%s` ADD `%s` %s", databaseName, tableName, fieldName, fieldType));
 
         // 处理字段长度和小数位数
-        if (displaySize != null) {
-            if (scaleSize != null && fieldType.matches("DECIMAL|NUMERIC|FLOAT|DOUBLE")) {
-                addFieldSql.append(String.format("(%d, %d)", displaySize, scaleSize));
+        if (query.getDisplaySize() != null) {
+            if (query.getScaleSize() != null && query.getFieldTypeName().matches("DECIMAL|NUMERIC|FLOAT|DOUBLE")) {
+                addFieldSql.append(String.format("(%d, %d)", query.getDisplaySize(), query.getScaleSize()));
             } else {
-                addFieldSql.append(String.format("(%d)", displaySize));
+                addFieldSql.append(String.format("(%d)", query.getDisplaySize()));
             }
+        } else if (query.getFieldTypeName().equalsIgnoreCase("VARCHAR")) {
+            addFieldSql.append("(255)");
         }
 
-        // 处理默认值
+        // 处理默认值，仅在 defaultValue 不为 null 或 空值时添加
         if (defaultValue != null) {
-            addFieldSql.append(String.format(" DEFAULT '%s'", defaultValue));
+            String fieldTypeName = query.getFieldTypeName().toUpperCase();
+            if (defaultValue instanceof String) {
+                String strDefaultValue = (String) defaultValue;
+                if (!strDefaultValue.trim().isEmpty()) {
+                    if (fieldTypeName.contains("CHAR") || fieldTypeName.contains("TEXT") || fieldTypeName.contains("DATE") || fieldTypeName.contains("TIME")) {
+                        addFieldSql.append(String.format(" DEFAULT '%s'", strDefaultValue));
+                    } else {
+                        addFieldSql.append(String.format(" DEFAULT %s", strDefaultValue));
+                    }
+                }
+            } else if (defaultValue instanceof Number) {
+                addFieldSql.append(String.format(" DEFAULT %s", defaultValue));
+            } else if (defaultValue instanceof Boolean) {
+                addFieldSql.append(String.format(" DEFAULT %s", (Boolean) defaultValue ? 1 : 0));
+            } else if (defaultValue instanceof java.util.Date) {
+                java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String dateStr = dateFormat.format((java.util.Date) defaultValue);
+                addFieldSql.append(String.format(" DEFAULT '%s'", dateStr));
+            }
         }
 
         // 处理是否可为空

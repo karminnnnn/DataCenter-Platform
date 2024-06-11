@@ -32,4 +32,9 @@ public class DataTableApiImpl implements DataTableApi {
 		return Result.ok();
 	}
 
+	@Override
+	public Result<String> getdatatablenamebyID(Long id){
+		return Result.ok(dataTableService.getById(id).getTableName());
+	}
+
 }

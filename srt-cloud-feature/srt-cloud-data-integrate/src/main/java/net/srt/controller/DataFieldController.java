@@ -74,10 +74,6 @@ public class DataFieldController {
     @GetMapping("/column-info/{datatableId}/{fieldName}")
     @Operation(summary = "获取特定字段信息")
     public Result<ColumnDescriptionVo> columnInfo(@PathVariable("fieldName") String fieldName, @PathVariable("datatableId") Long datatableId) {
-      //  Map<String, String> params = new HashMap<>();
-      //  params.put("fieldName", fieldName);
-      //  params.put("tableId", tableId);
-      //  return Result.ok(params);
         Optional<ColumnDescriptionVo> columnInfoOpt = dataFieldService.getColumnInfo(fieldName, datatableId);
 
         if (columnInfoOpt.isPresent()) {

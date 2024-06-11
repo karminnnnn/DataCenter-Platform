@@ -1,6 +1,5 @@
 package net.srt.service.impl;
 
-import cn.hutool.db.meta.Column;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
@@ -8,17 +7,12 @@ import net.srt.api.DataAccessApiImpl;
 import net.srt.api.DataDatabaseApiImpl;
 import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.api.module.data.integrate.dto.DataSourceDto;
-import net.srt.api.module.data.integrate.dto.DataTableDto;
 import net.srt.api.module.quartz.QuartzDataAccessApi;
 import net.srt.constants.DataHouseLayer;
-import net.srt.convert.DataOdsConvert;
 import net.srt.dao.DataTableDao;
-import net.srt.entity.DataAccessEntity;
-import net.srt.entity.DataSourceEntity;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.page.PageResult;
-import net.srt.framework.common.utils.BeanUtil;
 import net.srt.framework.common.utils.SqlUtils;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.query.DataTableQuery;
@@ -27,12 +21,11 @@ import net.srt.query.UpdateDataQuery;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
-import net.srt.vo.SchemaTableDataVo;
+import net.srt.vo.SchemaDataVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srt.cloud.framework.dbswitch.common.type.ProductTypeEnum;
 import srt.cloud.framework.dbswitch.common.util.StringUtil;
-import srt.cloud.framework.dbswitch.core.model.ColumnDescription;
 import srt.cloud.framework.dbswitch.core.model.SchemaTableData;
 import srt.cloud.framework.dbswitch.core.model.TableDescription;
 import srt.cloud.framework.dbswitch.core.service.IMetaDataByJdbcService;
@@ -153,13 +146,13 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		return baseMapper.selectOne(wrapper.eq(DataTableEntity::getTableName, tableName).eq(DataTableEntity::getProjectId, projectId));
 	}
 
-	@Override
+	/*@Override
 	public SchemaTableDataVo getTableData(String tableName) {
 		DataProjectCacheBean project = getProject();
 		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
 		SchemaTableData schemaTableData = service.queryTableData(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName, 50);
 		return SchemaTableDataVo.builder().columns(SqlUtils.convertColumns(schemaTableData.getColumns())).rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows())).build();
-	}
+	}*/
 
 	@Override
 	public boolean saveTableData(UpdateDataQuery query) {
@@ -217,7 +210,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 	}*/
 
 	@Override
-	public SchemaTableDataVo pageTableData(TableDataQuery query) {
+	public PageResult<SchemaDataVo> pageTableData(TableDataQuery query) {
 		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName();
 		DataProjectCacheBean project = getProject();
 		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
@@ -249,14 +242,22 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		// 获取分页数据
 		List<List<Object>> paginatedRows = rows.subList(startIndex, endIndex);
 
-		// 构建 SchemaTableDataVo 对象
-		SchemaTableDataVo tableDataVo = SchemaTableDataVo.builder()
-				.columns(SqlUtils.convertColumns(schemaTableData.getColumns()))
-				.rows(SqlUtils.convertRows(schemaTableData.getColumns(), paginatedRows))
-				.total(rows.size()) // 设置总记录数
-				.build();
+		// 将每行数据转换为 SchemaDataVo 对象并放入 List
+		List<SchemaDataVo> dataList = paginatedRows.stream().map(row -> {
+			Map<String, Object> rowData = SqlUtils.convertRow(columns, row);
+			return SchemaDataVo.builder()
+					.columns(SqlUtils.convertColumns(columns))
+					.rows(rowData)
+					.build();
+		}).collect(Collectors.toList());
 
-		return tableDataVo;
+		// 构建 PageResult 对象
+		PageResult<SchemaDataVo> result = new PageResult<>(
+				dataList,
+				rows.size()
+		);
+
+		return result;
 	}
 
 	private List<ColumnDescriptionVo> convertToColumnDescriptionVo(List<String> columns, List<List<Object>> rows, long datatableId, String tableName) {
@@ -631,6 +632,9 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 	}
 
 	public Long getaccessidbydatabaseid(Long id){
+		if (id == null) {
+			throw new NullPointerException("DataAccess object is null for databaseId: " + id);
+		}
 		return baseMapper.selectById(id).getDataAccessId();
 	}
 }
