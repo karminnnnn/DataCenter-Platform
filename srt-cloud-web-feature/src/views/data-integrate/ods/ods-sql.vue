@@ -32,8 +32,12 @@ const state: IHooksOptions = reactive({
 	sqlData: []
 })
 
-const init = (projectId: number) => {
+const init = (projectId: number, databaseId: number) => {
 	state.projectId = projectId
+	state.databaseId = databaseId
+	// console.log("看看projectId和databaseId")
+	// console.log(projectId)
+	// console.log(databaseId)
 }
 
 // sql语句执行

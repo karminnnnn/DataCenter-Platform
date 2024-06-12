@@ -1,5 +1,5 @@
 <template>
-	<el-dialog v-model="visible" :title="!dataForm.fieldId ? '新增' : '修改'" :close-on-click-modal="false">
+	<el-dialog v-model="visible" :title="!dataForm.oldfieldname ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
 			<el-form-item label="字段名称" prop="fieldName">
 				<el-input v-model="dataForm.fieldName" placeholder="字段名称"></el-input>
@@ -68,7 +68,9 @@ const dataForm = reactive({
 	pk: false,
 	autoIncrement: false,
 	nullable: false,
-	datatableId: ''
+	datatableId: '',
+	datatableName:'',
+	oldfieldname:''
 })
 
 // 定义字段类型多选框 options 数据
@@ -87,7 +89,7 @@ const options = reactive([
 ])
 
 //初始化
-const init = (row?: any) => {
+const init = (datatableId:any, row?: any) => {
 	visible.value = true
 
 	// 重置表单数据
@@ -107,36 +109,29 @@ const init = (row?: any) => {
 		pk: false,
 		autoIncrement: false,
 		nullable: false,
-		datatableId: ''
+		datatableId: '',
+		datatableName:'',
+		oldfieldname:''
 	})
 
+	dataForm.datatableId = datatableId
+	// console.log("看看row获取的信息")
+	// console.log(row)
 	if (row) {
-		// getProperty(row)
-		getTableColumnInfo(row.fieldId)
+		getTableColumnInfo(row.fieldName, row.datatableId)
+		// console.log("调用get接口")
 	}
 }
 
-// const getProperty = (row: any) => {
-// 	// console.log("aaaaaaaaaaaaaaa")
-// 	// console.log(row)
-// 	dataForm.fieldId = row.fieldId
-// 	dataForm.fieldName = row.fieldName
-// 	dataForm.remarks = row.remarks
-// 	dataForm.fieldTypeName = row.fieldTypeName
-// 	dataForm.displaySize = row.displaySize
-// 	dataForm.scaleSize = row.scaleSize
-// 	dataForm.defaultValue = row.defaultValue
-// 	dataForm.pk = row.pk
-// 	dataForm.autoIncrement = row.autoIncrement
-// 	dataForm.nullable = row.nullable
-// 	// console.log("aaaaaaaaaaaaaaa")
-// 	// console.log(dataForm)
-// }
 
-const getTableColumnInfo = (id: number) => {
-	useOdsColumnInfoApi(id).then(res => {
+const getTableColumnInfo = (fieldName: any, datatableId: number) => {
+	useOdsColumnInfoApi(fieldName, datatableId).then(res => {
 		Object.assign(dataForm, res.data)
+		dataForm.oldfieldname = res.data.fieldName
 	})
+
+	// console.log("看看字段部分get接口获取的数据")
+	// console.log(dataForm)
 }
 
 const dataRules = ref({
@@ -159,16 +154,16 @@ const submitHandle = () => {
 		console.log('提交的表单')
 		console.log(dataForm)
 
-		// useOdsColumnInfoSubmitApi(dataForm).then(() => {
-		// 	ElMessage.success({
-		// 		message: '操作成功',
-		// 		duration: 500,
-		// 		onClose: () => {
-		// 			visible.value = false
-		// 			emit('refreshDataList')
-		// 		}
-		// 	})
-		// })
+		useOdsColumnInfoSubmitApi(dataForm, dataForm.oldfieldname).then(() => {
+			ElMessage.success({
+				message: '操作成功',
+				duration: 500,
+				onClose: () => {
+					visible.value = false
+					emit('refreshDataList')
+				}
+			})
+		})
 	})
 }
 

@@ -28,10 +28,12 @@
 						style="width: 100%"
 						max-height="calc(100vh - 400px )"
 						highlight-current-row
+						@selection-change="selectionChangeHandle"
 						@current-change="handleCurrentChange"
 					>
 						<!-- <fast-table-project-column prop="projectId" label="所属项目" header-align="center" align="center"></fast-table-project-column> -->
-						<el-table-column prop="databaseId" label="所属数据库" header-align="center" align="center"></el-table-column>
+						<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+						<el-table-column prop="databaseName" label="所属数据库" header-align="center" align="center"></el-table-column>
 						<el-table-column prop="datatableName" label="表名" header-align="center" align="center"></el-table-column>
 						<el-table-column prop="remarks" label="注释" header-align="center" align="center"></el-table-column>
 					</el-table>
@@ -109,7 +111,7 @@
 	</div>
 
 	<!-- 弹窗, 表新增 / 修改 -->
-	<odsTableAddOrUpdate ref="odsTableAddOrUpdateRef" @refreshDataList="getDataList"></odsTableAddOrUpdate>
+	<odsTableAddOrUpdate ref="odsTableAddOrUpdateRef" @refreshDataList="getDataList()"></odsTableAddOrUpdate>
 </template>
 
 <script setup lang="ts" name="Data-integrateOdsIndex">
@@ -126,14 +128,15 @@ import OdsTableInfo from './ods-tabel-info.vue'
 import OdsSql from './ods-sql.vue'
 import odsTabledataInfo from './ods-tabledata-info.vue'
 import odsTableAddOrUpdate from './ods-table-add-or-update.vue'
+import { ro } from 'element-plus/es/locale'
 
 const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/ods/page',
 	deleteUrl: '/data-integrate/ods',
+	primaryKey: 'datatableId',
 	queryForm: {
 		datatableName: '',
 		remarks: '',
-		projectId: ''
 	},
 	currentRow: {},
 	tableColumns: [],
@@ -228,7 +231,7 @@ const tabBeforeLeave = () => {
 
 const odsTableAddOrUpdateRef = ref()
 const addOrUpdateTable = (row?: any) => {
-	odsTableAddOrUpdateRef.value.init(row)
+	odsTableAddOrUpdateRef.value.init()
 }
 
 // 右侧
@@ -239,7 +242,7 @@ const odsTableDataInfoRef = ref()
 /* tab切换 */
 const handleClick = (name: TabPaneName) => {
 	if (name == 'tableData') {
-		odsTableDataInfoRef.value.init(state.currentRow.datatableName)
+		odsTableDataInfoRef.value.init(state.currentRow.datatableId)
 		//查询选中的表数据
 		// getTableDataApi(state.currentRow.tableName).then(res => {
 		// 	state.tableDataHeader = res.data.columns
@@ -249,7 +252,7 @@ const handleClick = (name: TabPaneName) => {
 	} else if (name == 'tableLog') {
 		odsTaskDetailRef.value.init(state.currentRow.projectId, state.currentRow.datatableName)
 	} else if (name == 'tableSql') {
-		odsSqlRef.value.init(state.currentRow.projectId)
+		odsSqlRef.value.init(state.currentRow.projectId, state.currentRow.databaseId)
 	}
 }
 
@@ -265,10 +268,11 @@ const handleCurrentChange = row => {
 	state.tableDataHeader = {}
 	// console.log("查看分页返回的信息")
 	// console.log(row)
-	getColumnInfoApi(row.datatableName).then(res => {
-		state.tableColumns = res.data
-		odsTableInfoRef.value.init(state.currentRow, state.tableColumns)
-	})
+	odsTableInfoRef.value.init(state.currentRow)
+	// getColumnInfoApi(row.datatableName).then(res => {
+	// 	state.tableColumns = res.data
+	// 	odsTableInfoRef.value.init(state.currentRow)
+	// })
 }
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)

@@ -12,15 +12,16 @@
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px">
 			<!-- 基本信息配置 -->
 			<div v-show="active == 1">
-				<el-form-item prop="platformID" label="所属平台">
+				<el-form-item prop="orgId" label="所属平台">
 					<el-tree-select
 						clearable
-						v-model="dataForm.platformID"
+						v-model="dataForm.orgId"
 						:data="orgList"
 						check-strictly
 						value-key="id"
 						:props="{ label: 'name', children: 'children' }"
 						style="width: 100%"
+						disabled
 					/>
 				</el-form-item>
 				<el-form-item label="任务名称" prop="taskName">
@@ -560,7 +561,7 @@
 			<el-button type="primary" round size="large" @click="submitHandle()" v-if="active == 4"> 提交 </el-button>
 		</template>
 
-		<el-dialog v-if="active == 4" title="查看表名映射关系" v-model="tableNameMapperDialogVisible">
+		<!-- <el-dialog v-if="active == 4" title="查看表名映射关系" v-model="tableNameMapperDialogVisible">
 			<el-table :header-cell-style="{ background: '#eef1f6', color: '#606266' }" :data="tableNamesMapperData" size="small" border>
 				<el-table-column prop="originalName" label="源端表名" min-width="20%"></el-table-column>
 				<el-table-column prop="targetName" label="目标表名" min-width="20%"></el-table-column>
@@ -579,7 +580,7 @@
 				<el-table-column prop="originalName" label="原始字段名" min-width="20%"></el-table-column>
 				<el-table-column prop="targetName" label="目标表字段名" min-width="20%"></el-table-column>
 			</el-table>
-		</el-dialog>
+		</el-dialog> -->
 	</el-drawer>
 </template>
 
@@ -591,6 +592,7 @@ import { listDatabase, getTablesById, listColumnsByIdAndTableName, listColumnsBy
 import Cron from '@/components/fast-cron/index'
 import { useOrgListApi } from '@/api/sys/orgs'
 import SqlStudio from './sql-studio.vue'
+import { useUserInfoApi } from '@/api/sys/user';
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -602,11 +604,11 @@ const targetTables = ref([])
 
 const active = ref(1)
 const dataForm = reactive({
-	platformID: '',
+	orgId: '',
 	taskName: '',
 	description: '',
 	projectId: '',
-	sourceDatabaseId: '',
+	sourceDatabaseId: null,
 	sourceDatabase: {},
 	sourceType: '1',
 	sourceSql: '',
@@ -647,6 +649,8 @@ const changeCron = (val: any) => {
 onMounted(() => {
 	listDatabase().then(res => {
 		dataForm.databases = res.data
+		console.log("看看返回的所有数据表")
+		console.log(dataForm.databases)
 	})
 })
 
@@ -663,6 +667,10 @@ const init = (id?: number) => {
 	//获取部门列表
 	useOrgListApi().then(res => {
 		orgList.value = res.data
+	})
+
+	useUserInfoApi().then(res =>{
+		dataForm.orgId = res.data.orgId
 	})
 
 	if (id) {
@@ -750,19 +758,19 @@ const resetConfigMap = (tableList: any) => {
 }
 
 const mapperTableColumns = ref([])
-const mapperTableNameChange = (tableName: any) => {
-	if (!tableName) {
-		return
-	}
-	if (configMap[tableName].regexTableMapper.length == 0) {
-		//设置表名映射
-		configMap[tableName].regexTableMapper = [{ fromPattern: tableName, toValue: tableName }]
-	}
-	//查询表的字段列表
-	listColumnsByIdAndTableName(dataForm.sourceDatabaseId, tableName).then(res => {
-		mapperTableColumns.value = res.data
-	})
-}
+// const mapperTableNameChange = (tableName: any) => {
+// 	if (!tableName) {
+// 		return
+// 	}
+// 	if (configMap[tableName].regexTableMapper.length == 0) {
+// 		//设置表名映射
+// 		configMap[tableName].regexTableMapper = [{ fromPattern: tableName, toValue: tableName }]
+// 	}
+// 	//查询表的字段列表
+// 	listColumnsByIdAndTableName(dataForm.sourceDatabaseId, tableName).then(res => {
+// 		mapperTableColumns.value = res.data
+// 	})
+// }
 
 const dataSyncChange = syncVal => {
 	if (!syncVal) {
@@ -806,6 +814,8 @@ const getAccess = (id: number) => {
 			//获取库所包含的表
 			getTablesById(dataForm.sourceDatabaseId).then(res => {
 				dataForm.sourceTables = res.data
+				console.log("看看数据表")
+				console.log(dataForm.sourceDatabaseId)
 			})
 		}
 		if (dataForm.targetDatabaseId) {
@@ -850,7 +860,7 @@ const sourceTypeChange = (sourceType: any) => {
 }
 
 const dataRules = ref({
-	platformID: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	orgId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	taskName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	/* projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }], */
 	sourceDatabaseId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
@@ -896,6 +906,9 @@ const selectChangedSourceDatabase = id => {
 	//获取库所包含的表
 	getTablesById(id).then(res => {
 		dataForm.sourceTables = res.data
+		console.log("看看数据表")
+		console.log(id)
+		console.log(dataForm.sourceTables)
 	})
 }
 const accessModeChange = value => {
@@ -977,158 +990,158 @@ const deleteSingleColumnName = index => {
 const tableNamesMapperData = ref([])
 const tableNameMapperDialogVisible = ref(false)
 //预览表名映射
-const previewTableNameMapList = () => {
-	if (!dataForm.sourceDatabaseId) {
-		ElMessage({
-			message: '请选择【源端数据库】！',
-			type: 'warning'
-		})
-		return
-	}
+// const previewTableNameMapList = () => {
+// 	if (!dataForm.sourceDatabaseId) {
+// 		ElMessage({
+// 			message: '请选择【源端数据库】！',
+// 			type: 'warning'
+// 		})
+// 		return
+// 	}
 
-	//调用方法
-	previewTableNameMap(
-		JSON.stringify({
-			sourceDatabaseId: dataForm.sourceDatabaseId,
-			includeOrExclude: dataForm.includeOrExclude,
-			sourceSelectedTables: dataForm.sourceSelectedTables,
-			tableNameMapper: dataForm.tableNameMapper,
-			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
-			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
-			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
-		})
-	).then(res => {
-		tableNamesMapperData.value = res.data
-		tableNameMapperDialogVisible.value = true
-	})
-}
+// 	//调用方法
+// 	previewTableNameMap(
+// 		JSON.stringify({
+// 			sourceDatabaseId: dataForm.sourceDatabaseId,
+// 			includeOrExclude: dataForm.includeOrExclude,
+// 			sourceSelectedTables: dataForm.sourceSelectedTables,
+// 			tableNameMapper: dataForm.tableNameMapper,
+// 			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
+// 			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
+// 			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
+// 		})
+// 	).then(res => {
+// 		tableNamesMapperData.value = res.data
+// 		tableNameMapperDialogVisible.value = true
+// 	})
+// }
 
 const preiveSeeTableNameList = ref([])
 const preiveTableName = ref('')
 const columnNamesMapperData = ref([])
 const columnNameMapperDialogVisible = ref(false)
 //预览字段名映射
-const previewColumnNameMapList = () => {
-	if (dataForm.sourceType == 1) {
-		if (!dataForm.sourceDatabaseId) {
-			ElMessage({
-				message: '请选择【源端数据库】！',
-				type: 'warning'
-			})
-			return
-		}
-		if (dataForm.includeOrExclude == '1') {
-			if (dataForm.sourceSelectedTables.length == 0) {
-				preiveSeeTableNameList.value = dataForm.sourceTables.map(item => {
-					return item.tableName
-				})
-			} else {
-				preiveSeeTableNameList.value = dataForm.sourceSelectedTables
-			}
-		} else {
-			preiveSeeTableNameList.value = dataForm.sourceTables.map(item => {
-				return item.tableName
-			})
-			// 去除排除的表
-			for (var i = 0; i < dataForm.sourceSelectedTables.length; i++) {
-				var exclude = dataForm.sourceSelectedTables[i]
-				preiveSeeTableNameList.value.some((item, index) => {
-					if (item == exclude) {
-						preiveSeeTableNameList.value.splice(index, 1)
-						return true
-					}
-				})
-			}
-		}
-		preiveTableName.value = ''
-		columnNamesMapperData.value = []
-		columnNameMapperDialogVisible.value = true
-	} else {
-		//查询映射字段名列表
-		if (!dataForm.sourceDatabaseId) {
-			ElMessage({
-				message: '请选择【源端数据库】！',
-				type: 'warning'
-			})
-			return
-		}
-		dataForm.sourceSql = sqlStudioRef.value.getEditorValue()
-		if (!dataForm.sourceSql) {
-			ElMessage({
-				message: '请填写源端 SQL 语句（单条 SELECT）',
-				type: 'warning'
-			})
-			return
-		}
-		//调用映射接口
-		previewColumnNameMap(
-			JSON.stringify({
-				sourceType: dataForm.sourceType,
-				sourceDatabaseId: dataForm.sourceDatabaseId,
-				columnNameMapper: dataForm.columnNameMapper,
-				sourceSql: dataForm.sourceSql
-			})
-		).then(res => {
-			columnNamesMapperData.value = res.data
-			columnNameMapperDialogVisible.value = true
-		})
-	}
-}
+// const previewColumnNameMapList = () => {
+// 	if (dataForm.sourceType == 1) {
+// 		if (!dataForm.sourceDatabaseId) {
+// 			ElMessage({
+// 				message: '请选择【源端数据库】！',
+// 				type: 'warning'
+// 			})
+// 			return
+// 		}
+// 		if (dataForm.includeOrExclude == '1') {
+// 			if (dataForm.sourceSelectedTables.length == 0) {
+// 				preiveSeeTableNameList.value = dataForm.sourceTables.map(item => {
+// 					return item.tableName
+// 				})
+// 			} else {
+// 				preiveSeeTableNameList.value = dataForm.sourceSelectedTables
+// 			}
+// 		} else {
+// 			preiveSeeTableNameList.value = dataForm.sourceTables.map(item => {
+// 				return item.tableName
+// 			})
+// 			// 去除排除的表
+// 			for (var i = 0; i < dataForm.sourceSelectedTables.length; i++) {
+// 				var exclude = dataForm.sourceSelectedTables[i]
+// 				preiveSeeTableNameList.value.some((item, index) => {
+// 					if (item == exclude) {
+// 						preiveSeeTableNameList.value.splice(index, 1)
+// 						return true
+// 					}
+// 				})
+// 			}
+// 		}
+// 		preiveTableName.value = ''
+// 		columnNamesMapperData.value = []
+// 		columnNameMapperDialogVisible.value = true
+// 	} else {
+// 		//查询映射字段名列表
+// 		if (!dataForm.sourceDatabaseId) {
+// 			ElMessage({
+// 				message: '请选择【源端数据库】！',
+// 				type: 'warning'
+// 			})
+// 			return
+// 		}
+// 		dataForm.sourceSql = sqlStudioRef.value.getEditorValue()
+// 		if (!dataForm.sourceSql) {
+// 			ElMessage({
+// 				message: '请填写源端 SQL 语句（单条 SELECT）',
+// 				type: 'warning'
+// 			})
+// 			return
+// 		}
+// 		//调用映射接口
+// 		previewColumnNameMap(
+// 			JSON.stringify({
+// 				sourceType: dataForm.sourceType,
+// 				sourceDatabaseId: dataForm.sourceDatabaseId,
+// 				columnNameMapper: dataForm.columnNameMapper,
+// 				sourceSql: dataForm.sourceSql
+// 			})
+// 		).then(res => {
+// 			columnNamesMapperData.value = res.data
+// 			columnNameMapperDialogVisible.value = true
+// 		})
+// 	}
+// }
 
 //根据选择的表名查看映射的字段
-const queryPreviewColumnNameMapperList = () => {
-	if (!dataForm.sourceDatabaseId) {
-		ElMessage({
-			message: '请选择【源端数据库】！',
-			type: 'warning'
-		})
-		return
-	}
-	if (!preiveTableName.value) {
-		ElMessage({
-			message: '请选择一个表名！',
-			type: 'warning'
-		})
-		return
-	}
-	previewColumnNameMap(
-		JSON.stringify({
-			sourceDatabaseId: dataForm.sourceDatabaseId,
-			includeOrExclude: dataForm.includeOrExclude,
-			preiveTableName: preiveTableName.value,
-			columnNameMapper: dataForm.columnNameMapper,
-			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
-			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
-			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
-		})
-	).then(res => {
-		columnNamesMapperData.value = res.data
-	})
-}
+// const queryPreviewColumnNameMapperList = () => {
+// 	if (!dataForm.sourceDatabaseId) {
+// 		ElMessage({
+// 			message: '请选择【源端数据库】！',
+// 			type: 'warning'
+// 		})
+// 		return
+// 	}
+// 	if (!preiveTableName.value) {
+// 		ElMessage({
+// 			message: '请选择一个表名！',
+// 			type: 'warning'
+// 		})
+// 		return
+// 	}
+// 	previewColumnNameMap(
+// 		JSON.stringify({
+// 			sourceDatabaseId: dataForm.sourceDatabaseId,
+// 			includeOrExclude: dataForm.includeOrExclude,
+// 			preiveTableName: preiveTableName.value,
+// 			columnNameMapper: dataForm.columnNameMapper,
+// 			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
+// 			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
+// 			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
+// 		})
+// 	).then(res => {
+// 		columnNamesMapperData.value = res.data
+// 	})
+// }
 
-const previewSingleColumnName = () => {
-	if (!dataForm.sourceDatabaseId) {
-		ElMessage({
-			message: '请选择【源端数据库】！',
-			type: 'warning'
-		})
-		return
-	}
-	previewColumnNameMap(
-		JSON.stringify({
-			sourceDatabaseId: dataForm.sourceDatabaseId,
-			includeOrExclude: dataForm.includeOrExclude,
-			preiveTableName: mapperTableName.value,
-			columnNameMapper: configMap[mapperTableName.value].regexColumnMapper,
-			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
-			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
-			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
-		})
-	).then(res => {
-		columnNamesMapperData.value = res.data
-		columnNameMapperDialogVisible.value = true
-	})
-}
+// const previewSingleColumnName = () => {
+// 	if (!dataForm.sourceDatabaseId) {
+// 		ElMessage({
+// 			message: '请选择【源端数据库】！',
+// 			type: 'warning'
+// 		})
+// 		return
+// 	}
+// 	previewColumnNameMap(
+// 		JSON.stringify({
+// 			sourceDatabaseId: dataForm.sourceDatabaseId,
+// 			includeOrExclude: dataForm.includeOrExclude,
+// 			preiveTableName: mapperTableName.value,
+// 			columnNameMapper: configMap[mapperTableName.value].regexColumnMapper,
+// 			targetLowerCase: dataForm.accessMode == '1' ? true : dataForm.targetLowerCase,
+// 			targetUpperCase: dataForm.accessMode == '1' ? false : dataForm.targetUpperCase,
+// 			tablePrefix: dataForm.accessMode == '1' ? 'ods_' : ''
+// 		})
+// 	).then(res => {
+// 		columnNamesMapperData.value = res.data
+// 		columnNameMapperDialogVisible.value = true
+// 	})
+// }
 
 // 表单提交
 const submitHandle = () => {
@@ -1219,6 +1232,9 @@ const submitHandle = () => {
 			dataForm.targetUpperCase = false
 			dataForm.targetAutoIncrement = false
 		}
+
+		console.log("数据接入提交的表单")
+		console.log(dataForm)
 
 		useAccessSubmitApi(dataForm).then(() => {
 			ElMessage.success({

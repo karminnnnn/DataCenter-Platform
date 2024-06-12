@@ -80,7 +80,7 @@ export const testOnline_database = (dataForm: any) => {
 
 // 保留？？？
 export const getTablesById = (id: number) => {
-	return service.get('/data-integrate/database/tables/' + id)
+	return service.get('/data-integrate/datasource/tables/' + id)
 }
 
 // Mine
@@ -105,7 +105,7 @@ export const listTreeByIdApi = (id: any) => {
 
 // 保留？？？
 export const listColumnsByIdAndTableName = (id: any, tableName: any) => {
-	return service.get('/data-integrate/database/' + id + '/' + tableName + '/columns')
+	return service.get('/data-integrate/datasource/' + id + '/' + tableName + '/columns')
 }
 
 // 保留？？？
