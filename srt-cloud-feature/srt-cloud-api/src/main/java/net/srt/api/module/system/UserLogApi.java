@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = ServerNames.SYSTEM_SERVER_NAME, contextId = "sys-userActivityLog")
 public interface UserLogApi {
     @PostMapping(value = "api/system/{accessToken}/{action}")
-    void save(@PathVariable String accessToken, @PathVariable Integer action);
+    String save(@PathVariable String accessToken, @PathVariable Integer action);
 }

@@ -85,8 +85,8 @@ public class DataTableController {
 
 	@PostMapping("tabledata")
 	@Operation(summary = "数据表数据保存")
-	public Result<String> saveTableData(@RequestBody UpdateDataQuery request) {
-		boolean result =dataTableService.saveTableData(request);
+	public Result<String> saveTableData(@RequestBody UpdateDataQuery query) {
+		boolean result =dataTableService.saveTableData(query);
 		if (result) {
 			return Result.ok("Save successful");
 		} else {
@@ -114,8 +114,9 @@ public class DataTableController {
 
 	@DeleteMapping("tabledata")
 	@Operation(summary = "数据表数据删除")
-	public Result<String> deleteTableData (@RequestBody DeleteDataQuery query){
-		boolean result = dataTableService.deleteTableData(query.getIdList(),query.getDatatableId());
+	public Result<String> deleteTableData (@RequestBody UpdateDataQuery query){
+
+		boolean result = dataTableService.deleteTableData(query.getRows(),query.getDatatableId());
 		if (result) {
 			return Result.ok("Delete successful");
 		} else {
