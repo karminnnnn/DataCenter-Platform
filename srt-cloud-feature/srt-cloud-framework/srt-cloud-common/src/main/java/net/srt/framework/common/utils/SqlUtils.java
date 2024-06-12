@@ -41,4 +41,11 @@ public class SqlUtils {
 		return result;
 	}
 
+    public static Map<String, Object> convertRow(List<String> columns, List<Object> row) {
+		Map<String, Object> rowData = new HashMap<>();
+		for (int i = 0; i < columns.size(); i++) {
+			rowData.put(columns.get(i), row.get(i));
+		}
+		return rowData;
+    }
 }

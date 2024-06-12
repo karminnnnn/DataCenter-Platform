@@ -3,19 +3,26 @@ package net.srt.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import net.srt.api.DataAccessApiImpl;
+import net.srt.api.DataDatabaseApiImpl;
+import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.convert.DataOdsConvert;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
-import net.srt.query.DataTableQuery;
-import net.srt.query.TableDataQuery;
+import net.srt.query.*;
 import net.srt.service.DataTableService;
+import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
+import net.srt.vo.SchemaDataVo;
 import net.srt.vo.SchemaTableDataVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+
+import static dm.jdbc.util.DriverUtil.log;
 
 /**
  * 数据集成-贴源数据
@@ -29,6 +36,8 @@ import java.util.List;
 @AllArgsConstructor
 public class DataTableController {
 	private final DataTableService dataTableService;
+	private DataAccessApiImpl dataAccessApi;
+	private DataDatabaseApiImpl dataDatabaseApi;
 
 	@GetMapping("page")
 	@Operation(summary = "数据表分页")
@@ -41,8 +50,15 @@ public class DataTableController {
 	@Operation(summary = "获取特定数据表信息")
 	public Result<DataTableVO> get(@PathVariable("id") Long id) {
 		DataTableEntity entity = dataTableService.getById(id);
-
-		return Result.ok(DataOdsConvert.INSTANCE.convert(entity));
+		DataTableVO dataTableVO=DataOdsConvert.INSTANCE.convert(entity);
+		String datatablename=dataTableVO.getDatatableName();
+		datatablename=datatablename.replace("ods_","");
+		dataTableVO.setDatatableName(datatablename);
+		DataAccessDto dataAccessDto=dataAccessApi.getById(entity.getDataAccessId()).getData();
+		Long databaseid=dataAccessDto.getSourceDatabaseId();
+		dataTableVO.setDatabaseId(databaseid);
+		dataTableVO.setDatabaseName(dataDatabaseApi.getDataBaseBamebyId(databaseid).getData());
+		return Result.ok(dataTableVO);
 	}
 
 	@DeleteMapping
@@ -69,31 +85,47 @@ public class DataTableController {
 
 	@PostMapping("tabledata")
 	@Operation(summary = "数据表数据保存")
-	public Result<String> saveTableData(@RequestBody TableDataQuery request) {
-		dataTableService.saveTableData(request);
-		return Result.ok("数据保存成功");
+	public Result<String> saveTableData(@RequestBody UpdateDataQuery request) {
+		boolean result =dataTableService.saveTableData(request);
+		if (result) {
+			return Result.ok("Save successful");
+		} else {
+			return Result.error("Save failed");
+		}
 	}
 
 	@GetMapping("tabledata/page")
 	@Operation(summary = "数据表数据分页")
-	public Result<PageResult<SchemaTableDataVo>> pageTableData(@Valid TableDataQuery query) {
-        PageResult<SchemaTableDataVo> page = dataTableService.pageTableData(query);
+	public Result<PageResult<Map<String, Object>>> pageTableData(@Valid TableDataQuery query) {
+		PageResult<Map<String, Object>> page = dataTableService.pageTableData(query);
         return Result.ok(page);
     }
 
 	@PutMapping("tabledata")
 	@Operation(summary = "数据表数据修改")
-    public Result<String> updateTableData(@RequestBody TableDataQuery request) {
-      //  dataTableService.updateTableData(request);
-        return Result.ok("数据修改成功");
+    public Result<String> updateTableData(@RequestBody UpdateDataQuery query) {
+		boolean result = dataTableService.updateTableData(query);
+		if (result) {
+			return Result.ok("Update successful");
+		} else {
+			return Result.error("Update failed");
+		}
     }
 
 	@DeleteMapping("tabledata")
 	@Operation(summary = "数据表数据删除")
-	public Result<String> deleteTableData(@RequestBody List<Long> idList) {
-		//  dataTableService.updateTableData(request);
-		return Result.ok("数据删除成功");
+	public Result<String> deleteTableData (@RequestBody DeleteDataQuery query){
+		boolean result = dataTableService.deleteTableData(query.getIdList(),query.getDatatableId());
+		if (result) {
+			return Result.ok("Delete successful");
+		} else {
+			return Result.error("Delete failed");
+		}
 	}
 
-
+	@GetMapping("tabledata/headers/{datatableId}")
+	@Operation(summary = "数据表表头获取")
+	public  Result<Map<String, String>> getTableHeader(@PathVariable("datatableId") Long datatableId){
+		return Result.ok(dataTableService.TableheaderGet(datatableId));
+	}
 }

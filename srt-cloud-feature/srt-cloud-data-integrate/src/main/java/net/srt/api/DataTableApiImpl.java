@@ -20,6 +20,7 @@ public class DataTableApiImpl implements DataTableApi {
 
 	private final DataTableService dataTableService;
 
+
 	@Override
 	public Result<String> addOds(DataTableDto dataTableDto) {
 		DataTableEntity dataTableEntity = dataTableService.getByTableName(dataTableDto.getProjectId(), dataTableDto.getDatatableName());
@@ -31,4 +32,23 @@ public class DataTableApiImpl implements DataTableApi {
 		}
 		return Result.ok();
 	}
+
+	@Override
+	public Result<String> getdatatablenamebyID(Long id){
+		return Result.ok(dataTableService.getById(id).getTableName());
+	}
+
+	@Override
+	public Result<DataTableDto> getById(Long id)
+	{   DataTableEntity entity=dataTableService.getById(id);
+		return Result.ok(DataOdsConvert.INSTANCE.entityToDto(entity)); }
+
+	@Override
+	public Result<Long> getaccessidbydatabaseid(Long id){
+		return Result.ok(dataTableService.getaccessidbydatabaseid(id));
+	}
+
+
+
+
 }

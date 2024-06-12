@@ -3,6 +3,7 @@ package net.srt.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import net.srt.convert.DataSourceConvert;
 import net.srt.dto.SqlConsole;
 import net.srt.dto.TableInfo;
@@ -11,6 +12,7 @@ import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
 import net.srt.framework.common.utils.TreeNodeVo;
 import net.srt.query.DataSourceQuery;
+import net.srt.service.DataDatabaseService;
 import net.srt.service.DataSourceService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataSourceVO;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 数据集成-数据库管理
@@ -56,10 +60,9 @@ public class DataSourceController {
 
 	@PostMapping
 	@Operation(summary = "保存")
-	@PreAuthorize("hasAuthority('data-integrate:database:save')")
+	//@PreAuthorize("hasAuthority('data-integrate:database:save')")
 	public Result<String> save(@RequestBody DataSourceVO vo) {
 		DataSourceService.save(vo);
-
 		return Result.ok();
 	}
 
@@ -90,9 +93,20 @@ public class DataSourceController {
 	@GetMapping("/tables/{id}")
 	@Operation(summary = "根据数据库id获取表相关信息")
 	public Result<List<TableVo>> getTablesById(@PathVariable Long id) {
-		List<TableVo> tableVos = DataSourceService.getTablesById(id);
+		Long ID=Long.valueOf(DataSourceService.getDatasourceIdByDatabaseId(id));
+		String tablebasename= DataSourceService.getDatabasenameByID(id);
+		List<TableVo> tableVos = DataSourceService.getTablesById(ID,tablebasename);
 		return Result.ok(tableVos);
 	}
+
+	//@GetMapping("/tables/test/{id}")
+	//@Operation(summary = "测试")
+	//public Result<String> testgetDatabasename(@PathVariable Long id) {
+		//Long ID=Long.valueOf(DataSourceService.getDatasourceIdByDatabaseId(id));
+	//	String tablebasename= DataSourceService.getDatabasenameByID(id);
+		//List<TableVo> tableVos = DataSourceService.getTablesById(ID,tablebasename);
+	//	return Result.ok(tablebasename);
+	//}
 
 	@PostMapping("/table-data/{id}")
 	@Operation(summary = "根据sql获取数据")
@@ -102,10 +116,14 @@ public class DataSourceController {
 	}
 
 	@GetMapping("/list-all")
-	@Operation(summary = "获取当前用户所能看到的的数据表")
-	public Result<List<DataSourceVO>> listAll() {
+	@Operation(summary = "获取当前用户所能看到的的数据库")
+	public Result<List<Map<String, Object>>> listAll() {
 		List<DataSourceVO> list = DataSourceService.listAll();
-		return Result.ok(list);
+		List<Long> dataSourceIds = list.stream()
+				.map(DataSourceVO::getId)
+				.collect(Collectors.toList());
+		List<Map<String, Object>> databaseInfoList = DataSourceService.getDatabaseInfoByDataSourceIds(dataSourceIds);
+		return Result.ok(databaseInfoList);
 	}
 
 	@GetMapping("/list-tree/{id}")
@@ -131,7 +149,9 @@ public class DataSourceController {
 	@GetMapping("/{id}/{tableName}/columns")
 	@Operation(summary = "获取字段信息")
 	public Result<List<ColumnDescriptionVo>> columnInfo(@PathVariable Long id, @PathVariable String tableName) {
-		return Result.ok(DataSourceService.getColumnInfo(id, tableName));
+		Long ID= Long.valueOf(DataSourceService.getDatasourceIdByDatabaseId(id));
+		String tablebasename= DataSourceService.getDatabasenameByID(id);
+		return Result.ok(DataSourceService.getColumnInfo(ID, tableName,tablebasename));
 	}
 
 	@GetMapping("/middle-db/{tableName}/columns")

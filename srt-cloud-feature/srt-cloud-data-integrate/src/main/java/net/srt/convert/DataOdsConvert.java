@@ -23,7 +23,6 @@ public interface DataOdsConvert {
 	@Mapping(source = "datatableName", target = "tableName")
 	@Mapping(source = "remarks", target = "remarks")
 	@Mapping(source = "recentlySyncTime", target = "recentlySyncTime")
-	@Mapping(source = "databaseId", target = "databaseId")
 	@Mapping(source = "dataAccessId", target = "dataAccessId")
 	@Mapping(source = "projectId", target = "projectId")
 	DataTableEntity convert(DataTableVO vo);
@@ -32,7 +31,6 @@ public interface DataOdsConvert {
 	@Mapping(source = "datatableName", target = "tableName")
 	@Mapping(source = "remarks", target = "remarks")
 	@Mapping(source = "recentlySyncTime", target = "recentlySyncTime")
-	@Mapping(source = "databaseId", target = "databaseId")
 	@Mapping(source = "dataAccessId", target = "dataAccessId")
 	@Mapping(source = "projectId", target = "projectId")
 	DataTableEntity convertByDto(DataTableDto dto);
@@ -41,7 +39,6 @@ public interface DataOdsConvert {
 	@Mapping(source = "tableName", target = "datatableName")
 	@Mapping(source = "remarks", target = "remarks")
 	@Mapping(source = "recentlySyncTime", target = "recentlySyncTime")
-	@Mapping(source = "databaseId", target = "databaseId")
 	@Mapping(source = "dataAccessId", target = "dataAccessId")
 	@Mapping(source = "projectId", target = "projectId")
 	DataTableVO convert(DataTableEntity entity);
@@ -50,7 +47,6 @@ public interface DataOdsConvert {
 	@Mapping(source = "tableName", target = "datatableName")
 	@Mapping(source = "remarks", target = "remarks")
 	@Mapping(source = "recentlySyncTime", target = "recentlySyncTime")
-	@Mapping(source = "databaseId", target = "databaseId")
 	@Mapping(source = "dataAccessId", target = "dataAccessId")
 	@Mapping(source = "projectId", target = "projectId")
 	List<DataTableVO> convertList(List<DataTableEntity> list);
@@ -59,7 +55,6 @@ public interface DataOdsConvert {
 	@Mapping(source = "tableName", target = "datatableName")
 	@Mapping(source = "remarks", target = "remarks")
 	@Mapping(source = "recentlySyncTime", target = "recentlySyncTime")
-	@Mapping(source = "databaseId", target = "databaseId")
 	@Mapping(source = "dataAccessId", target = "dataAccessId")
 	@Mapping(source = "projectId", target = "projectId")
 	DataTableDto entityToDto(DataTableEntity entity);

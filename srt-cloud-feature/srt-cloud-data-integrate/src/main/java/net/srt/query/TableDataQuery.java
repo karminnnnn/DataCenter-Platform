@@ -15,6 +15,6 @@ public class TableDataQuery extends Query{
     @Schema(description = "数据表主键ID")
     private Long datatableId;
 
-    @Schema(description = "数据行列表")
-    private List<Map<String, Object>> rows;
+    @Schema(description = "查询关键词")
+    private String keyWord;
 }

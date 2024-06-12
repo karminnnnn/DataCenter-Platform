@@ -18,7 +18,7 @@ public class DataFieldEntity extends BaseEntity{
     /**
      * 是否自动排序
      */
-    private Boolean autoIncrement;
+    private Boolean isAutoIncrement;
     /**
      * 所属数据表id
      */
@@ -46,11 +46,11 @@ public class DataFieldEntity extends BaseEntity{
     /**
      * 是否为空
      */
-    private Boolean nullable;
+    private Boolean isNullable;
     /**
      * 是否主键
      */
-    private Boolean pk;
+    private Boolean isPk;
     /**
      * 注释
      */

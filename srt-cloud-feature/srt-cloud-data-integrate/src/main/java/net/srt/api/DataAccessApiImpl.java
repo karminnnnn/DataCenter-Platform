@@ -115,4 +115,10 @@ public class DataAccessApiImpl implements DataAccessApi {
 	public void addIncreaseLog(DataAccessIncreaseLogDto increaseLogDto) {
 		increaseLogDao.insert(DataAccessIncreaseLogConvert.INSTANCE.convert(increaseLogDto));
 	}
+
+	@Override
+	public Long getAccessIDbydatabaseID(Long databaseId){
+         return dataAccessService.getAccessIDbydatabaseID(databaseId);
+	}
+
 }

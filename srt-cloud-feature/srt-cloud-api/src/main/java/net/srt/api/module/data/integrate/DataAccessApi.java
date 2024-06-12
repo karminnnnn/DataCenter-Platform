@@ -58,4 +58,7 @@ public interface DataAccessApi {
 
 	@PostMapping(value = "api/quartz/access-increase-log/add")
 	void addIncreaseLog(@RequestBody DataAccessIncreaseLogDto increaseLogDto);
+
+	@PostMapping(value = "api/quartz/getaccessid/{databaseId}")
+	Long getAccessIDbydatabaseID(@PathVariable Long databaseId);
 }

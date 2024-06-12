@@ -39,7 +39,7 @@ public class DataTableEntity extends BaseEntity {
 	/**
 	 * 数据库id
 	 */
-	private Long databaseId;
+	//private Long databaseId;
 
 
 	/**

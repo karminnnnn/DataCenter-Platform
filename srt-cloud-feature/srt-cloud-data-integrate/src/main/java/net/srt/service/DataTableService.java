@@ -5,11 +5,12 @@ import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.BaseService;
 import net.srt.query.DataTableQuery;
 import net.srt.query.TableDataQuery;
-import net.srt.vo.ColumnDescriptionVo;
+import net.srt.query.UpdateDataQuery;
 import net.srt.vo.DataTableVO;
-import net.srt.vo.SchemaTableDataVo;
+import net.srt.vo.SchemaDataVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据集成-贴源数据
@@ -29,11 +30,20 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 
 	DataTableEntity getByTableName(Long projectId, String tableName);
 
-	List<ColumnDescriptionVo> getColumnInfo(String tableName);
+	//List<ColumnDescriptionVo> getColumnInfo(String tableName);
 
-	SchemaTableDataVo getTableData(String tableName);
+	//SchemaTableDataVo getTableData(String tableName);
 
-	void saveTableData(TableDataQuery request);
+	boolean saveTableData(UpdateDataQuery request);
 
-	PageResult<SchemaTableDataVo> pageTableData(TableDataQuery query);
+	boolean updateTableData(UpdateDataQuery query);
+
+	boolean deleteTableData(List<Object> idList,Long datatableId );
+
+
+	Long getaccessidbydatabaseid(Long id);
+
+	PageResult<Map<String, Object>> pageTableData(TableDataQuery query);
+
+	Map<String, String> TableheaderGet(Long datatableid);
 }
