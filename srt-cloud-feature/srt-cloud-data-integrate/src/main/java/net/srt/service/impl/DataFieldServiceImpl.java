@@ -8,6 +8,7 @@ import net.srt.api.DataDatabaseApiImpl;
 import net.srt.api.DataTableApiImpl;
 import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.api.module.data.integrate.dto.DataSourceDto;
+import net.srt.api.module.data.integrate.dto.DataTableDto;
 import net.srt.api.module.quartz.QuartzDataAccessApi;
 import net.srt.constants.DataHouseLayer;
 import net.srt.convert.DataFieldConvert;
@@ -52,7 +53,6 @@ import static net.sf.jsqlparser.util.validation.metadata.NamedObject.column;
 public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFieldEntity> implements DataFieldService {
     private final DataFieldDao dataFieldDao;
     @Autowired
-    private DataTableService dataTableService;
     private DataAccessApiImpl dataAccessApi;
     private DataDatabaseApiImpl dataDatabaseApi;
     private DataTableApiImpl dataTableApi;
@@ -60,8 +60,8 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
 
     @Override
     public PageResult<ColumnDescriptionVo> page(DataFieldQuery query) {
-        DataTableEntity tableEntity = dataTableService.getById(query.getDatatableId());
-        if (tableEntity == null) {
+        DataTableDto tableDto = dataTableApi.getById(query.getDatatableId()).getData();
+        if (tableDto == null) {
             return new PageResult<>(new ArrayList<>(), 0);
         }
 
@@ -70,7 +70,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
 
         List<ColumnDescription> columnDescriptions = metaDataService.queryTableColumnMeta(
                 project.getDbUrl(), project.getDbUsername(), project.getDbPassword(),
-                project.getDbSchema(), tableEntity.getTableName()
+                project.getDbSchema(), tableDto.getDatatableName()
         );
 
         List<ColumnDescriptionVo> columnDescriptionVos = columnDescriptions.stream().map(columnDescription -> {
@@ -85,7 +85,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
             columnDescriptionVo.setPk(columnDescription.isPk());
             columnDescriptionVo.setAutoIncrement(columnDescription.isAutoIncrement());
             columnDescriptionVo.setDatatableId(query.getDatatableId());
-            columnDescriptionVo.setDatatableName(tableEntity.getTableName());
+            columnDescriptionVo.setDatatableName(tableDto.getDatatableName());
             return columnDescriptionVo;
         }).collect(Collectors.toList());
 
@@ -108,7 +108,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     public void save(ColumnDescriptionVo vo) {
         //DataFieldEntity entity = DataFieldConvert.INSTANCE.convert(vo);
         newDataField(vo);
-        quartzDataAccessApi.handRun(dataTableService.getaccessidbydatabaseid(vo.getDatatableId()));
+        quartzDataAccessApi.handRun(dataTableApi.getaccessidbydatabaseid(vo.getDatatableId()).getData());
        // baseMapper.insert(entity);
     }
 
@@ -116,7 +116,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     public void update(ColumnDescriptionVo vo,String oldfieldname) {
         //DataFieldEntity entity = DataFieldConvert.INSTANCE.convert(vo);
         modifyField(vo,oldfieldname);
-        quartzDataAccessApi.handRun(dataTableService.getaccessidbydatabaseid(vo.getDatatableId()));
+        quartzDataAccessApi.handRun(dataTableApi.getaccessidbydatabaseid(vo.getDatatableId()).getData());
         //updateById(entity);
     }
 
@@ -125,7 +125,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     public void delete(String fieldname,Long datatableid) {
        // removeByIds(idList);
         deleteDataField(fieldname,datatableid);
-        quartzDataAccessApi.handRun(dataTableService.getaccessidbydatabaseid(datatableid));
+        quartzDataAccessApi.handRun(dataTableApi.getaccessidbydatabaseid(datatableid).getData());
     }
 
     @Override
@@ -163,15 +163,14 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     }
 
     private String getTableNameByTableId(Long tableId) {
-        // 使用 dataTableService 根据 tableId 获取 DataTableEntity
-        DataTableEntity entity = dataTableService.getById(tableId);
-        return entity != null ? entity.getTableName() : null;
+        DataTableDto dto = dataTableApi.getById(tableId).getData();
+        return dto != null ? dto.getDatatableName() : null;
     }
 
     public void modifyField(ColumnDescriptionVo query,String oldfieldname) {
         // 获取数据接入信息
         Long datatableid=query.getDatatableId();
-        Long dataaccessid=dataTableService.getaccessidbydatabaseid(datatableid);//可能要两手中转，由table找base在找accsee再找dto
+        Long dataaccessid=dataTableApi.getaccessidbydatabaseid(datatableid).getData();//可能要两手中转，由table找base在找accsee再找dto
         DataAccessDto dataAccess = dataAccessApi.getById(dataaccessid).getData();
         if (dataAccess == null) {
             throw new RuntimeException("Data access not found");
@@ -187,7 +186,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     }
 
     private void modifySourceDatabaseField(DataSourceDto dataSource, ColumnDescriptionVo query,String oldfieldname) {
-        Long dataaccessid=dataTableService.getaccessidbydatabaseid(query.getDatatableId());
+        Long dataaccessid=dataTableApi.getaccessidbydatabaseid(query.getDatatableId()).getData();
         String databasename=dataDatabaseApi.getDataBaseBamebyId(dataAccessApi.getById(dataaccessid).getData().getSourceDatabaseId()).getData();
         String datatablename=dataTableApi.getdatatablenamebyID(query.getDatatableId()).getData().replace("ods_","");
         // 创建字段修改SQL
@@ -252,7 +251,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     public void newDataField(ColumnDescriptionVo query) {
         // 获取数据接入信息
         Long datatableid=query.getDatatableId();
-        Long dataaccessid=dataTableService.getaccessidbydatabaseid(datatableid);
+        Long dataaccessid=dataTableApi.getaccessidbydatabaseid(datatableid).getData();
         DataAccessDto dataAccess = dataAccessApi.getById(dataaccessid).getData();
         if (dataAccess == null) {
             throw new RuntimeException("Data access not found");
@@ -268,7 +267,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     }
 
     public void createSourceDatabaseField(DataSourceDto dataSource, ColumnDescriptionVo query) {
-        Long dataaccessid=dataTableService.getaccessidbydatabaseid(query.getDatatableId());
+        Long dataaccessid=dataTableApi.getaccessidbydatabaseid(query.getDatatableId()).getData();
         String databaseName=dataDatabaseApi.getDataBaseBamebyId(dataAccessApi.getById(dataaccessid).getData().getSourceDatabaseId()).getData();
         String tableName = dataTableApi.getdatatablenamebyID(query.getDatatableId()).getData().replace("ods_","");
         String fieldName = query.getFieldName();
@@ -347,7 +346,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
 
     public void deleteDataField(String fieldName, Long datatableId) {
         // 获取数据接入信息
-        Long dataaccessid = dataTableService.getaccessidbydatabaseid(datatableId);
+        Long dataaccessid = dataTableApi.getaccessidbydatabaseid(datatableId).getData();
         DataAccessDto dataAccess = dataAccessApi.getById(dataaccessid).getData();
         if (dataAccess == null) {
             throw new RuntimeException("Data access not found");
@@ -363,9 +362,9 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
     }
 
     public void deleteSourceDatabaseField(DataSourceDto dataSource,String thefieldName, Long datatableId) {
-        Long dataacessid=dataTableService.getaccessidbydatabaseid(datatableId);
+        Long dataacessid=dataTableApi.getaccessidbydatabaseid(datatableId).getData();
         String databaseName = dataDatabaseApi.getDataBaseBamebyId(dataAccessApi.getById(dataacessid).getData().getSourceDatabaseId()).getData();
-        String tableName = dataTableService.getById(datatableId).getTableName().replace("ods_","");
+        String tableName = dataTableApi.getById(datatableId).getData().getDatatableName().replace("ods_","");
         String fieldName = thefieldName;
 
         // 构建 DROP COLUMN SQL 语句

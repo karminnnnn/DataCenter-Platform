@@ -1,23 +1,30 @@
 package net.srt.service.impl;
 
+import com.alibaba.druid.sql.ast.statement.SQLColumnPrimaryKey;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import net.srt.api.DataAccessApiImpl;
 import net.srt.api.DataDatabaseApiImpl;
+import net.srt.api.DataFieldApiImpl;
+import net.srt.api.module.data.integrate.DataFieldApi;
 import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.api.module.data.integrate.dto.DataSourceDto;
+import net.srt.api.module.data.integrate.dto.DataTableDto;
 import net.srt.api.module.quartz.QuartzDataAccessApi;
 import net.srt.constants.DataHouseLayer;
 import net.srt.dao.DataTableDao;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.page.PageResult;
+import net.srt.framework.common.utils.Result;
 import net.srt.framework.common.utils.SqlUtils;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
+import net.srt.query.DataFieldQuery;
 import net.srt.query.DataTableQuery;
 import net.srt.query.TableDataQuery;
 import net.srt.query.UpdateDataQuery;
+import net.srt.service.DataFieldService;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
@@ -26,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srt.cloud.framework.dbswitch.common.type.ProductTypeEnum;
 import srt.cloud.framework.dbswitch.common.util.StringUtil;
+import srt.cloud.framework.dbswitch.core.model.ColumnDescription;
 import srt.cloud.framework.dbswitch.core.model.SchemaTableData;
 import srt.cloud.framework.dbswitch.core.model.TableDescription;
 import srt.cloud.framework.dbswitch.core.service.IMetaDataByJdbcService;
@@ -115,7 +123,6 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 
 	@Override
 	public void update(DataTableVO vo) {
-		//DataTableEntity entity = DataOdsConvert.INSTANCE.convert(vo);
 		String Newtablename=vo.getDatatableName();
 		DataTableEntity entity=baseMapper.selectById(vo.getDatatableId());
 		String OldtableName=entity.getTableName().replace("ods_","");
@@ -126,8 +133,6 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		{  log.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!f23g1");
 			deleteODSDatabaseTable(vo.getDatatableId());}
 		quartzDataAccessApi.handRun(vo.getDataAccessId());
-
-	//	updateById(entity);
 	}
 
 	@Override
@@ -178,7 +183,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		return ifsuccess;
 	}
 
-	public boolean deleteTableData(List<Object> idList,String primaryKeyColumn,Long datatableId ){
+	public boolean deleteTableData(List<Object> idList,Long datatableId ){
 		// 获取数据接入信息
 		DataAccessDto dataAccess = dataAccessApi.getById(getaccessidbydatabaseid(datatableId)).getData();
 		if (dataAccess == null) {
@@ -191,6 +196,8 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		if (dataSource == null) {
 			throw new RuntimeException("Data Source not found");
 		}
+
+		String primaryKeyColumn=getPrimaryKeyColumn(datatableId);
 
 		// 删除源端数据库中的表数据
 		boolean ifsuccess=deleteMultipleFromSourceDatabaseTableData(dataSource,datatableId,idList,primaryKeyColumn);
@@ -256,7 +263,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		return result;
 	}
 
-	public List<String> TableheaderGet(Long datatableid){
+	public Map<String, String> TableheaderGet(Long datatableid){
 		DataProjectCacheBean project = getProject();
 		String tableName=baseMapper.selectById(datatableid).getTableName();
 		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
@@ -267,7 +274,8 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		SchemaTableData schemaTableData = service.queryTableData(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName, maxRows);
 
 		// 获取列信息
-		List<String> columns = schemaTableData.getColumns();
+		List<String> column = schemaTableData.getColumns();
+		Map<String, String> columns=SqlUtils.convertColumns(schemaTableData.getColumns());
 		return columns;
 	}
 
@@ -510,6 +518,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 
 	private boolean modifySourceDatabaseTableData(DataSourceDto dataSource, UpdateDataQuery query) {
 		// 构建更新 SQL 语句
+		String PrimaryKeyColumn=getPrimaryKeyColumn(query.getDatatableId());
 		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName().replace("ods_","");
 		Long databaseId=dataAccessApi.getById(getaccessidbydatabaseid(query.getDatatableId())).getData().getSourceDatabaseId();
 		String databasename=dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
@@ -519,10 +528,10 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			for (Map<String, Object> data : query.getRows()) {// 为每个数据项构建更新 SQL 语句
 				StringBuilder sql = new StringBuilder("UPDATE ").append("`").append(databasename).append("`.`").append(tableName).append("` SET ");
 				List<Object> params = new ArrayList<>();
-				Object primaryKeyValue = data.get(query.getPrimaryKeyColumn());
+				Object primaryKeyValue = data.get(PrimaryKeyColumn);
 
 				data.forEach((column, value) -> {
-					if (!column.equals(query.getPrimaryKeyColumn())) {
+					if (!column.equals(PrimaryKeyColumn)) {
 						sql.append("`").append(column).append("` = ?, ");
 						params.add(value);
 					}
@@ -530,7 +539,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 
 				// 删除最后一个逗号和空格
 				sql.setLength(sql.length() - 2);
-				sql.append(" WHERE `").append(query.getPrimaryKeyColumn()).append("` = ?");
+				sql.append(" WHERE `").append(PrimaryKeyColumn).append("` = ?");
 				params.add(primaryKeyValue);
 				// 打印 SQL 语句和参数
 				System.out.println("Executing SQL: " + sql);
@@ -642,10 +651,62 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		}
 	}
 
+	public String getPrimaryKeyColumn(Long datatableid) {
+		DataFieldQuery dataFieldQuery = new DataFieldQuery();
+		dataFieldQuery.setDatatableId(datatableid); // 设置 datatableId
+		dataFieldQuery.setPage(1); // 设置页码
+		dataFieldQuery.setLimit(1000); // 设置每页条数
+		List<ColumnDescriptionVo> fields=Columnpage(dataFieldQuery).getList();
+		for (ColumnDescriptionVo field : fields) {
+			if (field.isPk()) {
+				return field.getFieldName();
+			}
+		}
+		return null;
+	}
+
 	public Long getaccessidbydatabaseid(Long id){
 		if (id == null) {
 			throw new NullPointerException("DataAccess object is null for databaseId: " + id);
 		}
 		return baseMapper.selectById(id).getDataAccessId();
+	}
+
+	public PageResult<ColumnDescriptionVo> Columnpage(DataFieldQuery query) {
+		DataTableEntity tableEntity = getById(query.getDatatableId());
+		if (tableEntity == null) {
+			return new PageResult<>(new ArrayList<>(), 0);
+		}
+
+		DataProjectCacheBean project = getProject();
+		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
+
+		List<ColumnDescription> columnDescriptions = metaDataService.queryTableColumnMeta(
+				project.getDbUrl(), project.getDbUsername(), project.getDbPassword(),
+				project.getDbSchema(), tableEntity.getTableName()
+		);
+
+		List<ColumnDescriptionVo> columnDescriptionVos = columnDescriptions.stream().map(columnDescription -> {
+			ColumnDescriptionVo columnDescriptionVo = new ColumnDescriptionVo();
+			columnDescriptionVo.setFieldName(columnDescription.getFieldName());
+			columnDescriptionVo.setRemarks(columnDescription.getRemarks());
+			columnDescriptionVo.setFieldTypeName(columnDescription.getFieldTypeName());
+			columnDescriptionVo.setDisplaySize(columnDescription.getDisplaySize());
+			columnDescriptionVo.setScaleSize(columnDescription.getScaleSize());
+			columnDescriptionVo.setDefaultValue(columnDescription.getDefaultValue());
+			columnDescriptionVo.setNullable(columnDescription.isNullable());
+			columnDescriptionVo.setPk(columnDescription.isPk());
+			columnDescriptionVo.setAutoIncrement(columnDescription.isAutoIncrement());
+			columnDescriptionVo.setDatatableId(query.getDatatableId());
+			columnDescriptionVo.setDatatableName(tableEntity.getTableName());
+			return columnDescriptionVo;
+		}).collect(Collectors.toList());
+
+		// Pagination
+		int startIndex = (query.getPage() - 1) * query.getLimit();
+		int endIndex = Math.min(query.getPage() * query.getLimit(), columnDescriptionVos.size());
+		List<ColumnDescriptionVo> pageList = columnDescriptionVos.subList(startIndex, endIndex);
+
+		return new PageResult<>(pageList, columnDescriptionVos.size());
 	}
 }

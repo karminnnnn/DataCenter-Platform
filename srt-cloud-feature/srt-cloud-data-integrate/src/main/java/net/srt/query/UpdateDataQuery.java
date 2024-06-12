@@ -12,6 +12,5 @@ import java.util.Map;
 @Schema(description = "数据集成-贴源数据查询")
 public class UpdateDataQuery {
     private Long datatableId;
-    private String primaryKeyColumn;
     private List<Map<String, Object>> rows;
 }

@@ -38,12 +38,12 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 
 	boolean updateTableData(UpdateDataQuery query);
 
-	boolean deleteTableData(List<Object> idList,String primaryKeyColumn,Long datatableId );
+	boolean deleteTableData(List<Object> idList,Long datatableId );
 
 
 	Long getaccessidbydatabaseid(Long id);
 
 	PageResult<Map<String, Object>> pageTableData(TableDataQuery query);
 
-	List<String> TableheaderGet(Long datatableid);
+	Map<String, String> TableheaderGet(Long datatableid);
 }

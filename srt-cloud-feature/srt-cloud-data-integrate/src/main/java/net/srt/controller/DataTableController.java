@@ -115,7 +115,7 @@ public class DataTableController {
 	@DeleteMapping("tabledata")
 	@Operation(summary = "数据表数据删除")
 	public Result<String> deleteTableData (@RequestBody DeleteDataQuery query){
-		boolean result = dataTableService.deleteTableData(query.getIdList(),query.getPrimaryKeyColumn(),query.getDatatableId());
+		boolean result = dataTableService.deleteTableData(query.getIdList(),query.getDatatableId());
 		if (result) {
 			return Result.ok("Delete successful");
 		} else {
@@ -125,7 +125,7 @@ public class DataTableController {
 
 	@GetMapping("tabledata/headers/{datatableId}")
 	@Operation(summary = "数据表表头获取")
-	public  Result<List<String>> getTableHeader(@PathVariable("datatableId") Long datatableId){
+	public  Result<Map<String, String>> getTableHeader(@PathVariable("datatableId") Long datatableId){
 		return Result.ok(dataTableService.TableheaderGet(datatableId));
 	}
 }
