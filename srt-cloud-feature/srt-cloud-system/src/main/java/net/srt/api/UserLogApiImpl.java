@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserLogApiImpl implements UserLogApi {
     private final SysUserActivityLogService service;
-    //private final TokenStoreCache tokenStoreCache;
+    private final TokenStoreCache tokenStoreCache;
     @Override
-    public void save(String accessToken,Integer action){
-        /*
+    public String save(String accessToken,Integer action){
+        System.out.println("成功调用");
         UserDetail userDetail = tokenStoreCache.getUser(accessToken);
         String userName = userDetail.getUsername();
         service.save(userName,action);
-
-         */
+        return "成功调用";
     }
 }
