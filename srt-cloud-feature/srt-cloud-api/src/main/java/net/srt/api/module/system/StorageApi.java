@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  *  @author 阿沐 babamu@126.com
  */
-@FeignClient(name = ServerNames.SYSTEM_SERVER_NAME)
+@FeignClient(name = ServerNames.SYSTEM_SERVER_NAME,contextId = "sys-storage")
 public interface StorageApi {
 
     /**

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
+import net.srt.api.UserLogApiImpl;
+import net.srt.api.module.system.constant.UserActionEnum;
 import net.srt.constants.YesOrNo;
 import net.srt.convert.DataDatabaseConvert;
 import net.srt.convert.DataSourceConvert;
@@ -17,6 +19,8 @@ import net.srt.entity.DataDatabaseEntity;
 import net.srt.entity.DataSourceEntity;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
+import net.srt.framework.security.cache.TokenStoreCache;
+import net.srt.framework.security.user.UserDetail;
 import net.srt.query.DataDatabaseQuery;
 import net.srt.query.DataSourceQuery;
 import net.srt.service.DataAccessTaskService;
@@ -41,11 +45,10 @@ import java.util.stream.Collectors;
 public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, DataDatabaseEntity> implements DataDatabaseService {
     private final DataDatabaseDao dataDatabaseDao;
     private final DataSourceDao dataSourceDao;
-
-
-    public PageResult<DataDatabaseVO> page(DataDatabaseQuery query) {
+    //private final UserLogApiImpl userLogApi;
+    public PageResult<DataDatabaseVO> page(DataDatabaseQuery query,String accessToken) {
         IPage<DataDatabaseEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
+        //userLogApi.save(accessToken, UserActionEnum.SELECT.getValue());
         return new PageResult<>(DataDatabaseConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
     }
 

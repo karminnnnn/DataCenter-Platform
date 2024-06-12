@@ -11,5 +11,5 @@ import java.util.List;
 @Schema(description = "数据集成-贴源数据查询")
 public class DeleteDataQuery {
     private Long datatableId;
-    private List<Object> idList;
+    private List<List<Object>> idList;
 }

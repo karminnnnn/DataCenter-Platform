@@ -11,7 +11,7 @@ import java.util.Map;
 
 
 public interface DataDatabaseService extends BaseService<DataDatabaseEntity> {
-    PageResult<DataDatabaseVO> page(DataDatabaseQuery query);
+    PageResult<DataDatabaseVO> page(DataDatabaseQuery query,String accessToken);
 
     void delete(Long databaseId);
 

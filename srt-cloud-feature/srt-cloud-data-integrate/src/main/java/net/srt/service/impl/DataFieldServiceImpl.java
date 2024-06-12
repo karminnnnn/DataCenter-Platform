@@ -72,7 +72,7 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
                 project.getDbUrl(), project.getDbUsername(), project.getDbPassword(),
                 project.getDbSchema(), tableDto.getDatatableName()
         );
-
+        List<String> pks =  metaDataService.queryTablePrimaryKeys(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableDto.getDatatableName());
         List<ColumnDescriptionVo> columnDescriptionVos = columnDescriptions.stream().map(columnDescription -> {
             ColumnDescriptionVo columnDescriptionVo = new ColumnDescriptionVo();
             columnDescriptionVo.setFieldName(columnDescription.getFieldName());
@@ -82,10 +82,13 @@ public class DataFieldServiceImpl extends BaseServiceImpl<DataFieldDao, DataFiel
             columnDescriptionVo.setScaleSize(columnDescription.getScaleSize());
             columnDescriptionVo.setDefaultValue(columnDescription.getDefaultValue());
             columnDescriptionVo.setNullable(columnDescription.isNullable());
-            columnDescriptionVo.setPk(columnDescription.isPk());
             columnDescriptionVo.setAutoIncrement(columnDescription.isAutoIncrement());
             columnDescriptionVo.setDatatableId(query.getDatatableId());
             columnDescriptionVo.setDatatableName(tableDto.getDatatableName());
+            log.warn(columnDescription.getFieldName());
+            if (pks.contains(columnDescription.getFieldName())) {
+                        columnDescriptionVo.setPk(true);}
+            else {columnDescriptionVo.setPk(false);}
             return columnDescriptionVo;
         }).collect(Collectors.toList());
 
