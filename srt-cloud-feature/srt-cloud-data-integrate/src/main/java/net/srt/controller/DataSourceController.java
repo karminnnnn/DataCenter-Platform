@@ -68,7 +68,7 @@ public class DataSourceController {
 
 	@PutMapping
 	@Operation(summary = "修改")
-	@PreAuthorize("hasAuthority('data-integrate:database:update')")
+	//@PreAuthorize("hasAuthority('data-integrate:database:update')")
 	public Result<String> update(@RequestBody @Valid DataSourceVO vo) {
 		DataSourceService.update(vo);
 
