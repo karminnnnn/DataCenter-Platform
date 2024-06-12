@@ -77,7 +77,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	private final DataAccessService dataAccessService;
 	private final DataProductionTaskApi productionTaskApi;
 	private final DataMetadataCollectApi dataMetadataCollectApi;
-	//private final DataDatabaseServiceImpl dataDatabaseServiceImpl;
+	private final DataDatabaseServiceImpl dataDatabaseServiceImpl;
 	@Autowired
 	private DataDatabaseService dataDatabaseService;  // 注入 DataDatabaseService
 
@@ -103,15 +103,14 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	@Override
 	public void save(DataSourceVO vo) {
 		DataSourceEntity entity = DataSourceConvert.INSTANCE.convert(vo);
-		/*
-		DataDatabaseEntity dbEntity = new DataDatabaseEntity();
-		if(dbEntity != null){
-			dbEntity.setStatus(0);
-			dbEntity.setSynStatus(1);
-			dbEntity.setDatasourceId(vo.getId().intValue());
-		}
 
-		 */
+		DataDatabaseEntity dbEntity = new DataDatabaseEntity();
+
+		dbEntity.setStatus(0);
+		dbEntity.setSynStatus(1);
+		dbEntity.setDatasourceId(vo.getId().intValue());
+		dbEntity.setDatabaseName(null);
+
 		entity.setProjectId(getProjectId());
 		setJdbcUrlByEntity(entity);
 		baseMapper.insert(entity);
@@ -120,7 +119,6 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		} catch (Exception ignored) {
 		}
 
-		/*
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
 		if (StringUtil.isBlank(vo.getJdbcUrl())) {
@@ -131,8 +129,6 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 			);
 		}
 
-		 */
-		/*
 		String getDatabaseStr = "SHOW DATABASES";
 		ResultSet resultSet = metaDataService.getDatabase(
 				vo.getJdbcUrl(),
@@ -140,8 +136,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 				vo.getPassword(),
 				getDatabaseStr
 		);
-		 */
-		/*
+
 		System.out.println("running 1");
 		List<String>databases = new ArrayList<>();
 		try{
@@ -154,7 +149,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		} catch (SQLException e){
 			throw new RuntimeException(e);
 		}
-		*/
+
 	}
 
 	@Override
