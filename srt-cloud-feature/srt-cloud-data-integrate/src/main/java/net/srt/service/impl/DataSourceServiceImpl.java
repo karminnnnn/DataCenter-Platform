@@ -286,7 +286,9 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	@SneakyThrows
 	@Override
 	public SchemaTableDataVo getTableDataBySql(Integer id, SqlConsole sqlConsole) {
-		DataSourceEntity DataSourceEntity = baseMapper.selectById(id);
+		Integer datasourceid=getDatasourceIdByDatabaseId(Long.valueOf(id));
+		String datatablename=getDatabasenameByID(Long.valueOf(id));
+		DataSourceEntity DataSourceEntity = baseMapper.selectById(datasourceid);
 		if (!ProductTypeEnum.MONGODB.getIndex().equals(DataSourceEntity.getDatabaseType())) {
 			Statement parse = CCJSqlParserUtil.parse(sqlConsole.getSql());
 			if (!(parse instanceof Select)) {
@@ -298,7 +300,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		SchemaTableData schemaTableData = metaDataService.queryTableDataBySql(StringUtil.isBlank(DataSourceEntity.getJdbcUrl()) ? productTypeEnum.getUrl()
 				.replace("{host}", DataSourceEntity.getDatabaseIp())
 				.replace("{port}", DataSourceEntity.getDatabasePort())
-				.replace("{database}", DataSourceEntity.getDatabaseName()) : DataSourceEntity.getJdbcUrl(), DataSourceEntity.getUserName(), DataSourceEntity.getPassword(), sqlConsole.getSql(), 100);
+				.replace("{database}", datatablename) : DataSourceEntity.getJdbcUrl(), DataSourceEntity.getUserName(), DataSourceEntity.getPassword(), sqlConsole.getSql(), 100);
 		return SchemaTableDataVo.builder().columns(SqlUtils.convertColumns(schemaTableData.getColumns())).rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows())).build();
 	}
 
