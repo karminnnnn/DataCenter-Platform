@@ -176,7 +176,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		return ifsuccess;
 	}
 
-	public boolean deleteTableData(List<List<Object>> idList,Long datatableId ){
+	public boolean deleteTableData(List<Map<String, Object>> List,Long datatableId ){
 		// 获取数据接入信息
 		DataAccessDto dataAccess = dataAccessApi.getById(getaccessidbydatabaseid(datatableId)).getData();
 		if (dataAccess == null) {
@@ -191,14 +191,27 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		}
 
 		List<String> primaryKeyColumn=getPrimaryKeyColumn(datatableId);
+		List<List<Object>> primaryKeyValueList=getPrimaryKeyValue(List,primaryKeyColumn);
 
 		// 删除源端数据库中的表数据
-		boolean ifsuccess=deleteMultipleFromSourceDatabaseTableData(dataSource,datatableId,idList,primaryKeyColumn);
+		boolean ifsuccess=deleteMultipleFromSourceDatabaseTableData(dataSource,datatableId,primaryKeyValueList,primaryKeyColumn);
 		if(ifsuccess) {
 			Long accessid=baseMapper.selectById(datatableId).getDataAccessId();
 			quartzDataAccessApi.handRun(accessid);
 		}
 		return ifsuccess;
+	}
+
+	private List<List<Object>> getPrimaryKeyValue(List<Map<String, Object>> list, List<String> primaryKeyColumn) {
+		List<List<Object>> PrimaryKeyValue=new ArrayList<>();
+		for (Map<String, Object> row : list) {
+			List<Object> primaryKeyRow = new ArrayList<>();
+			for (String key : primaryKeyColumn) {
+				primaryKeyRow.add(row.get(key));
+			}
+			PrimaryKeyValue.add(primaryKeyRow);
+		}
+		return PrimaryKeyValue;
 	}
 
 	/*public SchemaTableDataVo pageTableData(TableDataQuery query){
