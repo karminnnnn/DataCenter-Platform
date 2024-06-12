@@ -38,7 +38,7 @@ public interface DataTableService extends BaseService<DataTableEntity> {
 
 	boolean updateTableData(UpdateDataQuery query);
 
-	boolean deleteTableData(List<Object> idList,Long datatableId );
+	boolean deleteTableData(List<List<Object>> idList,Long datatableId );
 
 
 	Long getaccessidbydatabaseid(Long id);

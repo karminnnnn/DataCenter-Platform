@@ -1,34 +1,27 @@
 package net.srt.service.impl;
 
-import com.alibaba.druid.sql.ast.statement.SQLColumnPrimaryKey;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import net.srt.api.DataAccessApiImpl;
 import net.srt.api.DataDatabaseApiImpl;
-import net.srt.api.DataFieldApiImpl;
-import net.srt.api.module.data.integrate.DataFieldApi;
 import net.srt.api.module.data.integrate.dto.DataAccessDto;
 import net.srt.api.module.data.integrate.dto.DataSourceDto;
-import net.srt.api.module.data.integrate.dto.DataTableDto;
 import net.srt.api.module.quartz.QuartzDataAccessApi;
 import net.srt.constants.DataHouseLayer;
 import net.srt.dao.DataTableDao;
 import net.srt.entity.DataTableEntity;
 import net.srt.framework.common.cache.bean.DataProjectCacheBean;
 import net.srt.framework.common.page.PageResult;
-import net.srt.framework.common.utils.Result;
 import net.srt.framework.common.utils.SqlUtils;
 import net.srt.framework.mybatis.service.impl.BaseServiceImpl;
 import net.srt.query.DataFieldQuery;
 import net.srt.query.DataTableQuery;
 import net.srt.query.TableDataQuery;
 import net.srt.query.UpdateDataQuery;
-import net.srt.service.DataFieldService;
 import net.srt.service.DataTableService;
 import net.srt.vo.ColumnDescriptionVo;
 import net.srt.vo.DataTableVO;
-import net.srt.vo.SchemaDataVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srt.cloud.framework.dbswitch.common.type.ProductTypeEnum;
@@ -183,7 +176,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		return ifsuccess;
 	}
 
-	public boolean deleteTableData(List<Object> idList,Long datatableId ){
+	public boolean deleteTableData(List<List<Object>> idList,Long datatableId ){
 		// 获取数据接入信息
 		DataAccessDto dataAccess = dataAccessApi.getById(getaccessidbydatabaseid(datatableId)).getData();
 		if (dataAccess == null) {
@@ -197,7 +190,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 			throw new RuntimeException("Data Source not found");
 		}
 
-		String primaryKeyColumn=getPrimaryKeyColumn(datatableId);
+		List<String> primaryKeyColumn=getPrimaryKeyColumn(datatableId);
 
 		// 删除源端数据库中的表数据
 		boolean ifsuccess=deleteMultipleFromSourceDatabaseTableData(dataSource,datatableId,idList,primaryKeyColumn);
@@ -518,32 +511,44 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 
 	private boolean modifySourceDatabaseTableData(DataSourceDto dataSource, UpdateDataQuery query) {
 		// 构建更新 SQL 语句
-		String PrimaryKeyColumn=getPrimaryKeyColumn(query.getDatatableId());
-		String tableName=baseMapper.selectById(query.getDatatableId()).getTableName().replace("ods_","");
-		Long databaseId=dataAccessApi.getById(getaccessidbydatabaseid(query.getDatatableId())).getData().getSourceDatabaseId();
-		String databasename=dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
+		List<String> primaryKeyColumnS = getPrimaryKeyColumn(query.getDatatableId());
+		String tableName = baseMapper.selectById(query.getDatatableId()).getTableName().replace("ods_", "");
+		Long databaseId = dataAccessApi.getById(getaccessidbydatabaseid(query.getDatatableId())).getData().getSourceDatabaseId();
+		String databasename = dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
+
 		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword());
-			 Statement useDbStmt = connection.createStatement()) {// 选择数据库
+			 Statement useDbStmt = connection.createStatement()) { // 选择数据库
 			useDbStmt.execute("USE " + databasename);
-			for (Map<String, Object> data : query.getRows()) {// 为每个数据项构建更新 SQL 语句
-				StringBuilder sql = new StringBuilder("UPDATE ").append("`").append(databasename).append("`.`").append(tableName).append("` SET ");
+
+			for (Map<String, Object> data : query.getRows()) { // 为每个数据项构建更新 SQL 语句
+				StringBuilder sql = new StringBuilder("UPDATE `").append(databasename).append("`.`").append(tableName).append("` SET ");
 				List<Object> params = new ArrayList<>();
-				Object primaryKeyValue = data.get(PrimaryKeyColumn);
+				List<Object> primaryKeyValues = new ArrayList<>();
 
 				data.forEach((column, value) -> {
-					if (!column.equals(PrimaryKeyColumn)) {
+					if (!primaryKeyColumnS.contains(column)) {
 						sql.append("`").append(column).append("` = ?, ");
 						params.add(value);
+					} else {
+						primaryKeyValues.add(value);
 					}
 				});
 
 				// 删除最后一个逗号和空格
 				sql.setLength(sql.length() - 2);
-				sql.append(" WHERE `").append(PrimaryKeyColumn).append("` = ?");
-				params.add(primaryKeyValue);
+				sql.append(" WHERE ");
+				for (int i = 0; i < primaryKeyColumnS.size(); i++) {
+					if (i > 0) {
+						sql.append(" AND ");
+					}
+					sql.append("`").append(primaryKeyColumnS.get(i)).append("` = ?");
+				}
+				params.addAll(primaryKeyValues);
+
 				// 打印 SQL 语句和参数
 				System.out.println("Executing SQL: " + sql);
 				System.out.println("With parameters: " + params);
+
 				// 执行更新
 				try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
 					for (int i = 0; i < params.size(); i++) {
@@ -553,13 +558,11 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 				}
 			}
 			return true;
-		} catch (
-				SQLException e) {
+		} catch (SQLException e) {
 			// 打印异常信息
 			e.printStackTrace();
 			throw new RuntimeException("Failed to update table data in source database", e);
 		}
-
 
 	}
 
@@ -617,19 +620,28 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		}
 	}
 
-	public boolean deleteMultipleFromSourceDatabaseTableData(DataSourceDto dataSource, Long tableId, List<Object> primaryKeyValues, String primaryKeyColumn) {
-		String tableName=baseMapper.selectById(tableId).getTableName().replace("ods_","");
-		Long databaseId=dataAccessApi.getById(getaccessidbydatabaseid(tableId)).getData().getSourceDatabaseId();
-		String databasename=dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
+	public boolean deleteMultipleFromSourceDatabaseTableData(DataSourceDto dataSource, Long tableId, List<List<Object>> primaryKeyValues, List<String> primaryKeyColumns) {
+		String tableName = baseMapper.selectById(tableId).getTableName().replace("ods_", "");
+		Long databaseId = dataAccessApi.getById(getaccessidbydatabaseid(tableId)).getData().getSourceDatabaseId();
+		String databasename = dataDatabaseApi.getDataBaseBamebyId(databaseId).getData();
 
 		// 如果主键值列表为空，则不需要删除
-		if (primaryKeyValues.isEmpty()) {
+		if (primaryKeyValues.isEmpty() || primaryKeyColumns.isEmpty()) {
 			return false;
 		}
 
-		StringBuilder sql = new StringBuilder("DELETE FROM ")
-				.append("`").append(databasename).append("`.`").append(tableName).append("` WHERE `")
-				.append(primaryKeyColumn).append("` = ?");
+		// 构建 WHERE 子句
+		StringBuilder whereClause = new StringBuilder();
+		for (int i = 0; i < primaryKeyColumns.size(); i++) {
+			if (i > 0) {
+				whereClause.append(" AND ");
+			}
+			whereClause.append("`").append(primaryKeyColumns.get(i)).append("` = ?");
+		}
+
+		StringBuilder sql = new StringBuilder("DELETE FROM `")
+				.append(databasename).append("`.`").append(tableName).append("` WHERE ")
+				.append(whereClause);
 
 		// 打印 SQL 语句
 		System.out.println("Executing SQL: " + sql);
@@ -637,8 +649,13 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		try (Connection connection = DriverManager.getConnection(dataSource.getJdbcUrl(), dataSource.getUserName(), dataSource.getPassword());
 			 PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
 
-			for (Object primaryKeyValue : primaryKeyValues) {
-				stmt.setObject(1, primaryKeyValue);
+			for (List<Object> primaryKeyValueList : primaryKeyValues) {
+				if (primaryKeyValueList.size() != primaryKeyColumns.size()) {
+					throw new IllegalArgumentException("Primary key value list size must match primary key column list size");
+				}
+				for (int i = 0; i < primaryKeyValueList.size(); i++) {
+					stmt.setObject(i + 1, primaryKeyValueList.get(i));
+				}
 				stmt.addBatch();
 			}
 
@@ -651,18 +668,18 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		}
 	}
 
-	public String getPrimaryKeyColumn(Long datatableid) {
-		DataFieldQuery dataFieldQuery = new DataFieldQuery();
-		dataFieldQuery.setDatatableId(datatableid); // 设置 datatableId
-		dataFieldQuery.setPage(1); // 设置页码
-		dataFieldQuery.setLimit(1000); // 设置每页条数
-		List<ColumnDescriptionVo> fields=Columnpage(dataFieldQuery).getList();
-		for (ColumnDescriptionVo field : fields) {
-			if (field.isPk()) {
-				return field.getFieldName();
-			}
-		}
-		return null;
+	public List<String> getPrimaryKeyColumn(Long datatableid) {
+		// 获取项目信息
+		DataProjectCacheBean project = getProject();
+		// 获取表名
+		String tableName = baseMapper.selectById(datatableid).getTableName();
+		// 创建服务实例
+		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
+
+		List<String> pks =  service.queryTablePrimaryKeys(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName);
+
+		// 若未找到主键列，返回null
+		return pks;
 	}
 
 	public Long getaccessidbydatabaseid(Long id){

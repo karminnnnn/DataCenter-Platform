@@ -9,8 +9,6 @@ import net.srt.framework.common.query.Query;
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "数据集成-贴源数据查询")
 public class DataFieldQuery extends Query {
-   // @Schema(description = "表名")
-   // private String datatableName;
 
     @Schema(description = "所属数据表id")
     private Long datatableId;
