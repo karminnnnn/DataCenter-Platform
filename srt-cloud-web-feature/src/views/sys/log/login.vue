@@ -44,7 +44,7 @@ import { reactive } from 'vue'
 import { IHooksOptions } from '@/hooks/interface'
 
 const state: IHooksOptions = reactive({
-	dataListUrl: '/sys/log/login/page',
+	dataListUrl: '/sys/log/auth/login/page',
 	queryForm: {
 		username: '',
 		address: '',

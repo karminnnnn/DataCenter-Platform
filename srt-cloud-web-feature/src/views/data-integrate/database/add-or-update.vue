@@ -38,7 +38,7 @@
 				<el-input v-model="dataForm.creator" placeholder="创建者"></el-input>
 			</el-form-item>
 			<el-form-item label="创建时间" prop="creator">
-				<el-input v-model="dataForm.createTime" placeholder="创建者"></el-input>
+				<el-input v-model="dataForm.createTime" placeholder="创建时间"></el-input>
 			</el-form-item>
 			<el-form-item label="所属项目" prop="projectId">
 				<fast-project-select v-model="dataForm.projectId" placeholder="所属项目" clearable></fast-project-select>

@@ -101,6 +101,7 @@ export const useCrud = (options: IHooksOptions) => {
 	// 多选
 	// 定义了一个处理多选项变化的函数。
 	const selectionChangeHandle = (selections: any[]) => {
+		console.log('selection change')
 		state.dataListSelections = selections.map((item: any) => state.primaryKey && item[state.primaryKey])
 	}
 

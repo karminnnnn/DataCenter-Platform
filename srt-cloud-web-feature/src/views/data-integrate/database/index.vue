@@ -33,7 +33,7 @@
 				</el-form-item>
 				<!-- v-auth="'data-integrate:database:delete'" -->
 				<el-form-item>
-					<el-button type="danger" @click="datasource_state.deleteBatchHandle()">删除</el-button>
+					<el-button type="danger" @click="datasource_useCrud.deleteBatchHandle()">删除</el-button>
 				</el-form-item>
 				<!---->
 			</el-form>
@@ -106,11 +106,11 @@
 						</el-form-item>
 						<el-form-item>
 							<!-- v-auth="'data-integrate:database:save'" -->
-							<el-button type="primary" @click="addOrUpdateHandle_database()" disabled>新增</el-button>
+							<el-button type="primary" @click="addOrUpdateHandle_database()">新增</el-button>
 						</el-form-item>
 						<el-form-item>
 							<!-- v-auth="'data-integrate:database:delete'" -->
-							<el-button type="danger" @click="database_useCrud.deleteBatchHandle()" disabled>删除</el-button>
+							<el-button type="danger" @click="database_useCrud.deleteBatchHandle()">删除</el-button>
 						</el-form-item>
 					</el-form>
 					<el-table
@@ -412,12 +412,18 @@ const addOrUpdateHandle_datasource = (id?: number) => {
 
 const addOrUpdateRef_database = ref()
 const addOrUpdateHandle_database = (id?: number) => {
-	addOrUpdateRef_database.value.init(id)
+	if (id) {
+		addOrUpdateRef_database.value.init(id)
+	}
+	else {
+		console.log(-database_state.datasource_id)
+		addOrUpdateRef_database.value.init(-database_state.datasource_id)
+	}
 }
 
 // 测试连接
 // database是空
-const test_datasource = row => {
+const test_datasource = (row) => {
 	// console.log(row)
 	// row['aaaaa'] = 'aaaaa'
 	// console.log(row['aaaaa'])
@@ -431,7 +437,7 @@ const test_datasource = row => {
 		})
 	})
 }
-const test_database = row => {
+const test_database = (row) => {
 	const test_form = {
 		datasourceId: database_state.datasource_id,
 		name: row['databaseName']
