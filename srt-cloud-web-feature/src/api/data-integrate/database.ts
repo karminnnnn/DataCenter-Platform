@@ -43,8 +43,10 @@ export const useDatabaseSubmitApi = (dataForm: any) => {
 // Mine
 export const useDataSourceSubmitApi_v2 = (dataForm: any) => {
 	if (dataForm.id) {
+		console.log('put /data-integrate/datasource')
 		return service.put('/data-integrate/datasource', dataForm)
 	} else {
+		console.log('post /data-integrate/datasource')
 		return service.post('/data-integrate/datasource', dataForm)
 	}
 }

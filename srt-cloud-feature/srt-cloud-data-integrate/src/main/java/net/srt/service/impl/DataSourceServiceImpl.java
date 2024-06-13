@@ -104,13 +104,14 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	public void save(DataSourceVO vo) {
 		DataSourceEntity entity = DataSourceConvert.INSTANCE.convert(vo);
 
+		/*
 		DataDatabaseEntity dbEntity = new DataDatabaseEntity();
 
 		dbEntity.setStatus(0);
 		dbEntity.setSynStatus(1);
 		dbEntity.setDatasourceId(vo.getId().intValue());
 		dbEntity.setDatabaseName(null);
-
+		*/
 		entity.setProjectId(getProjectId());
 		setJdbcUrlByEntity(entity);
 		baseMapper.insert(entity);
@@ -119,6 +120,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		} catch (Exception ignored) {
 		}
 
+		/*
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
 		if (StringUtil.isBlank(vo.getJdbcUrl())) {
@@ -149,7 +151,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		} catch (SQLException e){
 			throw new RuntimeException(e);
 		}
-
+		*/
 	}
 
 	@Override
