@@ -32,9 +32,11 @@ import srt.cloud.framework.dbswitch.core.model.TableDescription;
 import srt.cloud.framework.dbswitch.core.service.IMetaDataByJdbcService;
 import srt.cloud.framework.dbswitch.core.service.impl.MetaDataByJdbcServiceImpl;
 
+import java.security.SecureRandom;
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.Constants.CHARACTERS;
 
 /**
  * 数据集成-贴源数据
@@ -132,8 +134,8 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(List<Long> idList) {
 		for (Long id : idList) {
-			deleteSourceDatabaseTable(id);//删除源数据库
-			deleteODSDatabaseTable(id);
+			deleteSourceDatabaseTable(id);//删除源数据库的表
+			deleteODSDatabaseTable(id);//删除中台库的表
 		}
 
 	}
@@ -465,9 +467,27 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		}
 		List<Long> ids=new ArrayList<>();
 		ids.add(id);
-		removeByIds(ids);
 
+		System.out.println("!!!!!!!!!!!!!!!124GRGWHREGAAAAAAAAAH!!!!!!!!!!!!!!!!");
+		System.out.println("this tableid"+id);
+		DataTableEntity thisentity=baseMapper.selectById(id);
+		if (thisentity == null) {
+			System.out.println("DataTableEntity is null for id: " + id);
+		} else {
+			System.out.println(thisentity.getTableName());
+		}
+		String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		SecureRandom secureRandom = new SecureRandom();
+		StringBuilder stringBuilder = new StringBuilder(4);
+		for (int i = 0; i < 4; i++) {
+			int randomIndex = secureRandom.nextInt(CHARACTERS.length());
+			stringBuilder.append(CHARACTERS.charAt(randomIndex));
+		}
+		thisentity.setTableName(thisentity.getTableName()+"_d"+ stringBuilder.toString());
+		baseMapper.updateById(thisentity);
+		removeByIds(ids);
 	}
+
 	public void deleteSourceDatabaseTable(Long id) {
 		String tableName=baseMapper.selectById(id).getTableName();
 		tableName=tableName.replace("ods_","");

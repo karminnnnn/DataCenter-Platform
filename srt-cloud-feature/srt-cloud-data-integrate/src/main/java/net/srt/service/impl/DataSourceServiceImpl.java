@@ -282,8 +282,11 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	@Override
 	public SchemaTableDataVo getTableDataBySql(Integer id, SqlConsole sqlConsole) {
 		Integer datasourceid=getDatasourceIdByDatabaseId(Long.valueOf(id));
-		String datatablename=getDatabasenameByID(Long.valueOf(id));
+		String databasename=getDatabasenameByID(Long.valueOf(id));
+		System.out.println("databaseid:"+id+"    "+databasename);
+		System.out.println("datasourseid:"+datasourceid);
 		DataSourceEntity DataSourceEntity = baseMapper.selectById(datasourceid);
+		System.out.println(DataSourceEntity.getName()+" "+DataSourceEntity.getDatabaseIp());
 		if (!ProductTypeEnum.MONGODB.getIndex().equals(DataSourceEntity.getDatabaseType())) {
 			Statement parse = CCJSqlParserUtil.parse(sqlConsole.getSql());
 			if (!(parse instanceof Select)) {
@@ -292,11 +295,48 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		}
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(DataSourceEntity.getDatabaseType());
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
-		SchemaTableData schemaTableData = metaDataService.queryTableDataBySql(StringUtil.isBlank(DataSourceEntity.getJdbcUrl()) ? productTypeEnum.getUrl()
-				.replace("{host}", DataSourceEntity.getDatabaseIp())
-				.replace("{port}", DataSourceEntity.getDatabasePort())
-				.replace("{database}", datatablename) : DataSourceEntity.getJdbcUrl(), DataSourceEntity.getUserName(), DataSourceEntity.getPassword(), sqlConsole.getSql(), 100);
-		return SchemaTableDataVo.builder().columns(SqlUtils.convertColumns(schemaTableData.getColumns())).rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows())).build();
+
+		String jdbcUrl;
+		if (StringUtil.isBlank(DataSourceEntity.getJdbcUrl())) {
+			jdbcUrl = productTypeEnum.getUrl().replace("{host}", DataSourceEntity.getDatabaseIp())
+					.replace("{port}", DataSourceEntity.getDatabasePort())
+					.replace("{database}", databasename);
+		} else {
+			jdbcUrl = DataSourceEntity.getJdbcUrl();
+			// 如果jdbcUrl中没有指定数据库名，则手动添加
+			if (!jdbcUrl.contains(databasename)) {
+				int indexOfQuestionMark = jdbcUrl.indexOf("?");
+				if (indexOfQuestionMark == -1) {
+					// 没有查询参数，直接追加数据库名
+					if (jdbcUrl.endsWith("/")) {
+						jdbcUrl += databasename;
+					} else {
+						jdbcUrl += "/" + databasename;
+					}
+				} else {
+					// 有查询参数，将数据库名插入到问号之前
+					String beforeQuestionMark = jdbcUrl.substring(0, indexOfQuestionMark);
+					String afterQuestionMark = jdbcUrl.substring(indexOfQuestionMark);
+					if (beforeQuestionMark.endsWith("/")) {
+						jdbcUrl = beforeQuestionMark + databasename + afterQuestionMark;
+					} else {
+						jdbcUrl = beforeQuestionMark + "/" + databasename + afterQuestionMark;
+					}
+				}
+			}
+		}
+
+		System.out.println("Generated JDBC URL: " + jdbcUrl);
+
+		SchemaTableData schemaTableData = metaDataService.queryTableDataBySql(jdbcUrl,
+				DataSourceEntity.getUserName(),
+				DataSourceEntity.getPassword(),
+				sqlConsole.getSql(),
+				100);
+		return SchemaTableDataVo.builder()
+				.columns(SqlUtils.convertColumns(schemaTableData.getColumns()))
+				.rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows()))
+				.build();
 	}
 
 	@Override
