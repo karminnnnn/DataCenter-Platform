@@ -47,6 +47,11 @@ const runSql = () => {
 		ElMessage.error('请输入sql')
 		return
 	}
+	
+	console.log("看看databaseId和sql语句")
+	console.log(state.databaseId)
+	console.log(sql.value)
+	
 	getTableDataBySql(state.databaseId, { sql: sql.value }).then(res => {
 		state.sqlDataHeader = res.data.columns
 		state.sqlData = res.data.rows

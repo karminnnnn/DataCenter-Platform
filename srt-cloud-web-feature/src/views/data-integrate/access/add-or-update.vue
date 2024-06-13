@@ -21,7 +21,7 @@
 						value-key="id"
 						:props="{ label: 'name', children: 'children' }"
 						style="width: 100%"
-						disabled
+						:disabled = "judge"
 					/>
 				</el-form-item>
 				<el-form-item label="任务名称" prop="taskName">
@@ -778,7 +778,9 @@ const dataSyncChange = syncVal => {
 	}
 }
 
+const judge = ref(false)
 const getAccess = (id: number) => {
+	judge.value = true
 	useAccessApi(id).then(res => {
 		Object.assign(dataForm, res.data)
 		if (res.data.configMap) {

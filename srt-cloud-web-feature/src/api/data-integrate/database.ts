@@ -90,7 +90,7 @@ export const getTablesById_v2 = (id: number) => {
 
 // 不要
 export const getTableDataBySql = (id: number, sqlConsole: any) => {
-	return service.post('/data-integrate/database/table-data/' + id, sqlConsole)
+	return service.post('/data-integrate/datasource/table-data/' + id, sqlConsole)
 }
 
 // 保留，牵扯众多

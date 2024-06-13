@@ -75,7 +75,7 @@ const state: IHooksOptions = reactive({
 	}
 })
 
-const init = (projectId: number, tableName?: any) => {
+const init = (projectId: number, tableName: any) => {
 	state.queryForm.projectId = projectId
 	state.queryForm.tableName = tableName
 	// console.log("看看projectId和tableName")

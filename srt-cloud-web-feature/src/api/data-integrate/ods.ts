@@ -51,3 +51,9 @@ export const useOdsTableDataPostApi = (dataForm: any) => {
 export const useOdsTableDataHeaderInfoApi = (datatableId: number) => {
 	return service.get('/data-integrate/ods/tabledata/headers/' + datatableId)
 }
+
+export const deleteOdsTableDataApi = (dataForm: any) => {
+	return service.delete('/data-integrate/ods/tabledata', {
+	  data: dataForm
+	});
+}
