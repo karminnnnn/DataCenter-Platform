@@ -72,7 +72,7 @@
 				<!-- <el-table-column prop="nextRunTime" label="下次执行时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column> -->
 				<el-table-column prop="releaseTime" label="发布时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column>
 				<fast-creator-column prop="releaseUserId" label="发布人" header-align="center" align="center"></fast-creator-column>
-				<fast-table-org-column prop="orgId" label="所属机构" header-align="center" align="center"></fast-table-org-column>
+				<fast-table-org-column prop="orgId" label="所属平台" header-align="center" align="center"></fast-table-org-column>
 				<fast-creator-column prop="creator" label="创建者" header-align="center" align="center"></fast-creator-column>
 				<el-table-column prop="createTime" label="创建时间" header-align="center" align="center" width="160" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" fixed="right" header-align="center" align="center" width="320">

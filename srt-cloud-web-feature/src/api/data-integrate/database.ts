@@ -82,7 +82,7 @@ export const testOnline_database = (dataForm: any) => {
 
 // 保留？？？
 export const getTablesById = (id: number) => {
-	return service.get('/data-integrate/database/tables/' + id)
+	return service.get('/data-integrate/datasource/tables/' + id)
 }
 
 // Mine
@@ -92,7 +92,7 @@ export const getTablesById_v2 = (id: number) => {
 
 // 不要
 export const getTableDataBySql = (id: number, sqlConsole: any) => {
-	return service.post('/data-integrate/database/table-data/' + id, sqlConsole)
+	return service.post('/data-integrate/datasource/table-data/' + id, sqlConsole)
 }
 
 // 保留，牵扯众多
@@ -107,7 +107,7 @@ export const listTreeByIdApi = (id: any) => {
 
 // 保留？？？
 export const listColumnsByIdAndTableName = (id: any, tableName: any) => {
-	return service.get('/data-integrate/database/' + id + '/' + tableName + '/columns')
+	return service.get('/data-integrate/datasource/' + id + '/' + tableName + '/columns')
 }
 
 // 保留？？？

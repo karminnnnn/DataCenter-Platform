@@ -550,10 +550,13 @@ public class DataAccessServiceImpl extends BaseServiceImpl<DataAccessDao, DataAc
 	}
 
 	public boolean existsBySourceDatabaseId(Long sourceDatabaseId){
+		System.out.println("sourceDatabaseId:"+sourceDatabaseId);
 		QueryWrapper<DataAccessEntity> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("source_database_id", sourceDatabaseId);
 
 		DataAccessEntity dataAccess = baseMapper.selectOne(queryWrapper);
+		System.out.println("dataAccess:"+dataAccess);
+		System.out.println("EGAAAAAAAAAFADHVJKASVKAJDSGAKJSDHJKAGSDKGDASKJGAKSDGAJSGA");
 		return dataAccess != null;
 	}
 
