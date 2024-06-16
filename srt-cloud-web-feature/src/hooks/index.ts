@@ -66,7 +66,7 @@ export const useCrud = (options: IHooksOptions) => {
 				}
 			})
 			.then((res: any) => {
-				//console.log(preFun)
+				console.log("HELLOHELLO")
 				// zrx 前置执行
 				if (preFun && typeof preFun === 'function' && typeof preFun.nodeType !== 'number' && state.isPage) {
 					preFun(res.data.list)
