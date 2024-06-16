@@ -31,15 +31,22 @@ public interface IDatabaseInterface {
 	 * 获取数据源的数据库
 	 * @return 数据库名集合
 	 */
-	ResultSet getDatabase(Connection connection, String sql);
+	List<String> getDatabase(Connection connection, String sql);
 
+	// 执行无返回值的sql
+	public void sqlExecute(Connection connection, String sql);
+
+	/**
+	 * 获取当前主键的最大值
+	 */
+	Integer getMaxId(Connection connection, String sql);
 	/**
 	 * 获取数据库类型
 	 *
 	 * @return 数据库类型
 	 */
 
-	public void sqlExecute(Connection connection, String sql);
+
 	ProductTypeEnum getDatabaseType();
 
 	/**

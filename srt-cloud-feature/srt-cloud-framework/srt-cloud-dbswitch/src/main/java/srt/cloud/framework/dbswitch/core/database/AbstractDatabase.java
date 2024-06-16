@@ -367,15 +367,39 @@ public abstract class AbstractDatabase implements IDatabaseInterface {
 	}
 
 	@Override
-	public ResultSet getDatabase(Connection connection, String sql){
-		String wrapperSql = this.getTestQuerySQL(sql);
+	public List<String> getDatabase(Connection connection, String sql){
 		try (Statement statement = connection.createStatement();) {
-			ResultSet resultSet = statement.executeQuery(wrapperSql);
-			return resultSet;
+			ResultSet resultSet = statement.executeQuery(sql);
+			List<String>dbNames = new ArrayList<>();
+			try{
+				while (resultSet.next()){
+					String databaseName = resultSet.getString(1);
+					dbNames.add(databaseName);
+				}
+			} catch (SQLException e){
+				throw new RuntimeException(e);
+			}
+			return dbNames;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public Integer getMaxId(Connection connection, String sql){
+		try (Statement statement = connection.createStatement();) {
+			ResultSet resultSet = statement.executeQuery(sql);
+			if (resultSet.next()) {
+				Long id = resultSet.getLong(1);
+				return id.intValue();
+			}
+			return 0;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
 	@Override
 	public String getQuotedSchemaTableCombination(String schemaName, String tableName) {
 		return String.format(" \"%s\".\"%s\" ", schemaName, tableName);

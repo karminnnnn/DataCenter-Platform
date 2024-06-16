@@ -101,17 +101,11 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	}
 
 	@Override
-	public void save(DataSourceVO vo) {
+	public List<String> save(DataSourceVO vo) {
 		DataSourceEntity entity = DataSourceConvert.INSTANCE.convert(vo);
 
-		DataDatabaseEntity dbEntity = new DataDatabaseEntity();
 
-		dbEntity.setStatus(0);
-		dbEntity.setSynStatus(1);
-		dbEntity.setDatasourceId(vo.getId().intValue());
-		dbEntity.setDatabaseName(null);
-
-		entity.setProjectId(getProjectId());
+		//entity.setProjectId(getProjectId());
 		setJdbcUrlByEntity(entity);
 		baseMapper.insert(entity);
 		try {
@@ -130,26 +124,39 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		}
 
 		String getDatabaseStr = "SHOW DATABASES";
-		ResultSet resultSet = metaDataService.getDatabase(
+		List<String>dbNames = metaDataService.getDatabase(
 				vo.getJdbcUrl(),
 				vo.getUserName(),
 				vo.getPassword(),
 				getDatabaseStr
 		);
 
-		System.out.println("running 1");
-		List<String>databases = new ArrayList<>();
-		try{
-			while (resultSet.next()){
-				String databaseName = resultSet.getString(0);
-				System.out.println("databaseName: "+databaseName);
-				dbEntity.setDatabaseName(databaseName);
-				dataDatabaseServiceImpl.getBaseMapper().insert(dbEntity);
-			}
-		} catch (SQLException e){
-			throw new RuntimeException(e);
-		}
 
+		vo.setJdbcUrl(productTypeEnum.getUrl()
+				.replace("{host}", "gz-cynosdbmysql-grp-aoa4ytjn.sql.tencentcdb.com")
+				.replace("{port}", "25428")
+				.replace("{database}", "srt_cloud")
+		);
+		String getMaxId = "SELECT MAX(id) FROM data_datasource";
+		Integer id = metaDataService.getMaxId(
+				vo.getJdbcUrl(),
+				vo.getUserName(),
+				vo.getPassword(),
+				getMaxId
+		);
+
+		System.out.println("running 1");
+		for(String dbName : dbNames){
+			DataDatabaseEntity dbEntity = new DataDatabaseEntity();
+
+			dbEntity.setStatus(0);
+			dbEntity.setSynStatus(1);
+			dbEntity.setDatasourceId(id);
+			dbEntity.setDatabaseName("");
+			dbEntity.setDatabaseName(dbName);
+			dataDatabaseServiceImpl.getBaseMapper().insert(dbEntity);
+		}
+		return dbNames;
 	}
 
 	@Override
