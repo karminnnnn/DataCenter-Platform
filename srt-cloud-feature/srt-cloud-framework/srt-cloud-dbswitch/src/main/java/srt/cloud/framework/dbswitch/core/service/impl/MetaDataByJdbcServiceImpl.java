@@ -274,10 +274,21 @@ public class MetaDataByJdbcServiceImpl implements IMetaDataByJdbcService {
 	}
 
 	@Override
-	public ResultSet getDatabase(String jdbcUrl, String username, String password, String sql){
+	public List<String> getDatabase(String jdbcUrl, String username, String password, String sql){
 		try (Connection connection = ConnectionUtils.connect(jdbcUrl, username, password)) {
-			ResultSet resultSet = database.getDatabase(connection, sql);
-			return resultSet;
+			List<String>dbNames = database.getDatabase(connection, sql);
+			return  dbNames;
+		} catch (SQLException se) {
+			throw new RuntimeException(se);
+		}
+	}
+
+
+	@Override
+	public Integer getMaxId(String jdbcUrl, String username, String password, String sql){
+		try (Connection connection = ConnectionUtils.connect(jdbcUrl, username, password)) {
+			Integer id = database.getMaxId(connection, sql);
+			return  id;
 		} catch (SQLException se) {
 			throw new RuntimeException(se);
 		}

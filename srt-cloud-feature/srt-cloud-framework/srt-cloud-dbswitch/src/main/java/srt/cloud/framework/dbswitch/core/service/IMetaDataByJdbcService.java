@@ -158,8 +158,12 @@ public interface IMetaDataByJdbcService {
 	void testQuerySQL(String jdbcUrl, String username, String password, String sql);
 
 	void sqlExecute(String jdbcUrl, String username, String password, String sql);
+
 	// 获取数据源对应的数据库
-	ResultSet getDatabase(String jdbcUrl, String username, String password, String sql);
+	List<String> getDatabase(String jdbcUrl, String username, String password, String sql);
+
+	// 获取对应表主键的最大值
+	Integer getMaxId(String jdbcUrl, String username, String password, String sql);
 
 	/**
 	 * 测试数据库SQL查询
