@@ -166,9 +166,9 @@ const test = row => {
 	})
 }
 
-const tables = id => {
+const tables = (id) => {
 	state.drawer = true
-	state.databaseId = id
+	state.databaseId = (id)
 	getTablesById(id).then(res => {
 		state.tableData = res.data
 	})

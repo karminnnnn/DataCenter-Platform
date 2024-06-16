@@ -1,7 +1,7 @@
 <template>
 	<el-config-provider :locale="locale" :size="size">
-		<router-view />
-		<!-- <index /> -->
+		<!-- <router-view /> -->
+		<index />
 	</el-config-provider>
 </template>
 
@@ -9,7 +9,8 @@
 import { computed, nextTick, onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 // Mine
-import Index from './views/data-integrate/database/index.vue'
+// import Index from './views/data-integrate/database/index.vue'
+import Index from './views/data-visualization/study-analysis/index.vue'
 
 import { useTitle } from '@vueuse/core'
 import store from '@/store'

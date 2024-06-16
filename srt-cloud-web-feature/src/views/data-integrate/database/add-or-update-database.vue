@@ -1,7 +1,7 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
-			<el-form-item prop="orgId" label="所属机构">
+			<el-form-item prop="orgId" label="所属平台" disabled>
 				<el-tree-select
 					clearable
 					v-model="dataForm.orgId"
@@ -10,6 +10,7 @@
 					value-key="id"
 					:props="{ label: 'name', children: 'children' }"
 					style="width: 100%"
+					disabled
 				/>
 			</el-form-item>
 			<el-form-item label="数据库ID" prop="id">
@@ -54,7 +55,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useDatabaseApi_v2, useDatabaseSubmitApi_v2 /*testOnline*/ } from '@/api/data-integrate/database'
+import { useDatabaseApi_v2, useDatabaseSubmitApi_v2, useDataSourceApi_v2 /*testOnline*/ } from '@/api/data-integrate/database'
 import { useOrgListApi } from '@/api/sys/orgs'
 
 const emit = defineEmits(['refreshDataList'])
@@ -78,11 +79,12 @@ const dataForm = reactive({
 	// projectId: ''
 
 	// Mine
+	orgId: '',
 	id: '',
 	databaseName: '',
 	datasourceId: '',
 	datasourceName: '',
-	synStatus: '',
+	synStatus: '0',
 	status: '',
 	version: '',
 	deleted: '',
@@ -96,21 +98,41 @@ const dataForm = reactive({
 const init = (id?: number) => {
 	console.log('hello')
 	visible.value = true
-	dataForm.id = ''
-	// dataForm.newPassword = '******'
 
-	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields()
+	if (id > 0) {
+		dataForm.id = id
+		// dataForm.newPassword = '******'
+
+		// 重置表单数据
+		if (dataFormRef.value) {
+			dataFormRef.value.resetFields()
+		}
+
+		//获取部门列表
+		useOrgListApi().then(res => {
+			orgList.value = res.data
+		})
+
+		if (id) {
+			getDatabase(id)
+		}
 	}
+	else {
+		dataForm.id = ''
 
-	//获取部门列表
-	useOrgListApi().then(res => {
-		orgList.value = res.data
-	})
+		// 重置表单数据
+		if (dataFormRef.value) {
+			dataFormRef.value.resetFields()
+		}
 
-	if (id) {
-		getDatabase(id)
+		//获取部门列表
+		useOrgListApi().then(res => {
+			orgList.value = res.data
+		})
+
+		dataForm.datasourceId = -id
+
+		getDatasource(dataForm.datasourceId)
 	}
 }
 
@@ -121,6 +143,16 @@ const init = (id?: number) => {
 const getDatabase = (id: number) => {
 	useDatabaseApi_v2(id).then(res => {
 		Object.assign(dataForm, res.data)
+	})
+}
+
+const getDatasource = (id: number) => {
+	useDataSourceApi_v2(id).then(res => {
+		// Object.assign(dataForm, res.data)
+		console.log(res.data)
+		dataForm.datasourceName = res.data.name
+		dataForm.orgId = res.data.orgId
+		dataForm.status = res.data.status
 	})
 }
 
@@ -136,11 +168,11 @@ const dataRules = ref({
 	// password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	// projectId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 
-	id: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// id: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	databaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	datasourceId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	datasourceName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	status: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// datasourceId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// datasourceName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	// status: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	version: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	deleted: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	creatorName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
