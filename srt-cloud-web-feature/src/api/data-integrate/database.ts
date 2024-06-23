@@ -149,3 +149,9 @@ export const saveTableInfoApi = (dataForm: any) => {
 export const deleteTableInfoApi = (tableName: any) => {
 	return service.delete('/data-integrate/database/middle-db/table-info/' + tableName)
 }
+
+
+// 可视化接口
+export const getVisualPeriodData = () => {
+	return service.get('/data-integrate/data-visualization/period-analysis')
+}
