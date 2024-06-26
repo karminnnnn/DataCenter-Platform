@@ -31,6 +31,8 @@ public class VisualizeInfoController {
     @GetMapping("study-analysis/page")
     @Operation(summary = "可视化接口")
     public Result<VisualizeInfo2ListVO> get2(@Valid VisualizeInfo2Query query){
+        if(query.getNetId() == 0)
+            return Result.ok(visualizeInfo2Service.getAll());
         return Result.ok(visualizeInfo2Service.getInfoByNetId(query.getNetId()));
     }
 }
