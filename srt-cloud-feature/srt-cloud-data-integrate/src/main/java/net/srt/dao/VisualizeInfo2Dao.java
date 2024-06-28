@@ -79,6 +79,29 @@ public interface VisualizeInfo2Dao extends BaseDao<VisualizeInfo2Entity>{
             "WHERE \n" +
             "    class_id = #{classId}";
 
+    String getAvgByClassIdAndGradeIdStr = "SELECT \n" +
+            "    -2 AS id,\n" +
+            "    '10000' AS NetId,\n" +
+            "    AVG(pub_course_perf) AS PubCoursePerf,\n" +
+            "    AVG(ele_course_perf) AS EleCoursePerf,\n" +
+            "    AVG(mand_spec_course_perf) AS MandSpecCoursePerf,\n" +
+            "    AVG(jd_idea_pol_awards) AS JdIdeaPolAwards,\n" +
+            "    AVG(disc_comp_awards) AS DiscCompAwards,\n" +
+            "    AVG(art_comp_awards) AS ArtCompAwards,\n" +
+            "    AVG(sport_comp_awards) AS SportCompAwards,\n" +
+            "    AVG(entrep_comp_awards) AS EntrepCompAwards,\n" +
+            "    AVG(academic_awards) AS AcademicAwards,\n" +
+            "    AVG(high_level_pubs) AS HighLevelPubs,\n" +
+            "    AVG(vol_serv_hours) AS VolServHours,\n" +
+            "    AVG(patents) AS Patents,\n" +
+            "    AVG(soft_copy_inventions) AS SoftCopyInventions,\n" +
+            "    AVG(monographs_pub) AS MonographsPub,\n" +
+            "    -2 AS ClassId,\n" +
+            "    -1 AS GradeId\n" +
+            "FROM \n" +
+            "    visualize_info2\n" +
+            "WHERE \n" +
+            "    grade_id = #{gradeId} AND class_id = #{classId}";
     String getByNetIdStr = "SELECT * FROM visualize_info2 WHERE net_id = #{netId}";
     @Select(getAvgByClassIdStr)
     VisualizeInfo2Entity getAvgByClassId(int classId);
@@ -91,4 +114,7 @@ public interface VisualizeInfo2Dao extends BaseDao<VisualizeInfo2Entity>{
 
     @Select(getByNetIdStr)
     VisualizeInfo2Entity selectByNetId(int netId);
+
+    @Select(getAvgByClassIdAndGradeIdStr)
+    VisualizeInfo2Entity getAvgByClassIdAndGradeId(int classId, int gradeId);
 }

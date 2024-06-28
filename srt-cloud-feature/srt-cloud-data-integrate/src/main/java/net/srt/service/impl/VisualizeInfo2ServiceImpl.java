@@ -34,4 +34,20 @@ public class VisualizeInfo2ServiceImpl extends BaseServiceImpl<VisualizeInfo2Dao
         visualizeInfo2ListVO.setList(list);
         return visualizeInfo2ListVO;
     }
+
+    public VisualizeInfo2ListVO getAll(){
+        VisualizeInfo2ListVO visualizeInfo2ListVO = new VisualizeInfo2ListVO();
+        List<VisualizeInfo2Entity>list = new ArrayList<>();
+        // grade:1-4为本科生，4-7为研究生
+        for(int i = 1;i <= 7;i++){
+            for(int j = 1;j <= 3;j++){
+                VisualizeInfo2Entity entity = visualizeInfo2Dao.getAvgByClassIdAndGradeId(j,i);
+                list.add(entity);
+            }
+            VisualizeInfo2Entity entity = visualizeInfo2Dao.getAvgByGradeId(i);
+            list.add(entity);
+        }
+        visualizeInfo2ListVO.setList(list);
+        return visualizeInfo2ListVO;
+    }
 }
