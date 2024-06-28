@@ -94,26 +94,52 @@ const pair = {
   "软件著作权发明": "softCopyInventions",
   "专著出版": "monographsPub"
 };
+const gradeAndClass = [
+    '本科生一年级1班',
+    '本科生一年级2班',
+    '本科生一年级3班',
+    '本科生一年级',
+    '本科生二年级1班',
+    '本科生二年级2班',
+    '本科生二年级3班',
+    '本科生二年级',
+    '本科生三年级1班',
+    '本科生三年级2班',
+    '本科生三年级3班',
+    '本科生三年级',
+    '本科生四年级1班',
+    '本科生四年级2班',
+    '本科生四年级3班',
+    '本科生四年级',
+    '研究生一年级1班',
+    '研究生一年级2班',
+    '研究生一年级3班',
+    '研究生一年级',
+    '研究生二年级1班',
+    '研究生二年级2班',
+    '研究生二年级3班',
+    '研究生二年级',
+    '研究生三年级1班',
+    '研究生三年级2班',
+    '研究生三年级3班',
+    '研究生三年级',
+    ];
+const numClass = 28;
 const checkList = ref([])
 
 const changeChart = (checkItem, engCheckItem) => {
   // 最高水平
   option.value.radar.indicator.push({
     name: checkItem,
-    max: state.dataList[3][engCheckItem]
+    max: state.dataList[numClass][engCheckItem]
   });
-  // 我的水平
-  option.value.series[0]['data'][0]['value'].push(
-    state.dataList[0][engCheckItem]
-  )
-  // 班级平均水平
-  option.value.series[0]['data'][1]['value'].push(
-    state.dataList[1][engCheckItem]
-  )
-  // 年级平均水平
-  option.value.series[0]['data'][2]['value'].push(
-    state.dataList[2][engCheckItem]
-  )
+
+  for (let i = 0; i < numClass; i++) {
+      // option.value.series[0]['data'][i]['value'] = []
+      option.value.series[0]['data'][i]['value'].push(
+      state.dataList[i][engCheckItem]
+    )
+  }
 }
 
 const refreshChart = () => {
@@ -124,9 +150,9 @@ const refreshChart = () => {
   if (checkList.value.length > 0) {
     // 清空indicator数组
     option.value.radar.indicator = [];
-    option.value.series[0]['data'][0]['value'] = []
-    option.value.series[0]['data'][1]['value'] = []
-    option.value.series[0]['data'][2]['value'] = []
+    for (let i = 0; i < numClass; i++) {
+      option.value.series[0]['data'][i]['value'] = []
+    }
 
     for (let i = 0; i < checkList.value.length; i++) {
       const checkItem = checkList.value[i];
@@ -146,7 +172,7 @@ const state: IHooksOptions = reactive({
 	dataListUrl: '/data-integrate/data-visualization/study-analysis/page',
 	deleteUrl: '/data-integrate/data-visualization/study-analysis',
   queryForm: {
-    NetId: '10001',
+    NetId: '0',
   },
 	tableData: [] // 好像没啥用
 })
@@ -162,10 +188,44 @@ use([
 
 const option = ref({
   title: {
-    text: '能力观测'
   },
   legend: {
-    data: ['我的水平', '班级平均水平', '年级平均水平']
+    data: gradeAndClass,
+    type: 'scroll',
+    orient: 'vertical',
+    right: 50,
+    top: 20,
+    bottom: 20,
+    selected: {
+      "本科生一年级1班": false,
+      "本科生一年级2班": false,
+      "本科生一年级3班": false,
+      "本科生一年级": false,
+      "本科生二年级1班": false,
+      "本科生二年级2班": false,
+      "本科生二年级3班": false,
+      "本科生二年级": false,
+      "本科生三年级1班": false,
+      "本科生三年级2班": false,
+      "本科生三年级3班": false,
+      "本科生三年级": false,
+      "本科生四年级1班": false,
+      "本科生四年级2班": false,
+      "本科生四年级3班": false,
+      "本科生四年级": false,
+      "研究生一年级1班": false,
+      "研究生一年级2班": false,
+      "研究生一年级3班": false,
+      "研究生一年级": false,
+      "研究生二年级1班": false,
+      "研究生二年级2班": false,
+      "研究生二年级3班": false,
+      "研究生二年级": false,
+      "研究生三年级1班": false,
+      "研究生三年级2班": false,
+      "研究生三年级3班": false,
+      "研究生三年级": false
+    }
   },
   radar: {
     shape: 'circle',
@@ -176,18 +236,34 @@ const option = ref({
       name: 'Budget vs spending',
       type: 'radar',
       data: [
-        {
-          value: [],
-          name: '我的水平'
-        },
-        {
-          value: [],
-          name: '班级平均水平'
-        },
-        {
-          value: [],
-          name: '年级平均水平'
-        }
+        { value: [], name: "本科生一年级1班", itemStyle: { color: '#FF4D4D' } },
+        { value: [], name: "本科生一年级2班", itemStyle: { color: '#FF6F00' } },
+        { value: [], name: "本科生一年级3班", itemStyle: { color: '#FFD700' } },
+        { value: [], name: "本科生一年级", itemStyle: { color: '#98FB98' } },
+        { value: [], name: "本科生二年级1班", itemStyle: { color: '#87CEFA' } },
+        { value: [], name: "本科生二年级2班", itemStyle: { color: '#00BFFF' } },
+        { value: [], name: "本科生二年级3班", itemStyle: { color: '#8A2BE2' } },
+        { value: [], name: "本科生二年级", itemStyle: { color: '#DC143C' } },
+        { value: [], name: "本科生三年级1班", itemStyle: { color: '#E74C3C' } },
+        { value: [], name: "本科生三年级2班", itemStyle: { color: '#90EE90' } },
+        { value: [], name: "本科生三年级3班", itemStyle: { color: '#FFDB58' } },
+        { value: [], name: "本科生三年级", itemStyle: { color: '#5C6BC0' } },
+        { value: [], name: "本科生四年级1班", itemStyle: { color: '#FF69B4' } },
+        { value: [], name: "本科生四年级2班", itemStyle: { color: '#FF8C00' } },
+        { value: [], name: "本科生四年级3班", itemStyle: { color: '#ADFF2F' } },
+        { value: [], name: "本科生四年级", itemStyle: { color: '#85144B' } },
+        { value: [], name: "研究生一年级1班", itemStyle: { color: '#FF4500' } },
+        { value: [], name: "研究生一年级2班", itemStyle: { color: '#6A5ACD' } },
+        { value: [], name: "研究生一年级3班", itemStyle: { color: '#708090' } },
+        { value: [], name: "研究生一年级", itemStyle: { color: '#F08080' } },
+        { value: [], name: "研究生二年级1班", itemStyle: { color: '#FF6347' } },
+        { value: [], name: "研究生二年级2班", itemStyle: { color: '#FFA07A' } },
+        { value: [], name: "研究生二年级3班", itemStyle: { color: '#20B2AA' } },
+        { value: [], name: "研究生二年级", itemStyle: { color: '#48D1CC' } },
+        { value: [], name: "研究生三年级1班", itemStyle: { color: '#C71585' } },
+        { value: [], name: "研究生三年级2班", itemStyle: { color: '#191970' } },
+        { value: [], name: "研究生三年级3班", itemStyle: { color: '#FFD700' } },
+        { value: [], name: "研究生三年级", itemStyle: { color: '#FF69B4' } }
       ]
     }
   ]
