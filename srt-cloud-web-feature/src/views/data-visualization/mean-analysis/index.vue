@@ -6,7 +6,7 @@
 				<el-card body-style="height: calc(100vh - 170px )">
           <template #header>
             <div class="card-header">
-              <span>选择我的能力（选择 3~6 项）</span>
+              <span>选择能力</span>
             </div>
           </template>
           <el-checkbox-group v-model="checkList" @change="refreshChart">
@@ -128,10 +128,13 @@ const numClass = 28;
 const checkList = ref([])
 
 const changeChart = (checkItem, engCheckItem) => {
+
+  console.log(state.dataList)
+
   // 最高水平
   option.value.radar.indicator.push({
     name: checkItem,
-    max: state.dataList[numClass][engCheckItem]
+    max: state.dataList[numClass-1][engCheckItem]
   });
 
   for (let i = 0; i < numClass; i++) {
@@ -164,7 +167,7 @@ const refreshChart = () => {
   }
   else {
     console.log("No check")
-    ElMessage.error("请至少选择一个维度！")
+    // ElMessage.error("请至少选择一个维度！")
   }
 }
 
@@ -188,6 +191,7 @@ use([
 
 const option = ref({
   title: {
+    text: '平均学业能力'
   },
   legend: {
     data: gradeAndClass,
@@ -200,31 +204,31 @@ const option = ref({
       "本科生一年级1班": false,
       "本科生一年级2班": false,
       "本科生一年级3班": false,
-      "本科生一年级": false,
+      "本科生一年级": true,
       "本科生二年级1班": false,
       "本科生二年级2班": false,
       "本科生二年级3班": false,
-      "本科生二年级": false,
+      "本科生二年级": true,
       "本科生三年级1班": false,
       "本科生三年级2班": false,
       "本科生三年级3班": false,
-      "本科生三年级": false,
+      "本科生三年级": true,
       "本科生四年级1班": false,
       "本科生四年级2班": false,
       "本科生四年级3班": false,
-      "本科生四年级": false,
+      "本科生四年级": true,
       "研究生一年级1班": false,
       "研究生一年级2班": false,
       "研究生一年级3班": false,
-      "研究生一年级": false,
+      "研究生一年级": true,
       "研究生二年级1班": false,
       "研究生二年级2班": false,
       "研究生二年级3班": false,
-      "研究生二年级": false,
+      "研究生二年级": true,
       "研究生三年级1班": false,
       "研究生三年级2班": false,
       "研究生三年级3班": false,
-      "研究生三年级": false
+      "研究生三年级": true
     }
   },
   radar: {

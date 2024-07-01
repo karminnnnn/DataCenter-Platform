@@ -1,31 +1,56 @@
 <template>
+  <!--gkb-->
+  <el-dialog v-model="dialogFormVisible" title="请选择新生入学年份" width="370" :close-on-click-modal="false" 
+                                                        :close-on-press-escape="false" :show-close="false" center>
+    <el-form :model="form">
+      <el-form-item label="新生入学年份">
+        <el-select v-model="year" placeholder="新生入学年份">
+          <el-option label="Zone No.1" value="shanghai" />
+          <el-option label="Zone No.2" value="beijing" />
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button type="success" @click="getYearData">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+
+
     <div class="common-layout">
         <el-container>
             <el-header>
+                <!--gkb-->
                 <el-card class="custom-card">
                     <div slot="header" class="clearfix">
-                        <span class="spantext">各学年课业绩点趋势分析</span>
+                        <span class="spantext">学生类别（港澳台生/境内生/国际生）</span>
                     </div>
-                    <div id="mainCoursePerformance" style="height: 400px;"></div> 
+                    <div id="mainStudentType" style="height: 400px;"></div> 
                 </el-card>
                 <el-card class="custom-card">
                     <div slot="header" class="clearfix">
-                        <span class="spantext">各学年综合竞赛趋势分析</span>
+                        <span class="spantext">性别（男/女）</span>
                     </div>
-                    <div id="mainComprehensiveCompetition" style="height: 400px;"></div> 
+                    <div id="mainGender" style="height: 400px;"></div> 
                 </el-card>
                 <el-card class="custom-card">
                     <div slot="header" class="clearfix">
-                        <span class="spantext">各学年专业竞赛趋势分析</span>
+                        <span class="spantext">民族</span>
                     </div>
-                    <div id="mainprofessionalCompetition" style="height: 400px;"></div> 
+                    <div id="mainEthnicity" style="height: 400px;"></div> 
                 </el-card>
                 <el-card class="custom-card">
                     <div slot="header" class="clearfix">
-                        <span class="spantext">各学年科研成果趋势分析</span>
+                        <span class="spantext">出身年月</span>
                     </div>
-                    <div id="mainacademicAchievements" style="height: 400px;"></div> 
+                    <div id="mainBirth" style="height: 400px;"></div> 
                 </el-card>
+
+
+
                 <el-card class="custom-card">
                     <div slot="header" class="clearfix">
                         <span class="spantext">各学年社会服务趋势分析</span>
@@ -41,6 +66,12 @@
 import * as echarts from 'echarts';
 import { ref, onMounted, nextTick } from 'vue';
 import { getVisualPeriodData } from '@/api/data-integrate/database';
+
+const dialogFormVisible = ref(true)
+const year = ref()
+const getYearData = () => {
+    dialogFormVisible.value = false
+}
 
 const option = {
     color: [
@@ -185,7 +216,6 @@ async function fetchData() {
         // console.log("看看可视化接口收到的数据");
         // console.log(JSON.stringify(res.data.list[0]));
         data[0] = res.data.list;
-        console.log(data[0])
         // console.log(data[0][0]);
         // console.log("结束");
     } catch (error) {
@@ -210,11 +240,17 @@ const getChart = async (chartId: string, index: number, judge: number) => {
 }
 
 onMounted(() => {
-    getChart('mainCoursePerformance', 0, 1);
-    getChart('mainComprehensiveCompetition', 1, 0);
-    getChart('mainprofessionalCompetition', 2, 1)
-    getChart('mainacademicAchievements', 3, 0)
-    getChart('mainsocialService', 4, 1)
+    // getChart('mainCoursePerformance', 0, 1);
+    // getChart('mainComprehensiveCompetition', 1, 0);
+    // getChart('mainprofessionalCompetition', 2, 1)
+    // getChart('mainacademicAchievements', 3, 0)
+    // getChart('mainsocialService', 4, 1)
+    
+    // gkb
+    getChart('mainStudentType', 0)
+    getChart('mainGender', 1)
+    getChart('mainEthnicity', 2)
+    getChart('mainBirth', 3)
 });
 
 </script>

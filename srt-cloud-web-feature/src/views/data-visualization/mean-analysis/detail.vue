@@ -1,7 +1,7 @@
 <template>
     <el-dialog v-model="visible" :title="'详情'" :close-on-click-modal="false" destroy-on-close center :before-close="handleBeforeClose">
         <el-table :data="dataList" stripe style="width: 100%">
-            <el-table-column fixed prop="ability" label=""/>
+            <el-table-column fixed prop="ability" label="" width="120"/>
             <el-table-column prop="class0" label="本科生一年级1班" width="100" />
             <el-table-column prop="class1" label="本科生一年级2班" width="100" />
             <el-table-column prop="class2" label="本科生一年级3班" width="100" />

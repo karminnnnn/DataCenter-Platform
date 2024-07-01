@@ -6,9 +6,16 @@
 				<el-card body-style="height: calc(100vh - 170px )">
           <template #header>
             <div class="card-header">
-              <span>选择我的能力（选择 3~6 项）</span>
+              <span>选择我的能力</span>
             </div>
           </template>
+          <el-input
+            v-model="state.queryForm.NetId"
+            style="width: 240px"
+            placeholder="学号"
+            :prefix-icon="Search"
+            @change="changeNetId"
+          />
           <el-checkbox-group v-model="checkList" @change="refreshChart">
             <el-checkbox label="公必绩点" value="公必绩点">{{ '（课程业绩）公必绩点' }}</el-checkbox>
             <el-checkbox label="专选绩点" value="专选绩点">{{ '（课程业绩）专选绩点' }}</el-checkbox>
@@ -71,7 +78,7 @@ import Detail from './detail.vue';
 import { ElMessage } from 'element-plus/es';
 import { IHooksOptions } from '@/hooks/interface';
 import { useCrud } from '@/hooks/index'
-
+import { Search } from '@element-plus/icons-vue'
 
 const detailRef = ref()
 const detailHandle = () => {
@@ -138,7 +145,38 @@ const refreshChart = () => {
   }
   else {
     console.log("No check")
-    ElMessage.error("请至少选择一个维度！")
+    // ElMessage.error("请至少选择一个维度！")
+  }
+}
+
+const changeNetId = () => {
+  if (state.queryForm.NetId != '10001' && 
+    state.queryForm.NetId != '10002' && 
+    state.queryForm.NetId != '10003' && 
+    state.queryForm.NetId != '20001' && 
+    state.queryForm.NetId != '20002' && 
+    state.queryForm.NetId != '20003' && 
+    state.queryForm.NetId != '30001' && 
+    state.queryForm.NetId != '30002' && 
+    state.queryForm.NetId != '30003' && 
+    state.queryForm.NetId != '40001' && 
+    state.queryForm.NetId != '40002' && 
+    state.queryForm.NetId != '40003' && 
+    state.queryForm.NetId != '50001' && 
+    state.queryForm.NetId != '50002' && 
+    state.queryForm.NetId != '50003' && 
+    state.queryForm.NetId != '60001' && 
+    state.queryForm.NetId != '60002' && 
+    state.queryForm.NetId != '60003' && 
+    state.queryForm.NetId != '70001' && 
+    state.queryForm.NetId != '70002' && 
+    state.queryForm.NetId != '70003') {
+    // 执行当 NetId 不是上述任何值时的代码
+    ElMessage.error("输入NetID不正确！")
+  }
+  else {
+    stateUseCrud.getDataList()
+    refreshChart()
   }
 }
 
