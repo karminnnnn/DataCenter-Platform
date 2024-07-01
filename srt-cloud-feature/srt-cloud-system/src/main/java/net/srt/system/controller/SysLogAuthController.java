@@ -6,9 +6,8 @@ import lombok.AllArgsConstructor;
 import net.srt.framework.common.page.PageResult;
 import net.srt.framework.common.utils.Result;
 import net.srt.system.query.SysLogLoginQuery;
-import net.srt.system.service.SysLogLoginService;
+import net.srt.system.service.SysLogService;
 import net.srt.system.vo.SysLogLoginVO;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +24,7 @@ import javax.validation.Valid;
 @Tag(name = "登录日志")
 @AllArgsConstructor
 public class SysLogAuthController {
-    private final SysLogLoginService sysLogLoginService;
+    private final SysLogService sysLogLoginService;
 
     @GetMapping("login/page")
     @Operation(summary = "分页")
