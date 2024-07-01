@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import net.srt.framework.common.constant.Constant;
 import net.srt.framework.security.user.UserDetail;
 import net.srt.system.enums.LoginOperationEnum;
-import net.srt.system.service.SysLogLoginService;
+import net.srt.system.service.SysLogService;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class AuthenticationEvents {
-    private final SysLogLoginService sysLogLoginService;
+    private final SysLogService sysLogLoginService;
 
     @EventListener
     public void onSuccess(AuthenticationSuccessEvent event) {
