@@ -66,7 +66,7 @@ export const useCrud = (options: IHooksOptions) => {
 				}
 			})
 			.then((res: any) => {
-				//console.log(preFun)
+				console.log("HELLOHELLO")
 				// zrx 前置执行
 				if (preFun && typeof preFun === 'function' && typeof preFun.nodeType !== 'number' && state.isPage) {
 					preFun(res.data.list)
@@ -101,6 +101,7 @@ export const useCrud = (options: IHooksOptions) => {
 	// 多选
 	// 定义了一个处理多选项变化的函数。
 	const selectionChangeHandle = (selections: any[]) => {
+		console.log('selection change')
 		state.dataListSelections = selections.map((item: any) => state.primaryKey && item[state.primaryKey])
 	}
 

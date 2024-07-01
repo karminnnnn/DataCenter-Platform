@@ -101,23 +101,18 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	}
 
 	@Override
-	public void save(DataSourceVO vo) {
+	public List<String> save(DataSourceVO vo) {
 		DataSourceEntity entity = DataSourceConvert.INSTANCE.convert(vo);
 
-		DataDatabaseEntity dbEntity = new DataDatabaseEntity();
+		//entity.setProjectId(getProjectId());
 
-		dbEntity.setStatus(0);
-		dbEntity.setSynStatus(1);
-		dbEntity.setDatasourceId(vo.getId().intValue());
-		dbEntity.setDatabaseName(null);
-
-		entity.setProjectId(getProjectId());
 		setJdbcUrlByEntity(entity);
 		baseMapper.insert(entity);
 		try {
 			testOnline(DataSourceConvert.INSTANCE.convert(entity));
 		} catch (Exception ignored) {
 		}
+
 
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(1);  // 目前只用到MYSQL数据库
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
@@ -130,25 +125,37 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		}
 
 		String getDatabaseStr = "SHOW DATABASES";
-		ResultSet resultSet = metaDataService.getDatabase(
+		List<String>dbNames = metaDataService.getDatabase(
 				vo.getJdbcUrl(),
 				vo.getUserName(),
 				vo.getPassword(),
 				getDatabaseStr
 		);
 
-		System.out.println("running 1");
-		List<String>databases = new ArrayList<>();
-		try{
-			while (resultSet.next()){
-				String databaseName = resultSet.getString(0);
-				System.out.println("databaseName: "+databaseName);
-				dbEntity.setDatabaseName(databaseName);
-				dataDatabaseServiceImpl.getBaseMapper().insert(dbEntity);
-			}
-		} catch (SQLException e){
-			throw new RuntimeException(e);
+
+		vo.setJdbcUrl(productTypeEnum.getUrl()
+				.replace("{host}", "gz-cynosdbmysql-grp-aoa4ytjn.sql.tencentcdb.com")
+				.replace("{port}", "25428")
+				.replace("{database}", "srt_cloud")
+		);
+		String getMaxId = "SELECT MAX(id) FROM data_datasource";
+		Integer id = metaDataService.getMaxId(
+				vo.getJdbcUrl(),
+				vo.getUserName(),
+				vo.getPassword(),
+				getMaxId
+		);
+		for(String dbName : dbNames){
+			DataDatabaseEntity dbEntity = new DataDatabaseEntity();
+
+			dbEntity.setStatus(0);
+			dbEntity.setSynStatus(1);
+			dbEntity.setDatasourceId(id);
+			dbEntity.setDatabaseName("");
+			dbEntity.setDatabaseName(dbName);
+			dataDatabaseServiceImpl.getBaseMapper().insert(dbEntity);
 		}
+		return dbNames;
 
 	}
 
@@ -282,8 +289,11 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 	@Override
 	public SchemaTableDataVo getTableDataBySql(Integer id, SqlConsole sqlConsole) {
 		Integer datasourceid=getDatasourceIdByDatabaseId(Long.valueOf(id));
-		String datatablename=getDatabasenameByID(Long.valueOf(id));
+		String databasename=getDatabasenameByID(Long.valueOf(id));
+		System.out.println("databaseid:"+id+"    "+databasename);
+		System.out.println("datasourseid:"+datasourceid);
 		DataSourceEntity DataSourceEntity = baseMapper.selectById(datasourceid);
+		System.out.println(DataSourceEntity.getName()+" "+DataSourceEntity.getDatabaseIp());
 		if (!ProductTypeEnum.MONGODB.getIndex().equals(DataSourceEntity.getDatabaseType())) {
 			Statement parse = CCJSqlParserUtil.parse(sqlConsole.getSql());
 			if (!(parse instanceof Select)) {
@@ -292,11 +302,48 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 		}
 		ProductTypeEnum productTypeEnum = ProductTypeEnum.getByIndex(DataSourceEntity.getDatabaseType());
 		IMetaDataByJdbcService metaDataService = new MetaDataByJdbcServiceImpl(productTypeEnum);
-		SchemaTableData schemaTableData = metaDataService.queryTableDataBySql(StringUtil.isBlank(DataSourceEntity.getJdbcUrl()) ? productTypeEnum.getUrl()
-				.replace("{host}", DataSourceEntity.getDatabaseIp())
-				.replace("{port}", DataSourceEntity.getDatabasePort())
-				.replace("{database}", datatablename) : DataSourceEntity.getJdbcUrl(), DataSourceEntity.getUserName(), DataSourceEntity.getPassword(), sqlConsole.getSql(), 100);
-		return SchemaTableDataVo.builder().columns(SqlUtils.convertColumns(schemaTableData.getColumns())).rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows())).build();
+
+		String jdbcUrl;
+		if (StringUtil.isBlank(DataSourceEntity.getJdbcUrl())) {
+			jdbcUrl = productTypeEnum.getUrl().replace("{host}", DataSourceEntity.getDatabaseIp())
+					.replace("{port}", DataSourceEntity.getDatabasePort())
+					.replace("{database}", databasename);
+		} else {
+			jdbcUrl = DataSourceEntity.getJdbcUrl();
+			// 如果jdbcUrl中没有指定数据库名，则手动添加
+			if (!jdbcUrl.contains(databasename)) {
+				int indexOfQuestionMark = jdbcUrl.indexOf("?");
+				if (indexOfQuestionMark == -1) {
+					// 没有查询参数，直接追加数据库名
+					if (jdbcUrl.endsWith("/")) {
+						jdbcUrl += databasename;
+					} else {
+						jdbcUrl += "/" + databasename;
+					}
+				} else {
+					// 有查询参数，将数据库名插入到问号之前
+					String beforeQuestionMark = jdbcUrl.substring(0, indexOfQuestionMark);
+					String afterQuestionMark = jdbcUrl.substring(indexOfQuestionMark);
+					if (beforeQuestionMark.endsWith("/")) {
+						jdbcUrl = beforeQuestionMark + databasename + afterQuestionMark;
+					} else {
+						jdbcUrl = beforeQuestionMark + "/" + databasename + afterQuestionMark;
+					}
+				}
+			}
+		}
+
+		System.out.println("Generated JDBC URL: " + jdbcUrl);
+
+		SchemaTableData schemaTableData = metaDataService.queryTableDataBySql(jdbcUrl,
+				DataSourceEntity.getUserName(),
+				DataSourceEntity.getPassword(),
+				sqlConsole.getSql(),
+				100);
+		return SchemaTableDataVo.builder()
+				.columns(SqlUtils.convertColumns(schemaTableData.getColumns()))
+				.rows(SqlUtils.convertRows(schemaTableData.getColumns(), schemaTableData.getRows()))
+				.build();
 	}
 
 	@Override

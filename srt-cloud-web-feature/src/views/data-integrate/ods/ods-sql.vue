@@ -32,8 +32,12 @@ const state: IHooksOptions = reactive({
 	sqlData: []
 })
 
-const init = (projectId: number) => {
+const init = (projectId: number, databaseId: number) => {
 	state.projectId = projectId
+	state.databaseId = databaseId
+	// console.log("看看projectId和databaseId")
+	// console.log(projectId)
+	// console.log(databaseId)
 }
 
 // sql语句执行
@@ -43,6 +47,11 @@ const runSql = () => {
 		ElMessage.error('请输入sql')
 		return
 	}
+	
+	console.log("看看databaseId和sql语句")
+	console.log(state.databaseId)
+	console.log(sql.value)
+	
 	getTableDataBySql(state.databaseId, { sql: sql.value }).then(res => {
 		state.sqlDataHeader = res.data.columns
 		state.sqlData = res.data.rows

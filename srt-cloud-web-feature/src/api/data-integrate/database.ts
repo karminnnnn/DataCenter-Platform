@@ -43,8 +43,10 @@ export const useDatabaseSubmitApi = (dataForm: any) => {
 // Mine
 export const useDataSourceSubmitApi_v2 = (dataForm: any) => {
 	if (dataForm.id) {
+		console.log('put /data-integrate/datasource')
 		return service.put('/data-integrate/datasource', dataForm)
 	} else {
+		console.log('post /data-integrate/datasource')
 		return service.post('/data-integrate/datasource', dataForm)
 	}
 }
@@ -80,7 +82,7 @@ export const testOnline_database = (dataForm: any) => {
 
 // 保留？？？
 export const getTablesById = (id: number) => {
-	return service.get('/data-integrate/database/tables/' + id)
+	return service.get('/data-integrate/datasource/tables/' + id)
 }
 
 // Mine
@@ -90,7 +92,7 @@ export const getTablesById_v2 = (id: number) => {
 
 // 不要
 export const getTableDataBySql = (id: number, sqlConsole: any) => {
-	return service.post('/data-integrate/database/table-data/' + id, sqlConsole)
+	return service.post('/data-integrate/datasource/table-data/' + id, sqlConsole)
 }
 
 // 保留，牵扯众多
@@ -105,7 +107,7 @@ export const listTreeByIdApi = (id: any) => {
 
 // 保留？？？
 export const listColumnsByIdAndTableName = (id: any, tableName: any) => {
-	return service.get('/data-integrate/database/' + id + '/' + tableName + '/columns')
+	return service.get('/data-integrate/datasource/' + id + '/' + tableName + '/columns')
 }
 
 // 保留？？？
@@ -146,4 +148,10 @@ export const saveTableInfoApi = (dataForm: any) => {
 // 保留？？？
 export const deleteTableInfoApi = (tableName: any) => {
 	return service.delete('/data-integrate/database/middle-db/table-info/' + tableName)
+}
+
+
+// 可视化接口
+export const getVisualPeriodData = () => {
+	return service.get('/data-integrate/data-visualization/period-analysis')
 }

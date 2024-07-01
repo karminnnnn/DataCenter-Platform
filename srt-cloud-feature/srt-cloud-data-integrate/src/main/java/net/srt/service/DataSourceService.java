@@ -23,7 +23,7 @@ public interface DataSourceService extends BaseService<DataSourceEntity> {
 
 	PageResult<DataSourceVO> page(DataSourceQuery query);
 
-	void save(DataSourceVO vo);
+	List<String> save(DataSourceVO vo);
 
 	void update(DataSourceVO vo);
 

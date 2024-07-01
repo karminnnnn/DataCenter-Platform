@@ -30,8 +30,8 @@ public class DataAccessTaskDetailServiceImpl extends BaseServiceImpl<DataAccessT
 
 	@Override
 	public PageResult<DataAccessTaskDetailVO> page(DataAccessTaskDetailQuery query) {
+		query.setTableName("ods_"+query.getTableName());
 		IPage<DataAccessTaskDetailEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
 		return new PageResult<>(DataAccessTaskDetailConvert.INSTANCE.convertList(page.getRecords()), page.getTotal());
 	}
 

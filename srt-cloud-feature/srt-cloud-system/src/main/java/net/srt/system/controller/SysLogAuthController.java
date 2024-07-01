@@ -28,7 +28,9 @@ public class SysLogAuthController {
 
     @GetMapping("login/page")
     @Operation(summary = "分页")
+
     //@PreAuthorize("hasAuthority('sys:log:login')")
+
     public Result<PageResult<SysLogLoginVO>> page(@Valid SysLogLoginQuery query) {
         PageResult<SysLogLoginVO> page = sysLogLoginService.page(query);
 

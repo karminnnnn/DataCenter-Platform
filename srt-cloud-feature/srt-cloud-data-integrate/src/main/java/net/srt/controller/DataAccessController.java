@@ -62,7 +62,8 @@ public class DataAccessController {
 	@PreAuthorize("hasAuthority('data-integrate:access:save')")
 	public Result<String> save(@RequestBody DataAccessClientDto dto) {
 		boolean ifexistdatabase=dataAccessService.existsBySourceDatabaseId(dto.getSourceDatabaseId());
-		if(ifexistdatabase)
+		System.out.println(ifexistdatabase);
+		if(!ifexistdatabase)
 		{dataAccessService.save(dto);
 		 return Result.ok();}
 		else {return Result.error("该数据库已创建过接入任务，请勿重复接入！");}
