@@ -26,8 +26,8 @@
 			<el-table-column prop="userAgent" label="User Agent" show-overflow-tooltip header-align="center" align="center"></el-table-column>
 			<fast-table-column prop="status" label="登录状态" dict-type="success_fail"></fast-table-column> -->
 			<!-- <fast-table-column prop="operation" label="操作信息" dict-type="login_operation"></fast-table-column> -->
-            <el-table-column prop="Log" label="操作日志" header-align="center" align="center" show-overflow-tooltip width="800"></el-table-column>
-			<el-table-column prop="Time" label="登录时间" header-align="center" align="center" width="165"></el-table-column>
+            <el-table-column prop="log" label="操作日志" header-align="center" align="center" show-overflow-tooltip width="800"></el-table-column>
+			<el-table-column prop="time" label="登录时间" header-align="center" align="center" width="165"></el-table-column>
 		</el-table>
 		<el-pagination
 			:current-page="state.page"
@@ -49,7 +49,7 @@ import { IHooksOptions } from '@/hooks/interface'
 
 const state: IHooksOptions = reactive({
 	// dataListUrl: '/sys/log/sys/page',
-	dataListUrl: '/sys/log/user/page',
+	dataListUrl: '/sys/log/sys/page',
     queryForm: {
 		userName: '',
 		Time: ''
