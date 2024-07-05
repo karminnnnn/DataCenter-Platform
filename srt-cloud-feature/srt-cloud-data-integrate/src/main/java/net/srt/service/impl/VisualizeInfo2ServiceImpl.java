@@ -47,6 +47,7 @@ public class VisualizeInfo2ServiceImpl extends BaseServiceImpl<VisualizeInfo2Dao
             VisualizeInfo2Entity entity = visualizeInfo2Dao.getAvgByGradeId(i);
             list.add(entity);
         }
+        list.add(visualizeInfo2Dao.getMax());
         visualizeInfo2ListVO.setList(list);
         return visualizeInfo2ListVO;
     }
