@@ -16,20 +16,20 @@ const visible = ref(false)
 const dataList = ref([])
 
 const pair = {
-  "PubCoursePerf": "公必绩点",
-  "EleCoursePerf": "专选绩点",
-  "MandSpecCoursePerf": "专必绩点",
-  "JdIdeaPolAwards": "党建思政获奖",
-  "DiscCompAwards": "学科竞赛获奖",
-  "ArtCompAwards": "艺术比赛获奖",
-  "SportCompAwards": "体育比赛获奖",
-  "EntrepCompAwards": "实践创业竞赛获奖",
-  "AcademicAwards": "学术成果获奖",
-  "HighLevelPubs": "高水平论文发表",
-  "VolServHours": "志愿服务时长",
-  "Patents": "专利发明",
-  "SoftCopyInventions": "软件著作权发明",
-  "MonographsPub": "专著出版"
+  "pubCoursePerf": "公必绩点",
+  "eleCoursePerf": "专选绩点",
+  "mandSpecCoursePerf": "专必绩点",
+  "jdIdeaPolAwards": "党建思政获奖",
+  "discCompAwards": "学科竞赛获奖",
+  "artCompAwards": "艺术比赛获奖",
+  "sportCompAwards": "体育比赛获奖",
+  "entrepCompAwards": "实践创业竞赛获奖",
+  "academicAwards": "学术成果获奖",
+  "highLevelPubs": "高水平论文发表",
+  "volServHours": "志愿服务时长",
+  "patents": "专利发明",
+  "softCopyInventions": "软件著作权发明",
+  "monographsPub": "专著出版"
 };
 
 const init = (data) => {
