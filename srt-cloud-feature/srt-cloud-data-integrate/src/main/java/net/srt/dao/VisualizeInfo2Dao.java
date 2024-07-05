@@ -79,6 +79,28 @@ public interface VisualizeInfo2Dao extends BaseDao<VisualizeInfo2Entity>{
             "WHERE \n" +
             "    class_id = #{classId}";
 
+    String getMaxStr = "SELECT \n" +
+            "    -2 AS id,\n" +
+            "    '10000' AS NetId,\n" +
+            "    MAX(pub_course_perf) AS PubCoursePerf,\n" +
+            "    MAX(ele_course_perf) AS EleCoursePerf,\n" +
+            "    MAX(mand_spec_course_perf) AS MandSpecCoursePerf,\n" +
+            "    MAX(jd_idea_pol_awards) AS JdIdeaPolAwards,\n" +
+            "    MAX(disc_comp_awards) AS DiscCompAwards,\n" +
+            "    MAX(art_comp_awards) AS ArtCompAwards,\n" +
+            "    MAX(sport_comp_awards) AS SportCompAwards,\n" +
+            "    MAX(entrep_comp_awards) AS EntrepCompAwards,\n" +
+            "    MAX(academic_awards) AS AcademicAwards,\n" +
+            "    MAX(high_level_pubs) AS HighLevelPubs,\n" +
+            "    MAX(vol_serv_hours) AS VolServHours,\n" +
+            "    MAX(patents) AS Patents,\n" +
+            "    MAX(soft_copy_inventions) AS SoftCopyInventions,\n" +
+            "    MAX(monographs_pub) AS MonographsPub,\n" +
+            "    -3 AS ClassId,\n" +
+            "    -1 AS GradeId\n" +
+            "FROM \n" +
+            "    visualize_info2\n" ;
+
     String getAvgByClassIdAndGradeIdStr = "SELECT \n" +
             "    -2 AS id,\n" +
             "    '10000' AS NetId,\n" +
@@ -117,4 +139,7 @@ public interface VisualizeInfo2Dao extends BaseDao<VisualizeInfo2Entity>{
 
     @Select(getAvgByClassIdAndGradeIdStr)
     VisualizeInfo2Entity getAvgByClassIdAndGradeId(int classId, int gradeId);
+
+    @Select(getMaxStr)
+    VisualizeInfo2Entity getMax();
 }
