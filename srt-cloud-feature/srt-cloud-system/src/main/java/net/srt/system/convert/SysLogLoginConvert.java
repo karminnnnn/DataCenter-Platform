@@ -16,6 +16,7 @@ import java.util.List;
 public interface SysLogLoginConvert {
     SysLogLoginConvert INSTANCE = Mappers.getMapper(SysLogLoginConvert.class);
 
+
     SysLogLoginEntity convert(SysLogLoginVO vo);
 
     SysLogLoginVO convert(SysLogLoginEntity entity);

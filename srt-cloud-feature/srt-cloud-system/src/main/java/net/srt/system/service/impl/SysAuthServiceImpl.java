@@ -9,7 +9,7 @@ import net.srt.framework.security.utils.TokenUtils;
 import net.srt.system.enums.LoginOperationEnum;
 import net.srt.system.service.SysAuthService;
 import net.srt.system.service.SysCaptchaService;
-import net.srt.system.service.SysLogLoginService;
+import net.srt.system.service.SysLogService;
 import net.srt.system.vo.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,7 +28,7 @@ public class SysAuthServiceImpl implements SysAuthService {
     private final SysCaptchaService sysCaptchaService;
     private final TokenStoreCache tokenStoreCache;
     private final AuthenticationManager authenticationManager;
-    private final SysLogLoginService sysLogLoginService;
+    private final SysLogService sysLogLoginService;
 
     @Override
     public SysTokenVO loginByAccount(SysAccountLoginVO login) {

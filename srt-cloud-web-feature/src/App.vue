@@ -10,7 +10,7 @@ import { computed, nextTick, onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 // Mine
 // import Index from './views/data-integrate/database/index.vue'
-import Index from './views/data-visualization/study-analysis/index.vue'
+import Index from './views/data-visualization/mean-analysis/index.vue'
 
 import { useTitle } from '@vueuse/core'
 import store from '@/store'

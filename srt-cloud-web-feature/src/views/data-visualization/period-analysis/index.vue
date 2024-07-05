@@ -185,6 +185,7 @@ async function fetchData() {
         // console.log("看看可视化接口收到的数据");
         // console.log(JSON.stringify(res.data.list[0]));
         data[0] = res.data.list;
+        console.log(data[0])
         // console.log(data[0][0]);
         // console.log("结束");
     } catch (error) {
