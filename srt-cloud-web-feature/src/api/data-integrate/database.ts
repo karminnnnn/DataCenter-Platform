@@ -155,3 +155,7 @@ export const deleteTableInfoApi = (tableName: any) => {
 export const getVisualPeriodData = () => {
 	return service.get('/data-integrate/data-visualization/period-analysis')
 }
+
+export const getStudentTypeData = () => {
+	return service.get('/data-integrate/data-visualization/freshman-analysis')
+}
