@@ -55,9 +55,9 @@ public class DataDatabaseServiceImpl extends BaseServiceImpl<DataDatabaseDao, Da
 
     private LambdaQueryWrapper<DataDatabaseEntity> getWrapper(DataDatabaseQuery query) {
         LambdaQueryWrapper<DataDatabaseEntity> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(StrUtil.isNotBlank(query.getName()), DataDatabaseEntity::getDatabaseName, query.getName());
+        wrapper.like(StrUtil.isNotBlank(query.getName()), DataDatabaseEntity::getDatabaseName, query.getName());
         wrapper.eq( query.getStatus() != null,DataDatabaseEntity::getStatus, query.getStatus());
-        wrapper.eq( StrUtil.isNotBlank(query.getCreatorName()),DataDatabaseEntity::getCreator, query.getCreatorName());
+        wrapper.like( StrUtil.isNotBlank(query.getCreatorName()),DataDatabaseEntity::getCreator, query.getCreatorName());
         wrapper.eq( DataDatabaseEntity::getDatasourceId, query.getDatasourceId());
         //dataScopeWithOrgId(wrapper);  // 加限制条件，不能对权限范围之外的数据库进行操作
         return wrapper;
