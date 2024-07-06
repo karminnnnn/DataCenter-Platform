@@ -101,7 +101,7 @@ const pair = {
   "软件著作权发明": "softCopyInventions",
   "专著出版": "monographsPub"
 };
-const checkList = ref([])
+const checkList = ref(["公必绩点"])
 
 const changeChart = (checkItem, engCheckItem) => {
   // 最高水平
@@ -205,6 +205,9 @@ const option = ref({
   legend: {
     data: ['我的水平', '班级平均水平', '年级平均水平']
   },
+  tooltip: {
+    trigger: 'item'
+  },
   radar: {
     shape: 'circle',
     indicator: []
@@ -232,6 +235,10 @@ const option = ref({
 });
 
 const stateUseCrud = useCrud(state)
+
+onMounted(() => {
+  // refreshChart()
+})
 </script>
 
 

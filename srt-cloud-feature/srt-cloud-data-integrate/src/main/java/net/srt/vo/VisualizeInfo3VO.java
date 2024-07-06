@@ -8,7 +8,7 @@ import java.util.List;
 public class VisualizeInfo3VO implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
 
-    private List<String> property;
+    private String type;
     Integer value;
     Integer year;
 }

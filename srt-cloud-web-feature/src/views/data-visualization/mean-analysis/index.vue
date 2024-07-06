@@ -134,7 +134,7 @@ const changeChart = (checkItem, engCheckItem) => {
   // 最高水平
   option.value.radar.indicator.push({
     name: checkItem,
-    max: state.dataList[numClass-1][engCheckItem]
+    max: state.dataList[numClass][engCheckItem]
   });
 
   for (let i = 0; i < numClass; i++) {
@@ -230,6 +230,9 @@ const option = ref({
     //   "研究生三年级3班": false,
     //   "研究生三年级": false
     // }
+  },
+  tooltip: {
+    trigger: 'item'
   },
   radar: {
     shape: 'circle',

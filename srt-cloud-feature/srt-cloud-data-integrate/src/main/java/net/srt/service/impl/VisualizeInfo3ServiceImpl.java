@@ -10,7 +10,9 @@ import net.srt.vo.VisualizeInfo3VO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -58,7 +60,8 @@ public class VisualizeInfo3ServiceImpl extends BaseServiceImpl<VisualizeInfo3Dao
             String hometown = entity.getHometown();
             String highScore = entity.getHighScore();
 
-            // 保存到对应的数组
+
+            // 保存到对应的数组,暂存每个年份的属性值
             result.get(start).add(category);
             result.get(start+1).add(gender);
             result.get(start+2).add(ethnicity);
@@ -69,24 +72,57 @@ public class VisualizeInfo3ServiceImpl extends BaseServiceImpl<VisualizeInfo3Dao
             result.get(start+7).add(highScore);
         }
 
+        // result_lists用以保存最终返回给前端的结果，Check用以检查是否有重复的属性
+        List<List<VisualizeInfo3VO>> result_lists = new ArrayList<>();
+        List<List<Map<String,Integer>>> Check = new ArrayList<>();
+        for(int i = 0;i < 8;i++){
+            List<VisualizeInfo3VO> result_list = new ArrayList<>();
+            List<Map<String,Integer>> check_list = new ArrayList<>();
+            result_lists.add(result_list);
+            Check.add(check_list);
+        }
+
         // 每个数组加入对应的人数、年份信息，返回给前端
-        List<VisualizeInfo3VO> visualizeInfo3VOList = new ArrayList<>();
+
         for(Integer year : years){
             int index = years.indexOf(year);
             int start = index * 8;
 
-            for(int i = start;i < start+8;i++){
-                VisualizeInfo3VO visualizeInfo3VO = new VisualizeInfo3VO();
-                visualizeInfo3VO.setProperty(result.get(i));
-                visualizeInfo3VO.setValue(result.get(i).size());
-                visualizeInfo3VO.setYear(year);
-                visualizeInfo3VOList.add(visualizeInfo3VO);
+            for(int i = 0;i < 8;i++){
+                List<String> property_list = result.get(start + i);
+
+                for(String property : property_list){
+                    // flag用以标记是否有这个属性,false表示没有
+                    boolean flag = false;
+                    for(Map<String,Integer> map : Check.get(i)){
+                        // 如果有这个属性，则值加一
+                        if(map.containsKey(property)){
+                            map.put(property,map.get(property)+1);
+                            flag = true;
+                        }
+                    }
+                    // 如果没有这个属性，则新建一个map
+                    if(!flag){
+                        Map<String,Integer> tmp_map = new HashMap<>();
+                        tmp_map.put(property,1);
+                        Check.get(i).add(tmp_map);
+                    }
+                }
+
+                for(Map<String,Integer> map : Check.get(i)){
+                    VisualizeInfo3VO visualizeInfo3VO = new VisualizeInfo3VO();
+                    visualizeInfo3VO.setType(map.keySet().iterator().next());
+                    visualizeInfo3VO.setValue(map.values().iterator().next());
+                    visualizeInfo3VO.setYear(year);
+                    result_lists.get(i).add(visualizeInfo3VO);
+                }
+
             }
 
         }
+            VisualizeInfo3ListVO visualizeInfo3ListVO = new VisualizeInfo3ListVO();
+            visualizeInfo3ListVO.setList(result_lists);
 
-        VisualizeInfo3ListVO visualizeInfo3ListVO = new VisualizeInfo3ListVO();
-        visualizeInfo3ListVO.setList(visualizeInfo3VOList);
         return visualizeInfo3ListVO;
     }
 }

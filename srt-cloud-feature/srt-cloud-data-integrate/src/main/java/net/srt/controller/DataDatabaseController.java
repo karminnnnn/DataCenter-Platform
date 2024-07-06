@@ -12,6 +12,7 @@ import net.srt.vo.DataDatabaseVO;
 import net.srt.vo.DatabaseTestOnlineVO;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("database")
@@ -31,7 +32,8 @@ public class DataDatabaseController {
     @DeleteMapping
     @Operation(summary = "删除数据库")
     //@PreAuthorize("hasAuthority('data-integrate:database:delete')")
-    public Result<String> delete(@RequestBody Long id,@RequestHeader(value = "Authorization", required = false) String accessToken) {
+    public Result<String> delete(@RequestBody List<Long> idList, @RequestHeader(value = "Authorization", required = false) String accessToken) {
+        Long id = idList.get(0);
         DataDatabaseService.delete(id);
         return Result.ok();
     }
