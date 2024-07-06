@@ -46,7 +46,7 @@ public class SysCaptchaServiceImpl implements SysCaptchaService {
 
     @Override
     public boolean validate(String key, String code) {
-        /*
+
         if (StrUtil.isBlank(key) || StrUtil.isBlank(code)) {
             return false;
         }
@@ -55,8 +55,9 @@ public class SysCaptchaServiceImpl implements SysCaptchaService {
         String captcha = getCache(key);
 
         // 效验成功
-        return code.equalsIgnoreCase(captcha);*/
-        return true;
+        return code.equalsIgnoreCase(captcha);
+
+        //return true;
     }
 
     /**
