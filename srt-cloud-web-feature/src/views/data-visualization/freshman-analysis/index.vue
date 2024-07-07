@@ -78,12 +78,20 @@ const yearValue = ref(2020);
 const selectOption = [
     {item: '2020年', value: 2020},
     {item: '2021年', value: 2021},
+    {item: '2022年', value: 2022},
+    {item: '2023年', value: 2023},
 ]
 
 const changeYear = () => {
     console.log(yearValue.value)
-    getChart('studentType', 0);
-    getChart('gender', 1);
+    getChart('studentType', 0, true);
+    getChart('gender', 1, true);
+    getChart('nationality', 2, false);
+    getChart('birthday', 3, false);
+    getChart('trainingLevel', 4, true);
+    getChart('politicalStatus', 5, true);
+    getChart('nativePlace', 6, false);
+    getChart('examScore', 7, false);
 }
 
 const option = {
@@ -99,6 +107,30 @@ const option = {
         '#bda29a',
         '#6e7074',
         '#546570',
+
+        
+        // '#c23531',
+        // '#2f4554',
+        // '#61a0a8',
+        // '#d48265',
+        // '#91c7ae',
+        // '#749f83',
+        // '#ca8622',
+        // '#bda29a',
+        // '#6e7074',
+        // '#546570',
+        // '#c4ccd3',
+        // '#dd6b66',
+        // '#759aa0',
+        // '#e69d87',
+        // '#8dc1a9',
+        // '#ea7e53',
+        // '#eedd78',
+        // '#73a373',
+        // '#73b9bc',
+        // '#7289ab',
+        // '#91ca8c',
+        // '#f49f42',
     ],
     tooltip: {
         trigger: 'item'
@@ -108,25 +140,25 @@ const option = {
     series: []
 };
 
-const data = [
-    [
-        {type: "港澳台生", value: 20, year: 2020},
-        {type: "国际生", value: 10, year: 2020},
-        {type: "境内生", value: 119, year: 2020},
-        {type: "港澳台生", value: 18, year: 2021},
-        {type: "国际生", value: 101, year: 2021},
-        {type: "境内生", value: 22, year: 2021},
-    ],
-    [
-        {type: "男", value: 107, year: 2020},
-        {type: "女", value: 46, year: 2020},
-        {type: "男", value: 41, year: 2021},
-        {type: "女", value: 117, year: 2021},
-    ]
-]
+// const data = [
+//     [
+//         {type: "港澳台生", value: 20, year: 2020},
+//         {type: "国际生", value: 10, year: 2020},
+//         {type: "境内生", value: 119, year: 2020},
+//         {type: "港澳台生", value: 18, year: 2021},
+//         {type: "国际生", value: 101, year: 2021},
+//         {type: "境内生", value: 22, year: 2021},
+//     ],
+//     [
+//         {type: "男", value: 107, year: 2020},
+//         {type: "女", value: 46, year: 2020},
+//         {type: "男", value: 41, year: 2021},
+//         {type: "女", value: 117, year: 2021},
+//     ]
+// ]
+const data = [[{}]]
 
-
-const getData = (data: any, myChart: any) => {
+const getData = (data: any, myChart: any, judge:boolean) => {
 
     const types = Array.from(new Set(data.map(item => item.type)));
 
@@ -159,26 +191,38 @@ const getData = (data: any, myChart: any) => {
         value: 'value'
       },
       datasetIndex:1,
-    });
+      label: {
+        show: judge,
+      },
+    },);
     types.forEach((type) => {
         legend.data.push(`${type}`)
     })
 
-    myChart.setOption({
-        legend: legend,
-        dataset: dataset,
-        series: series
-    })
+    if(judge) {
+        myChart.setOption({
+            legend: legend,
+            dataset: dataset,
+            series: series
+        })
+    }
+    else{
+        myChart.setOption({
+            dataset: dataset,
+            series: series
+        })
+    }
+
 }
 
 
 async function fetchData() {
     try {
-        const res = await getVisualPeriodData();
+        const res = await getStudentTypeData();
         // console.log("看看可视化接口收到的数据");
-        // console.log(JSON.stringify(res.data.list[0]));
+        // console.log(JSON.stringify(res.data.list));
         data[0] = res.data.list;
-        // console.log(data[0][0]);
+        console.log(data[0][0]);
         // console.log("结束");
     } catch (error) {
         console.error("获取数据时出错:", error);
@@ -186,7 +230,7 @@ async function fetchData() {
 }
 
 
-const getChart = async (chartId: string, index: number) => {
+const getChart = async (chartId: string, index: number, judge:boolean) => {
     var chartDom = document.getElementById(chartId);
     const existingInstance = echarts.getInstanceByDom(chartDom);
     if (existingInstance) {
@@ -195,17 +239,22 @@ const getChart = async (chartId: string, index: number) => {
     var myChart = echarts.init(chartDom);
     myChart.setOption(option)
 
-    // await fetchData()
+    await fetchData()
 
     myChart.showLoading();
-    getData(data[index], myChart)
+    getData(data[0][index], myChart, judge)
     myChart.hideLoading();
 }
 
 onMounted(() => {
-    getChart('studentType', 0);
-    getChart('gender', 1);
-    getChart('trainingLevel', 0);
+    getChart('studentType', 0, true);
+    getChart('gender', 1, true);
+    getChart('nationality', 2, false);
+    getChart('birthday', 3, false);
+    getChart('trainingLevel', 4, true);
+    getChart('politicalStatus', 5, true);
+    getChart('nativePlace', 6, false);
+    getChart('examScore', 7, false);
 });
 
 </script>

@@ -143,7 +143,7 @@ const getData = (data: any, myChart: any, judge: number) => {
                     name: education + '-' + classs,
                     xAxisIndex: index,
                     yAxisIndex: index,
-                    datasetIndex: index2 + 1,
+                    datasetIndex: dataset.length - 1,
                     encode: {
                         x: 'year',
                         y: 'value'
@@ -157,7 +157,7 @@ const getData = (data: any, myChart: any, judge: number) => {
                     name: education + '-' + classs,
                     xAxisIndex: index,
                     yAxisIndex: index,
-                    datasetIndex: index2 + 1,
+                    datasetIndex: dataset.length - 1,
                     encode: {
                         x: 'year',
                         y: 'value'
