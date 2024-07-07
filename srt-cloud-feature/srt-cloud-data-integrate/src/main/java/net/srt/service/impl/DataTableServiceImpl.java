@@ -231,7 +231,7 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		IMetaDataByJdbcService service = new MetaDataByJdbcServiceImpl(ProductTypeEnum.getByIndex(project.getDbType()));
 
 		// 设置合理的最大行数限制
-		int maxRows = 50000000;
+		int maxRows = 50000;
 		// 查询所有表数据
 		SchemaTableData schemaTableData = service.queryTableData(project.getDbUrl(), project.getDbUsername(), project.getDbPassword(), project.getDbSchema(), tableName, maxRows);
 
@@ -240,6 +240,17 @@ public class DataTableServiceImpl extends BaseServiceImpl<DataTableDao, DataTabl
 		int orderIndex = columns.indexOf(query.getOrder());
 
 		List<List<Object>> rows = schemaTableData.getRows();
+
+		// 增加 keyword 过滤
+		if (query.getKeyWord() != null && !query.getKeyWord().isEmpty()) {
+			String lowerCaseKeyWord = query.getKeyWord().toLowerCase();
+			rows = rows.stream()
+					.filter(row -> row != null && row.stream().anyMatch(value ->
+							value != null && value.toString().toLowerCase().contains(lowerCaseKeyWord))
+					)
+					.collect(Collectors.toList());
+		}
+
 		// 对数据进行排序（如果有排序需求）
 		if (orderIndex != -1) {
 			final int index = orderIndex;
