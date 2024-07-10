@@ -107,30 +107,6 @@ const option = {
         '#bda29a',
         '#6e7074',
         '#546570',
-
-        
-        // '#c23531',
-        // '#2f4554',
-        // '#61a0a8',
-        // '#d48265',
-        // '#91c7ae',
-        // '#749f83',
-        // '#ca8622',
-        // '#bda29a',
-        // '#6e7074',
-        // '#546570',
-        // '#c4ccd3',
-        // '#dd6b66',
-        // '#759aa0',
-        // '#e69d87',
-        // '#8dc1a9',
-        // '#ea7e53',
-        // '#eedd78',
-        // '#73a373',
-        // '#73b9bc',
-        // '#7289ab',
-        // '#91ca8c',
-        // '#f49f42',
     ],
     tooltip: {
         trigger: 'item'
@@ -160,6 +136,24 @@ const data = [[{}]]
 
 const getData = (data: any, myChart: any, judge:boolean) => {
 
+    // const transformedData = data.reduce((acc, curr) => {
+    //     const type = curr.type.slice(0, 7); // 只取前7个字符，得到"YYYY-MM"
+    //     // console.log("type",type)
+    //     const key = `${type}-${curr.year}`; // 使用type和year组合成一个唯一的键
+
+    //     if (!acc[key]) {
+    //         acc[key] = { type, value: 0, year: curr.year };
+    //     }
+
+    //     acc[key].value += curr.value;
+
+    //     return acc;
+    // }, {});
+
+    // const result = Object.values(transformedData);
+
+    // console.log("看看filteredData",result)
+    
     const types = Array.from(new Set(data.map(item => item.type)));
 
     const dataset = [
@@ -222,7 +216,7 @@ async function fetchData() {
         // console.log("看看可视化接口收到的数据");
         // console.log(JSON.stringify(res.data.list));
         data[0] = res.data.list;
-        console.log(data[0][0]);
+        console.log(data[0][3]);
         // console.log("结束");
     } catch (error) {
         console.error("获取数据时出错:", error);
