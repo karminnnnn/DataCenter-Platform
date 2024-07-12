@@ -136,21 +136,21 @@ const data = [[{}]]
 
 const getData = (data: any, myChart: any, judge:boolean) => {
 
-    // const transformedData = data.reduce((acc, curr) => {
-    //     const type = curr.type.slice(0, 7); // 只取前7个字符，得到"YYYY-MM"
-    //     // console.log("type",type)
-    //     const key = `${type}-${curr.year}`; // 使用type和year组合成一个唯一的键
+    const transformedData = data.reduce((acc, curr) => {
+        const type = curr.type.slice(0, 7); // 只取前7个字符，得到"YYYY-MM"
+        // console.log("type",type)
+        const key = `${type}-${curr.year}`; // 使用type和year组合成一个唯一的键
 
-    //     if (!acc[key]) {
-    //         acc[key] = { type, value: 0, year: curr.year };
-    //     }
+        if (!acc[key]) {
+            acc[key] = { type, value: 0, year: curr.year };
+        }
 
-    //     acc[key].value += curr.value;
+        acc[key].value += curr.value;
 
-    //     return acc;
-    // }, {});
+        return acc;
+    }, {});
 
-    // const result = Object.values(transformedData);
+    const result = Object.values(transformedData);
 
     // console.log("看看filteredData",result)
     
@@ -159,7 +159,7 @@ const getData = (data: any, myChart: any, judge:boolean) => {
     const dataset = [
         {
             dimensions: ['type', 'value', 'year'],
-            source: data
+            source: result
         }
     ];
     const series = [];
